@@ -27,7 +27,7 @@ class BlogManager {
             console.log(`Đã tải ${this.posts.length} bài viết`);
 
             console.log('Bắt đầu hiển thị bài viết mới...');
-            this.loadPosts();
+            this.loadLatestPosts();
             
         } catch (error) {
             console.error('Lỗi chi tiết khi khởi tạo blog:', {
@@ -37,32 +37,27 @@ class BlogManager {
         }
     }
 
-    loadPosts() {
-        const isIndexPage = window.location.pathname === '/index.html';  // Kiểm tra trang hiện tại
-
-        // Nếu là trang index.html, chỉ lấy 3 bài mới nhất
-        const postsToLoad = isIndexPage ? this.posts.slice(0, 3) : this.posts;
-
-        console.log('Đang tìm container .latest-posts .posts-grid...');
-        const container = document.querySelector('.latest-posts .posts-grid');
+    loadLatestPosts() {
+        console.log('Đang tìm container #posts-container...');
+        const container = document.querySelector('#posts-container');
         
         if (!container) {
-            console.error("Lỗi: Không tìm thấy .posts-grid trong .latest-posts");
+            console.error("Lỗi: Không tìm thấy #posts-container");
             return;
         }
-
+        
         console.log('Đã tìm thấy container, xóa nội dung cũ...');
         container.innerHTML = '';
 
         console.log('Bắt đầu tạo các phần tử bài viết...');
-        postsToLoad.forEach((post, index) => {
+        this.posts.forEach((post, index) => {
             console.log(`Đang tạo bài viết thứ ${index + 1}:`, post);
             
             const postElement = document.createElement('div');
             postElement.className = 'post';
             
             postElement.innerHTML = `
-                <img src="path/to/image.jpg" alt="Post Image">
+                <img src="${post.image}" alt="Post Image">
                 <h3>${post.title}</h3>
                 <p>${post.description}</p>
                 <a href="${post.file}">Read More</a>
@@ -72,7 +67,7 @@ class BlogManager {
             console.log(`Đã thêm bài viết ${index + 1} vào container`);
         });
         
-        console.log('Hoàn thành việc tải các bài viết');
+        console.log('Hoàn thành việc tải các bài viết mới');
     }
 }
 
