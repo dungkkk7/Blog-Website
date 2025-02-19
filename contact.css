@@ -1,0 +1,258 @@
+.contact {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+.contact h1 {
+    text-align: center;
+    color: #32CD32;  /* Chuyển màu chữ thành xanh lá mạ */
+    margin-bottom: 3rem;
+    font-weight: normal;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.contact-container {
+    display: flex;
+    gap: 3rem;
+    align-items: stretch;
+    padding: 0 2rem;
+}
+
+/* Contact Form */
+#contact-form {
+    flex: 1;
+    background: rgba(50, 205, 50, 0.05);  /* Màu nền nhẹ xanh lá */
+    padding: 3rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#contact-form:hover {
+    transform: translateY(-5px);
+}
+
+#contact-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(50, 205, 50, 0.1),  /* Thêm hiệu ứng chuyển sắc xanh lá */
+        rgba(50, 205, 50, 0.3),
+        rgba(50, 205, 50, 0.1),
+        transparent
+    );
+    z-index: 1;
+    animation: electricBorder 2s linear infinite;
+}
+
+#contact-form:hover::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(50, 205, 50, 0.2),  /* Màu sắc hiệu ứng hover */
+        rgba(50, 205, 50, 0.6),
+        rgba(50, 205, 50, 0.2),
+        transparent
+    );
+    animation: electricBorder 1.5s linear infinite;
+}
+
+#contact-form::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(50, 205, 50, 0.1);  /* Đổi màu border */
+    border-radius: 8px;
+    z-index: 0;
+}
+
+#contact-form > * {
+    position: relative;
+    z-index: 2;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#contact-form label {
+    display: block;
+    color: #32CD32;  /* Đổi màu label thành xanh lá mạ */
+    font-weight: normal;
+    text-align: center;
+}
+
+#contact-form input,
+#contact-form textarea {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(50, 205, 50, 0.2);  /* Đổi màu viền input và textarea */
+    border-radius: 4px;
+    color: #32CD32;  /* Đổi màu chữ trong input và textarea thành xanh lá mạ */
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+#contact-form input:focus,
+#contact-form textarea:focus {
+    outline: none;
+    border-color: rgba(50, 205, 50, 0.4);  /* Đổi màu khi focus */
+    background: rgba(50, 205, 50, 0.1);
+}
+
+#contact-form textarea {
+    min-height: 150px;
+    resize: vertical;
+    text-align: left;
+    padding: 1rem;
+}
+
+#contact-form button {
+    padding: 1rem;
+    background: rgba(50, 205, 50, 0.1);  /* Nền button màu xanh lá mạ nhạt */
+    border: 1px solid rgba(50, 205, 50, 0.2);  /* Viền button xanh lá */
+    border-radius: 4px;
+    color: #32CD32;  /* Chữ button xanh lá mạ */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#contact-form button:hover {
+    background: rgba(50, 205, 50, 0.2);
+    border-color: rgba(50, 205, 50, 0.4);
+}
+
+/* Contact Info */
+.contact-info {
+    flex: 1;
+    padding: 3rem;
+    background: rgba(50, 205, 50, 0.05);  /* Nền thông tin liên lạc xanh lá */
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.contact-info:hover {
+    transform: translateY(-5px);
+}
+
+.contact-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(50, 205, 50, 0.1),
+        rgba(50, 205, 50, 0.3),
+        rgba(50, 205, 50, 0.1),
+        transparent
+    );
+    z-index: 1;
+    animation: electricBorder 2s linear infinite;
+}
+
+.contact-info:hover::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(50, 205, 50, 0.2),
+        rgba(50, 205, 50, 0.6),
+        rgba(50, 205, 50, 0.2),
+        transparent
+    );
+    animation: electricBorder 1.5s linear infinite;
+}
+
+.contact-info::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(50, 205, 50, 0.1);
+    border-radius: 8px;
+    z-index: 0;
+}
+
+.contact-info > * {
+    position: relative;
+    z-index: 2;
+}
+
+.contact-info p {
+    margin: 0;
+    color: rgba(50, 205, 50, 0.9);  /* Đổi màu chữ thành xanh lá mạ */
+    font-size: 1.1rem;
+    text-align: center;
+    background: rgba(50, 205, 50, 0.1);  /* Nền p thành xanh lá nhạt */
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.contact-info a {
+    color: #32CD32;  /* Màu liên kết xanh lá */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(50, 205, 50, 0.5);
+}
+
+.social-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.social-links a {
+    font-size: 1.5rem;
+}
+
+@keyframes electricBorder {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+@keyframes textGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(50, 205, 50, 0.3),
+                     0 0 20px rgba(50, 205, 50, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(50, 205, 50, 0.5),
+                     0 0 30px rgba(50, 205, 50, 0.5);
+    }
+}

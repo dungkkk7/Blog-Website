@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog listing page with latest articles.">
+    <meta name="keywords" content="blog, articles, personal blog">
+    <title>Blog - Personal Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="meteor-shower">
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+    </div>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="nav-logo" style="font-weight: normal;">BÙI VIỆT DŨNG</a>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Blog Posts</h1>
+            <div class="search-bar">
+                <input type="text" id="search" placeholder="Search for articles...">
+                <button onclick="searchPosts()">Search</button>
+            </div>
+        </section>
+        <section class="latest-posts">
+            <div class="posts-grid">
+                <div class="post">
+                    <img src="path/to/image1.jpg" alt="Post Image">
+                    <h3>Understanding Web Development</h3>
+                    <p>A comprehensive guide to modern web development practices and technologies...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+                <div class="post">
+                    <img src="path/to/image2.jpg" alt="Post Image">
+                    <h3>JavaScript Best Practices</h3>
+                    <p>Essential tips and tricks for writing clean, maintainable JavaScript code...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+                <div class="post">
+                    <img src="path/to/image3.jpg" alt="Post Image">
+                    <h3>CSS Grid Layout Guide</h3>
+                    <p>Learn how to create responsive layouts using CSS Grid with practical examples...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+                <div class="post">
+                    <img src="path/to/image4.jpg" alt="Post Image">
+                    <h3>React Components</h3>
+                    <p>Deep dive into React components and their lifecycle methods...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+                <div class="post">
+                    <img src="path/to/image5.jpg" alt="Post Image">
+                    <h3>Git Version Control</h3>
+                    <p>Master Git with essential commands and workflow strategies...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+                <div class="post">
+                    <img src="path/to/image6.jpg" alt="Post Image">
+                    <h3>Node.js Backend Development</h3>
+                    <p>Building scalable backend applications with Node.js and Express...</p>
+                    <a href="post.html">Read More</a>
+                </div>
+            </div>
+            <div class="pagination">
+                <a href="#">&laquo; Previous</a>
+                <div class="page-numbers">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                </div>
+                <a href="#">Next &raquo;</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Blog. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    <script src="scripts.js"></script>
+</body>

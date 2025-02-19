@@ -1,0 +1,168 @@
+.intro {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 2rem 0;
+    gap: 2rem;
+}
+
+.intro-content {
+    flex: 1;
+    margin-top: 2rem;
+}
+
+.profile-pic {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    margin: 2rem 0;
+    animation: glow 2s infinite;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(255, 255, 255, 0.3),
+                    0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                    0 0 40px rgba(255, 255, 255, 0.5),
+                    0 0 60px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(255, 255, 255, 0.3),
+                    0 0 30px rgba(255, 255, 255, 0.3);
+    }
+}
+
+.intro h1 {
+    margin-bottom: 1rem;
+}
+
+.intro p {
+    text-align: justify;
+    margin-top: 1rem;
+}
+
+/* New styles for interests and goals */
+.about-sections {
+    display: flex;
+    gap: 2rem;
+    margin: 2rem 0;
+    align-items: flex-start;
+}
+
+.interests, .goals {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.interests:hover, .goals:hover {
+    transform: translateY(-5px);
+}
+
+.interests::before, .goals::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 0, 0.1),
+        rgba(0, 255, 0, 0.3),
+        rgba(0, 255, 0, 0.1),
+        transparent
+    );
+    z-index: 1;
+    animation: electricBorder 2s linear infinite;
+}
+
+.interests:hover::before, .goals:hover::before {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 0, 0.2),
+        rgba(0, 255, 0, 0.6),
+        rgba(0, 255, 0, 0.2),
+        transparent
+    );
+    animation: electricBorder 1.5s linear infinite;
+}
+
+.interests::after, .goals::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(0, 255, 0, 0.1);
+    border-radius: 8px;
+    z-index: 0;
+}
+
+.interests > *, .goals > * {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes electricBorder {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+@keyframes textGlow {
+    0%, 100% {
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3),
+                     0 0 20px rgba(0, 255, 0, 0.3);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(0, 255, 0, 0.5),
+                     0 0 30px rgba(0, 255, 0, 0.5);
+    }
+}
+
+.interests h2, .goals h2 {
+    color: rgba(0, 255, 0, 0.8);
+    margin-bottom: 1.5rem;
+    font-weight: normal;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+.goals ul {
+    list-style: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.goals li {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.goals li::before {
+    content: "•";
+    color: rgba(0, 255, 0, 0.8);
+    position: absolute;
+    left: 0;
+}
+
+.interests p {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
