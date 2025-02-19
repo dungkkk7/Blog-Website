@@ -1,0 +1,31 @@
+{
+    "posts": [
+      {
+        "id": "web-development-basics",
+        "title": "Hướng Dẫn Cơ Bản Về Phát Triển Web",
+        "date": "2025-02-19",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-1.md",
+        "description": "Tìm hiểu các khái niệm cơ bản về phát triển web và cách bắt đầu",
+        "tags": ["web development", "frontend", "html", "css"]
+      },
+      {
+        "id": "javascript-tips",
+        "title": "Những Mẹo Hay Khi Lập Trình JavaScript",
+        "date": "2025-02-18",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-2.md",
+        "description": "Khám phá các mẹo và kỹ thuật hữu ích khi lập trình JavaScript",
+        "tags": ["javascript", "programming", "tips"]
+      },
+      {
+        "id": "react-components",
+        "title": "Hướng Dẫn Tạo Components Trong React",
+        "date": "2025-02-17",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-2.md",
+        "description": "Học cách tạo và quản lý components trong React một cách hiệu quả",
+        "tags": ["react", "javascript", "frontend"]
+      }
+    ]
+  }
