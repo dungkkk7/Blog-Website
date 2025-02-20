@@ -27,14 +27,6 @@
         "description": "Khám phá các mẹo và kỹ thuật hữu ích khi lập trình JavaScript",
         "tags": ["javascript", "programming", "tips"]
       },
-      {
-        "id": "react-components",
-        "title": "Hướng Dẫn Tạo Components Trong React",
-        "date": "2025-02-17",
-        "author": "Bùi Việt Dũng",
-        "file": "posts/post-2.md",
-        "description": "Học cách tạo và quản lý components trong React một cách hiệu quả",
-        "tags": ["react", "javascript", "frontend"]
-      }
+     
     ]
   }
