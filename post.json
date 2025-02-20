@@ -9,6 +9,15 @@
         "description": "Tìm hiểu các khái niệm cơ bản về phát triển web và cách bắt đầu",
         "tags": ["web development", "frontend", "html", "css"]
       },
+            {
+        "id": "Reverse Engineering ",
+        "title": "Cài Đặt và Cấu Hình Jadx và Phân tich file apk",
+        "date": "2025-02-19",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-3.md",
+        "description": "Tìm hiểu cách phân tich file apk với tools jadx ",
+        "tags": ["Reverse"]
+      },
       {
         "id": "javascript-tips",
         "title": "Những Mẹo Hay Khi Lập Trình JavaScript",
