@@ -1,31 +1,32 @@
 {
     "posts": [
-      {
-        "id": "web-development-basics",
-        "title": "Hướng Dẫn Cơ Bản Về Phát Triển Web",
-        "date": "2025-02-19",
-        "author": "Bùi Việt Dũng",
-        "file": "posts/post-1.md",
-        "description": "Tìm hiểu các khái niệm cơ bản về phát triển web và cách bắt đầu",
-        "tags": ["web development", "frontend", "html", "css"]
-      },
+  
             {
         "id": "Reverse Engineering ",
         "title": "Cài Đặt và Cấu Hình Jadx và Phân tich file apk",
         "date": "2025-02-20",
         "author": "Bùi Việt Dũng",
-        "file": "posts/post-3.md",
+        "file": "posts/post-3.html",
         "description": "Tìm hiểu cách phân tich file apk với tools jadx ",
         "tags": ["Reverse"]
       },
       {
-        "id": "javascript-tips",
-        "title": "Những Mẹo Hay Khi Lập Trình JavaScript",
-        "date": "2025-02-18",
+        "id": "Reverse Engineering ",
+        "title": "Hướng Dẫn Tắt ASLR Trong File PE",
+        "date": "2025-02-20",
         "author": "Bùi Việt Dũng",
-        "file": "posts/post-2.md",
-        "description": "Khám phá các mẹo và kỹ thuật hữu ích khi lập trình JavaScript",
-        "tags": ["javascript", "programming", "tips"]
+        "file": "posts/post-2.html",
+        "description": "Hướng Dẫn Tắt ASLR Trong File PE",
+        "tags": ["Reverse"]
+      },
+      {
+        "id": "Reverse Engineering ",
+        "title": "Phương Pháp Kiểm Tra File Packed và Anti-reverse",
+        "date": "2025-02-20",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-1.html",
+        "description": "Hướng Dẫn Kiểm Tra File Binary",
+        "tags": ["Reverse"]
       }
      
     ]

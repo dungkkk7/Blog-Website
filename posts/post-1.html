@@ -1,0 +1,203 @@
+<html><head><style>/* Base styles */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #f9fafb;
+    }
+    
+    /* Typography */
+    h1 {
+        font-size: 2.5rem;
+        color: #090a0a;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid #e5e7eb;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+        color: #000000;
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.4rem;
+        color: #050505;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    p {
+        margin-bottom: 1.2rem;
+    }
+    
+    /* Code blocks */
+    pre {
+        background-color: #1e293b;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    code {
+        font-family: 'Source Code Pro', Consolas, Monaco, 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+    
+    /* Inline code */
+    p code, li code {
+        background-color: #e2e8f0;
+        color: #1e293b;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    
+    /* Lists */
+    ul, ol {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+    
+    li {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Notes and warnings */
+    blockquote {
+        background-color: #dbeafe;
+        border-left: 4px solid #3b82f6;
+        padding: 1rem 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0 8px 8px 0;
+    }
+    
+    strong {
+        color: #1e40af;
+    }
+    
+    /* Horizontal rules */
+    hr {
+        border: 0;
+        height: 2px;
+        background-color: #e5e7eb;
+        margin: 3rem 0;
+    }
+    
+    /* Command section styling */
+    .command-section {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem;
+        }
+    
+        h1 {
+            font-size: 2rem;
+        }
+    
+        h2 {
+            font-size: 1.5rem;
+        }
+    
+        h3 {
+            font-size: 1.2rem;
+        }
+    
+        pre {
+            padding: 1rem;
+        }
+    }
+    
+    /* Print styles */
+    @media print {
+        body {
+            background: white;
+            color: black;
+            max-width: none;
+            padding: 1cm;
+        }
+    
+        pre, code {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+    
+        a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+    }</style></head><body><h1 id="h-ng-d-n-ki-m-tra-file-binary">Hướng Dẫn Kiểm Tra File Binary</h1>
+    <h2 id="ph-ng-ph-p-ki-m-tra-file-packed-v-anti-reverse">Phương Pháp Kiểm Tra File Packed và Anti-reverse</h2>
+    <p>Để kiểm tra xem một tệp có bị nén, đóng gói (packed) hoặc bị anti-reverse (unpacked) hay không, bạn có thể sử dụng các phương pháp sau.</p>
+    <h3 id="1-ki-m-tra-v-i-file">1. Kiểm tra với file</h3>
+    <p>Lệnh này giúp kiểm tra xem tệp có chứa dấu hiệu của UPX, packed sections hay không:</p>
+    <pre><code class="lang-bash"><span class="hljs-built_in">file</span> crackme100
+    </code></pre>
+    <p>Nếu tệp bị nén, kết quả có thể xuất hiện như:</p>
+    <pre><code>crackme100: ELF 64-bit LSB executable, dynamically linked, stripped,<span class="hljs-built_in"> packed </span>with UPX
+    </code></pre><p>Nếu có chữ &quot;packed with UPX&quot;, nghĩa là tệp đã bị nén bằng UPX.</p>
+    <h3 id="2-ki-m-tra-b-ng-strings">2. Kiểm tra bằng strings</h3>
+    <p>Nếu tệp bị nén hoặc đóng gói, lệnh strings sẽ trả về rất ít chuỗi có thể đọc được.</p>
+    <pre><code class="lang-bash">strings crackme100 <span class="hljs-string">| less</span>
+    </code></pre>
+    <p>Nếu chỉ có một vài chuỗi lộn xộn, khả năng cao là nó đã bị packed.</p>
+    <h3 id="3-ki-m-tra-entropy">3. Kiểm tra entropy</h3>
+    <p>Nếu tệp bị nén hoặc đóng gói, nó sẽ có entropy cao (gần 8.0). Dùng ent để kiểm tra:</p>
+    <pre><code class="lang-bash"><span class="hljs-attribute">ent</span> crackme100
+    </code></pre>
+    <p>Nếu entropy cao hơn 7.5, khả năng lớn là tệp đã bị nén hoặc packed.</p>
+    <h3 id="4-s-d-ng-checksec">4. Sử dụng checksec</h3>
+    <p>Kiểm tra cấu trúc bảo vệ. Nếu tệp có bảo vệ PIE, RELRO, NX, Canaries, nó có thể đã được bảo vệ chống reverse.</p>
+    <pre><code class="lang-bash">checksec <span class="hljs-comment">--file=crackme100</span>
+    </code></pre>
+    <h3 id="5-d-ng-binwalk">5. Dùng binwalk</h3>
+    <p>Tìm dấu hiệu packer trong file:</p>
+    <pre><code class="lang-bash"><span class="hljs-keyword">binwalk </span>crackme100
+    </code></pre>
+    <p>Nếu có dấu hiệu của UPX, ASPack, Armadillo, nghĩa là tệp đã bị đóng gói.</p>
+    <h3 id="6-gi-i-n-n-upx">6. Giải nén UPX</h3>
+    <p>Nếu file hoặc binwalk phát hiện UPX, bạn có thể thử giải nén:</p>
+    <pre><code class="lang-bash">upx <span class="hljs-_">-d</span> crackme100
+    </code></pre>
+    <p>Nếu giải nén thành công, tệp đã bị nén bằng UPX.</p>
+    <h3 id="7-d-ng-radare2">7. Dùng radare2</h3>
+    <p>Mở tệp bằng radare2 và kiểm tra các section:</p>
+    <pre><code class="lang-bash">r2 -AA crackme100
+    <span class="hljs-keyword">iS</span>
+    </code></pre>
+    <p>Nếu có section lạ như .upx0, .upx1 hoặc thiếu .text, tệp có thể đã bị packed.</p>
+    <h2 id="k-t-lu-n">Kết Luận</h2>
+    <ol>
+    <li><p><strong>Kiểm tra file packed:</strong></p>
+    <ul>
+    <li>Sử dụng file, strings, ent, binwalk</li>
+    </ul>
+    </li>
+    <li><p><strong>Xử lý file UPX:</strong></p>
+    <ul>
+    <li>Dùng upx -d để giải nén</li>
+    </ul>
+    </li>
+    <li><p><strong>Phân tích packer khác:</strong></p>
+    <ul>
+    <li>Sử dụng radare2, binwalk để phân tích sâu hơn</li>
+    </ul>
+    </li>
+    </ol>
+    </body></html>

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+
     // Contact form submission
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
@@ -61,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
             meteor.remove();
         }, 5000);
     }
+    // scripts.js
+  
+    
 
     setInterval(createMeteor, 100);
 });
