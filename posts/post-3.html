@@ -1,0 +1,285 @@
+<html><head><style>/* Base styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+}
+
+/* Typography */
+h1 {
+    font-size: 2.5rem;
+    color: #1a56db;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #e5e7eb;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #2563eb;
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #3b82f6;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin-bottom: 1.2rem;
+}
+
+/* Code blocks */
+pre {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+code {
+    font-family: 'Source Code Pro', Consolas, Monaco, 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Inline code */
+p code, li code {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Lists */
+ul, ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Notes and warnings */
+blockquote {
+    background-color: #dbeafe;
+    border-left: 4px solid #3b82f6;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+}
+
+strong {
+    color: #1e40af;
+}
+
+/* Horizontal rules */
+hr {
+    border: 0;
+    height: 2px;
+    background-color: #e5e7eb;
+    margin: 3rem 0;
+}
+
+/* Command section styling */
+.command-section {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+        max-width: none;
+        padding: 1cm;
+    }
+
+    pre, code {
+        background-color: #f1f5f9;
+        color: #0f172a;
+    }
+
+    a {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+}</style></head><body><pre><code class="lang-markdown"><span class="hljs-comment"># Cài Đặt và Cấu Hình Jadx</span>
+
+<span class="hljs-comment">## 1. Cài Đặt Java</span>
+
+`<span class="hljs-keyword">jadx` </span>yêu cầu <span class="hljs-keyword">Java </span>để chạy. Đảm <span class="hljs-keyword">bảo </span>rằng <span class="hljs-keyword">bạn </span>đã cài đặt <span class="hljs-keyword">Java </span>Development Kit (<span class="hljs-keyword">JDK) </span>trên hệ thống của mình.
+
+<span class="hljs-comment">### Các bước cài đặt:</span>
+
+<span class="hljs-number">1</span>. Mở Terminal và chạy các lệnh sau:
+   sudo apt update
+   sudo apt <span class="hljs-keyword">install </span>openjdk-11-<span class="hljs-keyword">jdk
+</span>
+
+<span class="hljs-number">2</span>. Kiểm tra phiên <span class="hljs-keyword">bản </span><span class="hljs-keyword">Java </span>đã cài đặt:
+
+   ```<span class="hljs-keyword">bash
+</span>   <span class="hljs-keyword">java </span>-version
+</code></pre>
+<h2 id="2-t-i-xu-ng-v-c-i-t-jadx">2. Tải Xuống và Cài Đặt Jadx</h2>
+<p>Bạn có thể tải xuống phiên bản mới nhất của <code>jadx</code> từ GitHub.</p>
+<h3 id="c-ch-1-t-i-xu-ng-t-github">Cách 1: Tải Xuống Từ GitHub</h3>
+<ol>
+<li><p>Tải xuống phiên bản mới nhất của <code>jadx</code>: Truy cập trang releases của <code>jadx</code> trên GitHub và tải xuống file <code>jadx-&lt;version&gt;.zip</code>. Ví dụ, bạn có thể sử dụng <code>wget</code> để tải xuống trực tiếp:</p>
+<pre><code class="lang-bash">mkdir -p ~<span class="hljs-regexp">/jadx
+cd ~/jadx</span>
+wget <span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/github.com/skylot</span><span class="hljs-regexp">/jadx/releases</span><span class="hljs-regexp">/download/v</span>1.<span class="hljs-number">4.4</span>/jadx-<span class="hljs-number">1.4</span>.<span class="hljs-number">4</span>.zip
+</code></pre>
+</li>
+<li><p>Giải nén file tải về: Cài đặt <code>unzip</code> nếu bạn chưa có:</p>
+<pre><code class="lang-bash">sudo apt <span class="hljs-keyword">install</span> unzip
+</code></pre>
+<p>Sau đó giải nén:</p>
+<pre><code class="lang-bash"><span class="hljs-selector-tag">unzip</span> <span class="hljs-selector-tag">jadx-1</span><span class="hljs-selector-class">.4</span><span class="hljs-selector-class">.4</span><span class="hljs-selector-class">.zip</span>
+</code></pre>
+</li>
+<li><p>Xóa file zip sau khi giải nén (tuỳ chọn):</p>
+<pre><code class="lang-bash"><span class="hljs-selector-tag">rm</span> <span class="hljs-selector-tag">jadx-1</span><span class="hljs-selector-class">.4</span><span class="hljs-selector-class">.4</span><span class="hljs-selector-class">.zip</span>
+</code></pre>
+</li>
+</ol>
+<h3 id="ki-m-tra-c-u-tr-c-th-m-c-jadx">Kiểm Tra Cấu Trúc Thư Mục Jadx</h3>
+<p>Trước tiên, hãy đảm bảo rằng thư mục <code>bin</code> chứa các script thực thi của <code>jadx</code> nằm trực tiếp trong thư mục <code>~/jadx</code>. Bạn có thể kiểm tra bằng lệnh:</p>
+<pre><code class="lang-bash">ls ~<span class="hljs-regexp">/jadx/</span>bin
+</code></pre>
+<p>Kết quả nên liệt kê các tệp như <code>jadx</code>, <code>jadx-gui</code>, v.v.</p>
+<h2 id="3-s-a-i-file-bashrc-th-m-jadx-v-o-path-">3. Sửa Đổi File <code>~/.bashrc</code> Để Thêm Jadx Vào <code>PATH</code></h2>
+<ol>
+<li><p>Mở file <code>~/.bashrc</code> bằng trình soạn thảo:</p>
+<pre><code class="lang-bash"><span class="hljs-attribute">nano</span> ~/.bashrc
+</code></pre>
+</li>
+<li><p>Thêm dòng sau vào cuối file:</p>
+<pre><code class="lang-bash">export PATH=<span class="hljs-variable">$PATH</span><span class="hljs-symbol">:~/jadx/bin</span>
+</code></pre>
+<p><strong>Lưu ý</strong>:</p>
+<ul>
+<li>Đảm bảo rằng đường dẫn là <code>~/jadx/bin</code> chứ không phải <code>~/jadx/jadx/bin</code>, dựa trên cấu trúc thư mục bạn đã cung cấp.</li>
+<li>Nếu bạn đã thêm một dòng tương tự trước đó, hãy sửa thành <code>~/jadx/bin</code> hoặc loại bỏ dòng cũ để tránh xung đột.</li>
+</ul>
+</li>
+<li><p>Lưu và thoát trình soạn thảo:</p>
+<ul>
+<li>Nhấn <code>Ctrl + X</code>, sau đó nhấn <code>Y</code> và <code>Enter</code> để lưu thay đổi.</li>
+</ul>
+</li>
+<li><p>Áp dụng thay đổi <code>PATH</code>:</p>
+<pre><code class="lang-bash"><span class="hljs-built_in">source</span> ~/.bashrc
+</code></pre>
+</li>
+</ol>
+<h2 id="4-ki-m-tra-quy-n-th-c-thi-c-a-c-c-script-jadx">4. Kiểm Tra Quyền Thực Thi Của Các Script Jadx</h2>
+<p>Đảm bảo rằng các tệp trong thư mục <code>bin</code> có quyền thực thi:</p>
+<pre><code class="lang-bash">chmod +x ~<span class="hljs-regexp">/jadx/bin</span><span class="hljs-regexp">/jadx
+chmod +x ~/jadx</span><span class="hljs-regexp">/bin/jadx</span>-gui
+</code></pre>
+<h2 id="5-ki-m-tra-l-i-c-i-t-path-">5. Kiểm Tra Lại Cài Đặt <code>PATH</code></h2>
+<p>Để xác nhận rằng <code>~/jadx/bin</code> đã được thêm vào <code>PATH</code>, bạn có thể chạy:</p>
+<pre><code class="lang-bash"><span class="hljs-built_in">echo</span> <span class="hljs-variable">$PATH</span>
+</code></pre>
+<p>Kiểm tra xem <code>~/jadx/bin</code> có nằm trong danh sách các đường dẫn hiển thị không.</p>
+<h2 id="6-ki-m-tra-l-nh-jadx-">6. Kiểm Tra Lệnh <code>jadx</code></h2>
+<p>Bây giờ, hãy thử kiểm tra phiên bản của <code>jadx</code>:</p>
+<pre><code class="lang-bash">jadx <span class="hljs-comment">--version</span>
+</code></pre>
+<p>Nếu mọi thứ đã được cấu hình đúng, bạn sẽ thấy thông tin phiên bản của <code>jadx</code> hiển thị trên Terminal.</p>
+<hr>
+<h2 id="c-u-l-nh-c-b-n-c-a-jadx-">Câu Lệnh Cơ Bản của <code>JADX</code></h2>
+<h3 id="1-decompile-m-t-apk-ho-c-dex-th-nh-m-ngu-n-java-">1. Decompile một APK hoặc DEX thành mã nguồn Java:</h3>
+<p>Nếu bạn có file APK hoặc DEX và muốn decompile nó thành mã Java, bạn sử dụng câu lệnh sau:</p>
+<pre><code class="lang-bash">jadx <span class="hljs-_">-d</span> output_folder your-app.apk
+</code></pre>
+<ul>
+<li><code>-d output_folder</code>: Thư mục để chứa kết quả decompiling (mã nguồn Java).</li>
+<li><code>your-app.apk</code>: File APK hoặc DEX bạn muốn decompile.</li>
+</ul>
+<p><strong>Ví dụ</strong>:</p>
+<pre><code class="lang-bash">jadx -d output_folder <span class="hljs-keyword">my</span>-app.apk
+</code></pre>
+<h3 id="2-decompile-m-t-dex-file-classes-dex-th-nh-java-">2. Decompile một DEX file (classes.dex) thành Java:</h3>
+<p>Nếu bạn chỉ có một file DEX (ví dụ <code>classes.dex</code>), bạn có thể chạy:</p>
+<pre><code class="lang-bash">jadx <span class="hljs-_">-d</span> output_folder classes.dex
+</code></pre>
+<h3 id="3-decompile-v-ch-nh-t-n-file-u-ra-">3. Decompile và chỉ định tên file đầu ra:</h3>
+<p>Bạn có thể chỉ định tên file đầu ra bằng cách sử dụng <code>-o</code> thay vì thư mục:</p>
+<pre><code class="lang-bash"><span class="hljs-selector-tag">jadx</span> <span class="hljs-selector-tag">-o</span> <span class="hljs-selector-tag">output_file_name</span> <span class="hljs-selector-tag">your-app</span><span class="hljs-selector-class">.apk</span>
+</code></pre>
+<h3 id="4-decompile-v-i-giao-di-n-h-a-gui-">4. Decompile với giao diện đồ họa (GUI):</h3>
+<p>Nếu bạn đã cài đặt <code>JADX GUI</code>, bạn có thể mở ứng dụng GUI để dễ dàng xem mã nguồn Java. Bạn chỉ cần chạy:</p>
+<pre><code class="lang-bash"><span class="hljs-attribute">jadx-gui</span>
+</code></pre>
+<p>Sau đó, mở file APK hoặc DEX mà bạn muốn decompile.</p>
+<h3 id="5-decompile-v-hi-n-th-th-ng-tin-chi-ti-t-">5. Decompile và hiển thị thông tin chi tiết:</h3>
+<p>Để xem thêm thông tin chi tiết về quá trình decompiling, bạn có thể sử dụng flag <code>-v</code> để kích hoạt chế độ verbose:</p>
+<pre><code class="lang-bash">jadx -v <span class="hljs-_">-d</span> output_folder your-app.apk
+</code></pre>
+<h3 id="6-decompile-v-i-c-u-h-nh-b-gi-i-n-n-t-i-u-">6. Decompile với cấu hình bộ giải nén tối ưu:</h3>
+<p>Nếu bạn muốn decompile và tối ưu hóa quá trình với các tùy chọn giải nén tốt hơn (chẳng hạn như tối ưu hóa mã lệnh), bạn có thể sử dụng các tùy chọn như <code>-j</code> cho bộ nhớ đa luồng:</p>
+<pre><code class="lang-bash"><span class="hljs-keyword">jadx </span>-d output_folder -<span class="hljs-keyword">j </span><span class="hljs-number">4</span> your-app.apk
+</code></pre>
+<ul>
+<li><code>-j 4</code>: Sử dụng 4 luồng (threads) để tăng tốc quá trình decompile.</li>
+</ul>
+<h3 id="7-t-y-ch-n-decompile-v-i-m-t-s-ph-n-ho-c-b-qua-c-c-ph-n-kh-ng-c-n-thi-t-">7. Tùy chọn decompile với một số phần hoặc bỏ qua các phần không cần thiết:</h3>
+<p>Nếu bạn chỉ muốn decompile một phần cụ thể của APK, bạn có thể chỉ định các phần như tài nguyên (res) hoặc smali code. Tuy nhiên, việc này có thể yêu cầu bạn phải cấu hình thêm một số tham số hoặc điều chỉnh thông qua GUI.</p>
+<h3 id="8-ch-y-l-nh-decompile-tr-n-nhi-u-file-apk-ho-c-dex-">8. Chạy lệnh decompile trên nhiều file APK hoặc DEX:</h3>
+<p>Nếu bạn muốn decompile nhiều file APK hoặc DEX cùng một lúc, bạn có thể sử dụng một lệnh cho nhiều file:</p>
+<pre><code class="lang-bash"><span class="hljs-keyword">for</span> apk <span class="hljs-keyword">in</span> *.apk; <span class="hljs-keyword">do</span>
+    jadx <span class="hljs-_">-d</span> output_folder <span class="hljs-string">"<span class="hljs-variable">$apk</span>"</span>
+<span class="hljs-keyword">done</span>
+</code></pre>
+<p>Lệnh này sẽ tìm tất cả các file <code>.apk</code> trong thư mục hiện tại và decompile chúng vào thư mục <code>output_folder</code>.</p>
+<hr>
+<h2 id="c-c-t-y-ch-n-kh-c-c-a-jadx-">Các Tùy Chọn Khác của <code>JADX</code>:</h2>
+<ul>
+<li><code>-d</code>: Chỉ định thư mục đầu ra.</li>
+<li><code>-o</code>: Chỉ định tệp đầu ra (thay vì thư mục).</li>
+<li><code>-v</code>: Hiển thị chi tiết quá trình decompiling.</li>
+<li><code>-j</code>: Định cấu hình số luồng sử dụng khi decompile.
+```</li>
+</ul>
+</body></html>
