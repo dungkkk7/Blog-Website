@@ -1,5 +1,6 @@
 /* Base styles */
 body {
+<<<<<<< HEAD
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: #333;
@@ -7,10 +8,20 @@ body {
     margin: 0 auto;
     padding: 2rem;
     background-color: #f9fafb;
+=======
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    color: #ffffff;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #0d1117;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Typography */
 h1 {
+<<<<<<< HEAD
     font-size: 2.5rem;
     color: #090a0a;
     margin-bottom: 2rem;
@@ -34,10 +45,41 @@ h3 {
 
 p {
     margin-bottom: 1.2rem;
+=======
+    font-size: 2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #30363d;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #30363d;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+p {
+    margin-bottom: 1rem;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Code blocks */
 pre {
+<<<<<<< HEAD
     background-color: #1e293b;
     color: #e2e8f0;
     padding: 1.5rem;
@@ -50,15 +92,38 @@ pre {
 code {
     font-family: 'Source Code Pro', Consolas, Monaco, 'Courier New', monospace;
     font-size: 0.9rem;
+=======
+    background-color: #161b22;
+    color: #c9d1d9;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    border: 1px solid #30363d;
+}
+
+code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.85rem;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Inline code */
 p code, li code {
+<<<<<<< HEAD
     background-color: #e2e8f0;
     color: #1e293b;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-size: 0.9em;
+=======
+    background-color: #161b22;
+    color: #c9d1d9;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    border: 1px solid #30363d;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Lists */
@@ -68,11 +133,16 @@ ul, ol {
 }
 
 li {
+<<<<<<< HEAD
     margin-bottom: 0.5rem;
+=======
+    margin-bottom: 0.25rem;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Notes and warnings */
 blockquote {
+<<<<<<< HEAD
     background-color: #dbeafe;
     border-left: 4px solid #3b82f6;
     padding: 1rem 1.5rem;
@@ -82,23 +152,77 @@ blockquote {
 
 strong {
     color: #1e40af;
+=======
+    background-color: #161b22;
+    border-left: 4px solid #30363d;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    color: #c9d1d9;
+}
+
+strong {
+    font-weight: 600;
+    color: #ffffff;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Horizontal rules */
 hr {
     border: 0;
+<<<<<<< HEAD
     height: 2px;
     background-color: #e5e7eb;
     margin: 3rem 0;
+=======
+    height: 1px;
+    background-color: #30363d;
+    margin: 2rem 0;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Command section styling */
 .command-section {
+<<<<<<< HEAD
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     padding: 1.5rem;
     margin: 2rem 0;
+=======
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+
+/* Links */
+a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+table th, table td {
+    border: 1px solid #30363d;
+    padding: 0.5rem 1rem;
+    text-align: left;
+}
+
+table th {
+    background-color: #161b22;
+    font-weight: 600;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
 }
 
 /* Responsive adjustments */
@@ -106,6 +230,7 @@ hr {
     body {
         padding: 1rem;
     }
+<<<<<<< HEAD
 
     h1 {
         font-size: 2rem;
@@ -121,12 +246,30 @@ hr {
 
     pre {
         padding: 1rem;
+=======
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2 {
+        font-size: 1.25rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    pre {
+        padding: 0.75rem;
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
     }
 }
 
 /* Print styles */
 @media print {
     body {
+<<<<<<< HEAD
         background: white;
         color: black;
         max-width: none;
@@ -143,3 +286,22 @@ hr {
         text-decoration: underline;
     }
 }
+=======
+        background: #0d1117;
+        color: white;
+        max-width: none;
+        padding: 1cm;
+    }
+    
+    pre, code {
+        background-color: #161b22;
+        color: #c9d1d9;
+        border: 1px solid #30363d;
+    }
+    
+    a {
+        color: #58a6ff;
+        text-decoration: underline;
+    }
+}
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e

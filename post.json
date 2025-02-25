@@ -27,6 +27,27 @@
         "file": "posts/post-1.html",
         "description": "Hướng Dẫn Kiểm Tra File Binary",
         "tags": ["Reverse"]
+<<<<<<< HEAD
+=======
+      },
+          {
+        "id": "Reverse Engineering ",
+        "title": " Sử dụng NTFS Streams để ẩn tệp trong hệ điều hành Windows:",
+        "date": "2025-02-24",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-4.html",
+        "description": "Trong hệ điều hành Windows, hệ thống tệp NTFS (New Technology File System) hỗ trợ một tính năng đặc biệt gọi là Alternate Data Streams (ADS)",
+        "tags": ["Reverse"]
+      },
+          {
+        "id": "Reverse Engineering ",
+        "title": "Quy Trình Manual Unpacking: Kỹ Thuật Sử Dụng Memory Breakpoints và DEP",
+        "date": "2025-02-24",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-5.html",
+        "description": "Quy Trình Manual Unpacking: Kỹ Thuật Sử Dụng Memory Breakpoints và DEP",
+        "tags": ["Reverse"]
+>>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
       }
      
     ]
