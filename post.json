@@ -1,35 +1,15 @@
 {
     "posts": [
-  
-            {
-        "id": "Reverse Engineering ",
-        "title": "Cài Đặt và Cấu Hình Jadx và Phân tich file apk",
-        "date": "2025-02-20",
-        "author": "Bùi Việt Dũng",
-        "file": "posts/post-3.html",
-        "description": "Tìm hiểu cách phân tich file apk với tools jadx ",
-        "tags": ["Reverse"]
-      },
       {
         "id": "Reverse Engineering ",
-        "title": "Hướng Dẫn Tắt ASLR Trong File PE",
-        "date": "2025-02-20",
+        "title": "Reverse Shell - Chèn Payload vào File EXE bằng Cách Sử Dụng Metasploit",
+        "date": "2025-02-26",
         "author": "Bùi Việt Dũng",
-        "file": "posts/post-2.html",
-        "description": "Hướng Dẫn Tắt ASLR Trong File PE",
+        "file": "posts/post6/ReverseShellMalware/post-6.html",
+        "description": "Shellcode Payload -Reverse Shell",
         "tags": ["Reverse"]
       },
-      {
-        "id": "Reverse Engineering ",
-        "title": "Phương Pháp Kiểm Tra File Packed và Anti-reverse",
-        "date": "2025-02-20",
-        "author": "Bùi Việt Dũng",
-        "file": "posts/post-1.html",
-        "description": "Hướng Dẫn Kiểm Tra File Binary",
-        "tags": ["Reverse"]
-<<<<<<< HEAD
-=======
-      },
+         
           {
         "id": "Reverse Engineering ",
         "title": " Sử dụng NTFS Streams để ẩn tệp trong hệ điều hành Windows:",
@@ -47,7 +27,34 @@
         "file": "posts/post-5.html",
         "description": "Quy Trình Manual Unpacking: Kỹ Thuật Sử Dụng Memory Breakpoints và DEP",
         "tags": ["Reverse"]
->>>>>>> a3193d924c88bf32bfdc4ce77d019d6e986fcc3e
+      },
+     
+      {
+        "id": "Reverse Engineering ",
+        "title": "Hướng Dẫn Tắt ASLR Trong File PE",
+        "date": "2025-02-20",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-2.html",
+        "description": "Hướng Dẫn Tắt ASLR Trong File PE",
+        "tags": ["Reverse"]
+      },
+      {
+        "id": "Reverse Engineering ",
+        "title": "Phương Pháp Kiểm Tra File Packed và Anti-reverse",
+        "date": "2025-02-20",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-1.html",
+        "description": "Hướng Dẫn Kiểm Tra File Binary",
+        "tags": ["Reverse"]
+      }, 
+      {
+        "id": "Reverse Engineering ",
+        "title": "Cài Đặt và Cấu Hình Jadx và Phân tich file apk",
+        "date": "2025-02-20",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post-3.html",
+        "description": "Tìm hiểu cách phân tich file apk với tools jadx ",
+        "tags": ["Reverse"]
       }
      
     ]

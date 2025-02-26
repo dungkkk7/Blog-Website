@@ -65,7 +65,12 @@ class BlogManager {
 
             container.appendChild(postElement);
             console.log(`Đã thêm bài viết ${index + 1} vào container`);
+            // index = 5 xóa 
+           
         });
+        if (index === 3) {
+            return;
+        }
         
         console.log('Hoàn thành việc tải các bài viết mới');
     }
