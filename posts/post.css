@@ -8,144 +8,165 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
+}
+
+h1, h2, h3, h4, h5, h6 {
     color: #4caf50;
     font-weight: bold;
     margin-top: 24px;
     margin-bottom: 16px;
     font-family: 'Courier New', monospace;
-  }
-  
-  h1 {
+}
+
+h1 {
     font-size: 2.2em;
     border-bottom: 2px solid #048a0b;
     padding-bottom: 0.3em;
-  }
-  
-  h2 {
+}
+
+h2 {
     font-size: 1.8em;
     border-bottom: 1px solid #09af11;
     padding-bottom: 0.3em;
-  }
-  
-  h3 {
+}
+
+h3 {
     font-size: 1.5em;
-  }
-  
-  h4 {
+}
+
+h4 {
     font-size: 1.3em;
-  }
-  
-  h5 {
+}
+
+h5 {
     font-size: 1.1em;
-  }
-  
-  p {
+}
+
+p {
     margin-bottom: 16px;
-  }
-  
-  a {
+}
+
+a {
     color: #8bc34a;
     text-decoration: none;
-  }
-  
-  a:hover {
+}
+
+a:hover {
     text-decoration: underline;
     color: #aed581;
-  }
-  
-  code {
+}
+
+code {
     font-family: 'Courier New', monospace;
     padding: 2px 4px;
     background-color: #000000;
     border-radius: 3px;
-  }
-  
-  pre {
-    background-color: #000000;
+}
+
+pre {
+    background-color: #001100;
+    border: 1px solid #2e7d32;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 6px;
-    padding: 16px;
+    padding: 20px;
     overflow: auto;
     margin-bottom: 16px;
-  }
-  
-  pre code {
+}
+
+pre code {
     background-color: transparent;
     padding: 0;
-  }
-  
-  blockquote {
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+blockquote {
     border-left: 4px solid #388e3c;
     padding-left: 16px;
     margin-left: 0;
     color: #a5d6a7;
-  }
-  
-  strong {
+}
+
+strong {
     color: #66bb6a;
     font-weight: bold;
-  }
-  
-  em {
+}
+
+em {
     color: #81c784;
-  }
-  
-  ul, ol {
+}
+
+ul, ol {
     margin-bottom: 16px;
     padding-left: 32px;
-  }
-  
-  li {
+}
+
+li {
     margin-bottom: 8px;
-  }
-  
-  table {
+}
+
+table {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 16px;
-  }
-  
-  th, td {
+}
+
+th, td {
     padding: 12px;
     border: 1px solid #2e7d32;
-  }
-  
-  th {
+}
+
+th {
     background-color: #1b3a1b;
     font-weight: bold;
     color: #4caf50;
-  }
-  
-  tr:nth-child(even) {
+}
+
+tr:nth-child(even) {
     background-color: #112211;
-  }
-  
-  /* Special styling for X-RAYING specifics */
-  .key-concept {
+}
+
+/* Special styling for X-RAYING specifics */
+.key-concept {
     background-color: #1b3a1b;
     border-left: 4px solid #4caf50;
     padding: 10px;
     margin: 15px 0;
-  }
-  
-  .example {
+}
+
+.example {
     background-color: #0d260d;
     border: 1px solid #1af025;
     border-radius: 6px;
     padding: 15px;
     margin: 15px 0;
-  }
-  
-  /* Specific styling for code examples */
-  .code-xor {
+}
+
+/* Specific styling for code examples */
+.code-xor {
     color: #ffeb3b;
-  }
-  
-  .highlight {
+}
+
+.highlight {
     background-color: #2e7d32;
     color: #e8f5e9;
     padding: 2px 4px;
     border-radius: 3px;
-  }
+}
+
+/* Syntax highlighting for code blocks */
+.keyword {
+    color: #4caf50;
+}
+.string {
+    color: #ffeb3b;
+}
+.comment {
+    color: #388e3c;
+}
+.variable {
+    color: #81c784;
+}
+.function {
+    color: #ff9800;
+}

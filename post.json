@@ -2,11 +2,29 @@
     "posts": [
       {
         "id": "Reverse Engineering ",
-        "title": "Reverse Shell - Chèn Payload vào File EXE bằng Cách Sử Dụng Metasploit",
+        "title": "Giới thiệu về mã hóa trong phân tích malware",
         "date": "2025-02-26",
         "author": "Bùi Việt Dũng",
-        "file": "posts/post6/ReverseShellMalware/post-6.html",
-        "description": "Shellcode Payload -Reverse Shell",
+        "file": "posts/post9/post-9.html",
+        "description": "Các bước malware sử dụng để mã hóa hoặc giải mã dữ liệu",
+        "tags": ["Reverse"]
+      },
+      {
+        "id": "Reverse Engineering ",
+        "title": "Thuật toán RC4 là gì?",
+        "date": "2025-02-26",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post8/post-8.html",
+        "description": "Thuật toán RC4 là gì? Cách hoạt động của thuật toán RC4",
+        "tags": ["Reverse"]
+      },
+      {
+        "id": "Reverse Engineering ",
+        "title": "Giới thiệu về mã hóa trong phân tích malware",
+        "date": "2025-02-26",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post9/post-9.html",
+        "description": "Các bước malware sử dụng để mã hóa hoặc giải mã dữ liệu",
         "tags": ["Reverse"]
       },
          

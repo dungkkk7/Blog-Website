@@ -116,3 +116,75 @@ Kết quả: "Hi" được khôi phục.
 
 ---
 
+## Đemoo 
+
+
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+// Create S array with values 0 to 255
+std::vector<int> createSArr() {
+    std::vector<int> S(256);
+    for (int i = 0; i < 256; i++) {
+        S[i] = i;
+    }
+    return S;
+}
+
+// Create key array by repeating the key to 256 bytes
+std::vector<int> createKeyArr(const std::string& key) {
+    std::vector<int> keyArr(256);
+    for (int i = 0; i < 256; i++) {
+        keyArr[i] = static_cast<int>(key[i % key.length()]);
+    }
+    return keyArr;
+}
+
+// Permute S array based on the key
+void permuteS(std::vector<int>& S, const std::vector<int>& key) {
+    int j = 0;
+    for (int i = 0; i < 256; i++) {
+        j = (j + S[i] + key[i]) % 256;
+        std::swap(S[i], S[j]);
+    }
+}
+
+// Pseudo-random generation (RC4 encryption)
+std::string PRNG(const std::vector<int>& S, const std::string& data) {
+    std::vector<int> S_copy = S; // Use a copy to preserve original S
+    int i = 0;
+    int j = 0;
+    std::string result = data;
+
+    for (size_t n = 0; n < data.length(); n++) {
+        i = (i + 1) % 256;
+        j = (j + S_copy[i]) % 256;
+        std::swap(S_copy[i], S_copy[j]);
+        int K = S_copy[(S_copy[i] + S_copy[j]) % 256];
+        result[n] = data[n] ^ K;
+    }
+    return result;
+}
+
+int main() {
+    std::vector<int> S = createSArr();
+    std::string keyStr = "HaoQuaSon";
+    std::vector<int> key = createKeyArr(keyStr);
+    permuteS(S, key);
+    std::string data = "Hay trao cho anh";
+    std::string encrypted = PRNG(S, data);
+
+    std::cout << "Encrypted data (as bytes): ";
+    for (char c : encrypted) {
+        std::cout << static_cast<int>(static_cast<unsigned char>(c)) << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+---
+
