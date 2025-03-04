@@ -184,6 +184,7 @@ int main() {
     DWORD dataLen = sizeof(dataToEncrypt);
     DWORD encryptedLen = 0;
     PBYTE encryptedData = NULL;
+    
 
     // Bước 1: Mở nhà cung cấp thuật toán RSA
     NTSTATUS status = BCryptOpenAlgorithmProvider(
@@ -326,9 +327,12 @@ int main() {
     HCRYPTKEY hKey = 0;
     HCRYPTHASH hHash = 0;
     BYTE dataToEncrypt[] = "MalwareSecretPayload";
-    DWORD dataLen = sizeof(dataToEncrypt);
+    DWORD dataLen = strlen((char*)dataToEncrypt); // Độ dài chuỗi (20 byte)
     BYTE encryptedData[256] = {0}; // Buffer cho dữ liệu mã hóa
     DWORD encryptedLen = sizeof(encryptedData);
+
+    // Sao chép dữ liệu vào buffer mã hóa
+    memcpy(encryptedData, dataToEncrypt, dataLen);
 
     // Bước 1: Khởi tạo và kết nối với CSP
     if (!CryptAcquireContext(&hProv, NULL, MS_STRONG_PROV, PROV_RSA_FULL, 0)) {
@@ -338,21 +342,17 @@ int main() {
     }
 
     // Bước 2: Chuẩn bị khóa
-    // Tạo đối tượng băm MD5
     if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
         HandleError("Failed to create hash object.", GetLastError());
     }
 
-    // Giả sử khóa bí mật là "secret"
     BYTE secretKey[] = "secret";
     DWORD secretKeyLen = sizeof(secretKey) - 1; // Không tính null terminator
 
-    // Băm khóa bí mật
     if (!CryptHashData(hHash, secretKey, secretKeyLen, 0)) {
         HandleError("Failed to hash secret key.", GetLastError());
     }
 
-    // Tạo khóa DES từ giá trị băm
     if (!CryptDeriveKey(hProv, CALG_DES, hHash, 0, &hKey)) {
         HandleError("Failed to derive DES key.", GetLastError());
     }
@@ -362,7 +362,7 @@ int main() {
         HandleError("Failed to encrypt data.", GetLastError());
     }
 
-    // In kết quả (dạng hex để dễ đọc)
+    // In kết quả (dạng hex)
     std::cout << "Encrypted data (hex): ";
     for (DWORD i = 0; i < dataLen; i++) {
         printf("%02x", encryptedData[i]);
