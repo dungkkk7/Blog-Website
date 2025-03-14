@@ -1,69 +1,72 @@
-<html><head>
-    <link rel="stylesheet" href="post.css">
-   </head><body><h3 id="hiding-files-using-ntfs-streams-in-windows">Hiding Files using NTFS Streams in Windows</h3>
-<p>Trong hệ điều hành Windows, hệ thống tệp NTFS (New Technology File System) hỗ trợ một tính năng đặc biệt gọi là <strong>Alternate Data Streams (ADS)</strong>. Tính năng này cho phép bạn gắn thông tin bổ sung vào các tệp mà người dùng không dễ dàng nhận thấy khi duyệt qua các tệp bình thường. Một trong những ứng dụng của ADS là <strong>ẩn tệp</strong> mà không thay đổi kích thước của tệp gốc hay làm ảnh hưởng đến các dữ liệu hiện có. Đặc biệt, việc sử dụng ADS có thể giúp bảo mật và tạo các “backdoor” hoặc ẩn tệp trong hệ thống mà không làm thay đổi cấu trúc file hệ thống. Tuy nhiên, kỹ thuật này cũng có thể bị lạm dụng cho các mục đích xấu, như ẩn virus hoặc phần mềm độc hại.</p>
-<h3 id="c-c-b-c-th-c-hi-n-n-t-p-b-ng-ntfs-streams">Các bước thực hiện để ẩn tệp bằng NTFS Streams</h3>
-<p>Dưới đây là một ví dụ cụ thể về cách sử dụng NTFS Streams để ẩn tệp trong hệ điều hành Windows:</p>
-<ol>
-<li><p><strong>Tạo thư mục mới</strong>:
-Đầu tiên, chúng ta tạo một thư mục mới trên ổ đĩa C.</p>
-<pre><code class="lang-batch"><span class="hljs-built_in">mkdir</span> c:\magic
-<span class="hljs-built_in">cd</span> c:\magic
-</code></pre>
-</li>
-<li><p><strong>Sao chép tệp exe</strong>:
-Tiếp theo, sao chép một tệp thực thi (chẳng hạn <code>calc.exe</code> từ thư mục System32) vào thư mục vừa tạo.</p>
-<pre><code class="lang-batch">copy c:<span class="hljs-symbol">\W</span>indows<span class="hljs-symbol">\S</span>ystem32<span class="hljs-symbol">\c</span>alc.exe c:<span class="hljs-symbol">\m</span>agic
-</code></pre>
-</li>
-<li><p><strong>Tạo tệp readme.txt</strong>:
-Tạo một tệp văn bản trống, có tên là <code>readme.txt</code>, để lưu trữ tệp ẩn sau này.</p>
-<pre><code class="lang-batch"><span class="hljs-selector-tag">echo</span>. &gt; <span class="hljs-selector-tag">readme</span><span class="hljs-selector-class">.txt</span>
-</code></pre>
-</li>
-<li><p><strong>Ẩn tệp trong <code>readme.txt</code></strong>:
-Sử dụng lệnh <code>type</code> để chèn tệp <code>calc.exe</code> vào trong <code>readme.txt</code> thông qua Alternate Data Stream. Cụ thể, ở đây, <code>calc.exe</code> sẽ được ẩn trong <code>readme.txt</code> dưới tên <code>calc.exe</code>.</p>
-<pre><code class="lang-batch">type c:\magic\calc<span class="hljs-selector-class">.exe</span> &gt; c:\magic\readme<span class="hljs-selector-class">.txt</span>:calc.exe
-</code></pre>
-</li>
-<li><p><strong>Kiểm tra thư mục</strong>:
-Khi kiểm tra thư mục <code>c:\magic</code>, bạn sẽ thấy <code>readme.txt</code> vẫn còn nhưng không thấy tệp <code>calc.exe</code>.</p>
-<pre><code class="lang-batch"><span class="hljs-built_in">dir</span>
-</code></pre>
-</li>
-<li><p><strong>Xóa tệp gốc</strong>:
-Sau đó, bạn có thể xóa tệp <code>calc.exe</code> gốc mà vẫn giữ nguyên tệp <code>readme.txt</code>.</p>
-<pre><code class="lang-batch"><span class="hljs-selector-tag">del</span> calc.exe
-</code></pre>
-</li>
-<li><p><strong>Tạo liên kết biểu tượng (symlink)</strong>:
-Tạo một liên kết biểu tượng có tên <code>backdoor.exe</code>, liên kết đến Alternate Data Stream trong tệp <code>readme.txt</code>.</p>
-<pre><code class="lang-batch">mklink backdoor<span class="hljs-selector-class">.exe</span> readme<span class="hljs-selector-class">.txt</span>:calc.exe
-</code></pre>
-</li>
-<li><p><strong>Chạy phần mềm ẩn</strong>:
-Cuối cùng, bạn có thể chạy <code>backdoor.exe</code>, và nó sẽ kích hoạt <code>calc.exe</code> mà không có dấu hiệu là có bất kỳ tệp thực thi nào tồn tại trong thư mục.</p>
-<pre><code class="lang-batch"><span class="hljs-selector-tag">backdoor</span><span class="hljs-selector-class">.exe</span>
-</code></pre>
-</li>
-</ol>
-<h3 id="t-i-sao-ntfs-streams-l-i-h-u-ch-">Tại sao NTFS Streams lại hữu ích?</h3>
-<p>Alternate Data Streams (ADS) có thể là một công cụ hữu ích để ẩn các tệp trong Windows. Chúng thường được sử dụng trong các tình huống sau:</p>
-<ol>
-<li><p><strong>Giấu thông tin nhạy cảm</strong>: Bạn có thể giấu thông tin hoặc tệp vào trong một tệp khác mà không làm thay đổi dung lượng của tệp chính. Điều này giúp tránh bị phát hiện khi duyệt thư mục.</p>
-</li>
-<li><p><strong>Tạo backdoor hoặc tệp độc hại</strong>: Trong một số trường hợp, các phần mềm độc hại có thể sử dụng ADS để ẩn mã độc và tránh sự phát hiện của phần mềm diệt virus. Kỹ thuật này giúp phần mềm độc hại không bị tìm thấy khi người dùng kiểm tra hệ thống.</p>
-</li>
-<li><p><strong>Đảm bảo an toàn thông tin</strong>: Các nhà phát triển có thể sử dụng ADS để bảo vệ dữ liệu nhạy cảm trong các tệp, mặc dù không phải là phương pháp an toàn nhất.</p>
-</li>
-</ol>
-<h3 id="nh-ng-l-u-quan-tr-ng">Những lưu ý quan trọng</h3>
-<ul>
-<li><p><strong>An ninh hệ thống</strong>: Việc sử dụng ADS có thể bị lợi dụng bởi các phần mềm độc hại để ẩn đi những tệp có hại. Các chương trình diệt virus hiện đại đã có thể phát hiện các ADS, nhưng không phải phần mềm diệt virus nào cũng có thể nhận diện và xử lý được chúng.</p>
-</li>
-<li><p><strong>Không phải tất cả hệ thống đều hỗ trợ ADS</strong>: Một số hệ thống hoặc phần mềm sao lưu có thể không hỗ trợ hoặc bỏ qua Alternate Data Streams, điều này có thể khiến các tệp ẩn không được sao lưu.</p>
-</li>
-<li><p><strong>Sử dụng hợp pháp</strong>: Việc sử dụng ADS để ẩn tệp phải được thực hiện một cách hợp lý và có trách nhiệm. Nó không nên được sử dụng cho các mục đích trái phép hoặc gian lận.</p>
-</li>
-</ul>
-</body></html>
+<div class="a4-content">
+    <html><head>
+        <link rel="stylesheet" href="post.css">
+       </head><body><h3 id="hiding-files-using-ntfs-streams-in-windows">Hiding Files using NTFS Streams in Windows</h3>
+    <p>Trong hệ điều hành Windows, hệ thống tệp NTFS (New Technology File System) hỗ trợ một tính năng đặc biệt gọi là <strong>Alternate Data Streams (ADS)</strong>. Tính năng này cho phép bạn gắn thông tin bổ sung vào các tệp mà người dùng không dễ dàng nhận thấy khi duyệt qua các tệp bình thường. Một trong những ứng dụng của ADS là <strong>ẩn tệp</strong> mà không thay đổi kích thước của tệp gốc hay làm ảnh hưởng đến các dữ liệu hiện có. Đặc biệt, việc sử dụng ADS có thể giúp bảo mật và tạo các “backdoor” hoặc ẩn tệp trong hệ thống mà không làm thay đổi cấu trúc file hệ thống. Tuy nhiên, kỹ thuật này cũng có thể bị lạm dụng cho các mục đích xấu, như ẩn virus hoặc phần mềm độc hại.</p>
+    <h3 id="c-c-b-c-th-c-hi-n-n-t-p-b-ng-ntfs-streams">Các bước thực hiện để ẩn tệp bằng NTFS Streams</h3>
+    <p>Dưới đây là một ví dụ cụ thể về cách sử dụng NTFS Streams để ẩn tệp trong hệ điều hành Windows:</p>
+    <ol>
+    <li><p><strong>Tạo thư mục mới</strong>:
+    Đầu tiên, chúng ta tạo một thư mục mới trên ổ đĩa C.</p>
+    <pre><code class="lang-batch"><span class="hljs-built_in">mkdir</span> c:\magic
+    <span class="hljs-built_in">cd</span> c:\magic
+    </code></pre>
+    </li>
+    <li><p><strong>Sao chép tệp exe</strong>:
+    Tiếp theo, sao chép một tệp thực thi (chẳng hạn <code>calc.exe</code> từ thư mục System32) vào thư mục vừa tạo.</p>
+    <pre><code class="lang-batch">copy c:<span class="hljs-symbol">\W</span>indows<span class="hljs-symbol">\S</span>ystem32<span class="hljs-symbol">\c</span>alc.exe c:<span class="hljs-symbol">\m</span>agic
+    </code></pre>
+    </li>
+    <li><p><strong>Tạo tệp readme.txt</strong>:
+    Tạo một tệp văn bản trống, có tên là <code>readme.txt</code>, để lưu trữ tệp ẩn sau này.</p>
+    <pre><code class="lang-batch"><span class="hljs-selector-tag">echo</span>. &gt; <span class="hljs-selector-tag">readme</span><span class="hljs-selector-class">.txt</span>
+    </code></pre>
+    </li>
+    <li><p><strong>Ẩn tệp trong <code>readme.txt</code></strong>:
+    Sử dụng lệnh <code>type</code> để chèn tệp <code>calc.exe</code> vào trong <code>readme.txt</code> thông qua Alternate Data Stream. Cụ thể, ở đây, <code>calc.exe</code> sẽ được ẩn trong <code>readme.txt</code> dưới tên <code>calc.exe</code>.</p>
+    <pre><code class="lang-batch">type c:\magic\calc<span class="hljs-selector-class">.exe</span> &gt; c:\magic\readme<span class="hljs-selector-class">.txt</span>:calc.exe
+    </code></pre>
+    </li>
+    <li><p><strong>Kiểm tra thư mục</strong>:
+    Khi kiểm tra thư mục <code>c:\magic</code>, bạn sẽ thấy <code>readme.txt</code> vẫn còn nhưng không thấy tệp <code>calc.exe</code>.</p>
+    <pre><code class="lang-batch"><span class="hljs-built_in">dir</span>
+    </code></pre>
+    </li>
+    <li><p><strong>Xóa tệp gốc</strong>:
+    Sau đó, bạn có thể xóa tệp <code>calc.exe</code> gốc mà vẫn giữ nguyên tệp <code>readme.txt</code>.</p>
+    <pre><code class="lang-batch"><span class="hljs-selector-tag">del</span> calc.exe
+    </code></pre>
+    </li>
+    <li><p><strong>Tạo liên kết biểu tượng (symlink)</strong>:
+    Tạo một liên kết biểu tượng có tên <code>backdoor.exe</code>, liên kết đến Alternate Data Stream trong tệp <code>readme.txt</code>.</p>
+    <pre><code class="lang-batch">mklink backdoor<span class="hljs-selector-class">.exe</span> readme<span class="hljs-selector-class">.txt</span>:calc.exe
+    </code></pre>
+    </li>
+    <li><p><strong>Chạy phần mềm ẩn</strong>:
+    Cuối cùng, bạn có thể chạy <code>backdoor.exe</code>, và nó sẽ kích hoạt <code>calc.exe</code> mà không có dấu hiệu là có bất kỳ tệp thực thi nào tồn tại trong thư mục.</p>
+    <pre><code class="lang-batch"><span class="hljs-selector-tag">backdoor</span><span class="hljs-selector-class">.exe</span>
+    </code></pre>
+    </li>
+    </ol>
+    <h3 id="t-i-sao-ntfs-streams-l-i-h-u-ch-">Tại sao NTFS Streams lại hữu ích?</h3>
+    <p>Alternate Data Streams (ADS) có thể là một công cụ hữu ích để ẩn các tệp trong Windows. Chúng thường được sử dụng trong các tình huống sau:</p>
+    <ol>
+    <li><p><strong>Giấu thông tin nhạy cảm</strong>: Bạn có thể giấu thông tin hoặc tệp vào trong một tệp khác mà không làm thay đổi dung lượng của tệp chính. Điều này giúp tránh bị phát hiện khi duyệt thư mục.</p>
+    </li>
+    <li><p><strong>Tạo backdoor hoặc tệp độc hại</strong>: Trong một số trường hợp, các phần mềm độc hại có thể sử dụng ADS để ẩn mã độc và tránh sự phát hiện của phần mềm diệt virus. Kỹ thuật này giúp phần mềm độc hại không bị tìm thấy khi người dùng kiểm tra hệ thống.</p>
+    </li>
+    <li><p><strong>Đảm bảo an toàn thông tin</strong>: Các nhà phát triển có thể sử dụng ADS để bảo vệ dữ liệu nhạy cảm trong các tệp, mặc dù không phải là phương pháp an toàn nhất.</p>
+    </li>
+    </ol>
+    <h3 id="nh-ng-l-u-quan-tr-ng">Những lưu ý quan trọng</h3>
+    <ul>
+    <li><p><strong>An ninh hệ thống</strong>: Việc sử dụng ADS có thể bị lợi dụng bởi các phần mềm độc hại để ẩn đi những tệp có hại. Các chương trình diệt virus hiện đại đã có thể phát hiện các ADS, nhưng không phải phần mềm diệt virus nào cũng có thể nhận diện và xử lý được chúng.</p>
+    </li>
+    <li><p><strong>Không phải tất cả hệ thống đều hỗ trợ ADS</strong>: Một số hệ thống hoặc phần mềm sao lưu có thể không hỗ trợ hoặc bỏ qua Alternate Data Streams, điều này có thể khiến các tệp ẩn không được sao lưu.</p>
+    </li>
+    <li><p><strong>Sử dụng hợp pháp</strong>: Việc sử dụng ADS để ẩn tệp phải được thực hiện một cách hợp lý và có trách nhiệm. Nó không nên được sử dụng cho các mục đích trái phép hoặc gian lận.</p>
+    </li>
+    </ul>
+    </body></html>
+    <!-- Nội dung blog của bạn ở đây -->
+</div>

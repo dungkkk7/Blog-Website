@@ -1,3 +1,6 @@
+<div class="a4-content">
+    <!-- Nội dung blog của bạn ở đây -->
+
 <link rel="stylesheet" href="../post.css">
 <h2 id="gi-i-thi-u-v-m-h-a-trong-ph-n-t-ch-malware">Giới thiệu về mã hóa trong phân tích malware</h2>
 <p>Phần mềm độc hại (malware) thường sử dụng các <strong>thuật toán mã hóa đối xứng</strong> (như DES, AES) và <strong>bất đối xứng</strong> (như RSA) để bảo vệ dữ liệu hoặc giao tiếp của chúng. Tuy nhiên, thay vì tự viết mã nguồn cho các thuật toán này, hầu hết malware tận dụng các <strong>API của Windows</strong> để thực hiện mã hóa. Điều này giúp chúng tránh được sự phức tạp khi tự cài đặt các thuật toán toán học tiên tiến, chẳng hạn như DES, AES, hay RSA, vốn khó hơn nhiều so với các thuật toán đơn giản như RC4.</p>
@@ -426,3 +429,4 @@ CryptDecrypt(<span class="hljs-name">hKey</span>, NULL, <span class="hljs-number
 <li><strong>Thư viện liên kết</strong>: Cần liên kết với <code>advapi32.lib</code> (được thêm bằng <code>#pragma comment(lib, &quot;advapi32.lib&quot;)</code>).  </li>
 <li><strong>Môi trường</strong>: Đoạn mã chạy trên Windows và yêu cầu bộ công cụ phát triển hỗ trợ Windows CryptoAPI (ví dụ: Visual Studio).</li>
 </ul>
+</div>

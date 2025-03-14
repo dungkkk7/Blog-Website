@@ -1,243 +1,246 @@
-<html>
-<head>
-    <link rel="stylesheet" href="../post.css">
-</head>
-<body>
-    <h3 id="gi-i-th-ch-chi-ti-t-v-k-thu-t-x-raying-trong-ph-t-hi-n-ph-n-m-m-c-h-i">Giải thích chi tiết về kỹ thuật X-RAYING trong phát hiện phần mềm độc hại</h3>
-    <p>X-RAYING là một kỹ thuật tiên tiến được sử dụng trong lĩnh vực an ninh mạng, đặc biệt trong việc phát hiện phần mềm độc hại (malware). Kỹ thuật này cho phép các công cụ antivirus và hệ thống phát hiện tĩnh nhận dạng các mẫu phần mềm độc hại, ngay cả khi chúng đã được mã hóa, mà không cần biết khóa mã hóa. Điều đặc biệt của X-RAYING là nó không yêu cầu sử dụng các phương pháp tốn thời gian như brute-forcing (thử tất cả các khóa có thể), mà vẫn có thể "nhìn xuyên qua" lớp mã hóa để tìm ra mã độc.</p>
+<div class="a4-content">
+  <!-- Nội dung blog của bạn ở đây -->
+  <html>
+    <head>
+        <link rel="stylesheet" href="../post.css">
+    </head>
+    <body>
+        <h3 id="gi-i-th-ch-chi-ti-t-v-k-thu-t-x-raying-trong-ph-t-hi-n-ph-n-m-m-c-h-i">Giải thích chi tiết về kỹ thuật X-RAYING trong phát hiện phần mềm độc hại</h3>
+        <p>X-RAYING là một kỹ thuật tiên tiến được sử dụng trong lĩnh vực an ninh mạng, đặc biệt trong việc phát hiện phần mềm độc hại (malware). Kỹ thuật này cho phép các công cụ antivirus và hệ thống phát hiện tĩnh nhận dạng các mẫu phần mềm độc hại, ngay cả khi chúng đã được mã hóa, mà không cần biết khóa mã hóa. Điều đặc biệt của X-RAYING là nó không yêu cầu sử dụng các phương pháp tốn thời gian như brute-forcing (thử tất cả các khóa có thể), mà vẫn có thể "nhìn xuyên qua" lớp mã hóa để tìm ra mã độc.</p>
+        <h4 id="t-i-sao-x-raying-h-u-ch-">Tại sao X-RAYING hữu ích?</h4>
+        <p>Nhiều tác giả phần mềm độc hại sử dụng mã hóa để che giấu mã của họ, khiến việc phát hiện bằng các phương pháp truyền thống trở nên khó khăn. Với X-RAYING, các công cụ antivirus có thể nhận diện các mẫu mã độc mà không cần giải mã hoàn toàn, giúp tiết kiệm thời gian và tài nguyên. Điều này rất quan trọng khi đối phó với các biến thể phần mềm độc hại sử dụng cùng mã lõi nhưng với các khóa mã hóa khác nhau.</p>
+        ...
+    </body>
+    </html>
+        color: #8bc34a;
+        text-decoration: none;
+      }
+      
+      a:hover {
+        text-decoration: underline;
+        color: #aed581;
+      }
+      
+      code {
+        font-family: 'Courier New', monospace;
+        padding: 2px 4px;
+        background-color: #000000;
+        border-radius: 3px;
+      }
+      
+      pre {
+        background-color: #000000;
+        border-radius: 6px;
+        padding: 16px;
+        overflow: auto;
+        margin-bottom: 16px;
+      }
+      
+      pre code {
+        background-color: transparent;
+        padding: 0;
+      }
+      
+      blockquote {
+        border-left: 4px solid #388e3c;
+        padding-left: 16px;
+        margin-left: 0;
+        color: #a5d6a7;
+      }
+      
+      strong {
+        color: #66bb6a;
+        font-weight: bold;
+      }
+      
+      em {
+        color: #81c784;
+      }
+      
+      ul, ol {
+        margin-bottom: 16px;
+        padding-left: 32px;
+      }
+      
+      li {
+        margin-bottom: 8px;
+      }
+      
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      
+      th, td {
+        padding: 12px;
+        border: 1px solid #2e7d32;
+      }
+      
+      th {
+        background-color: #1b3a1b;
+        font-weight: bold;
+        color: #4caf50;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #112211;
+      }
+      
+      /* Special styling for X-RAYING specifics */
+      .key-concept {
+        background-color: #1b3a1b;
+        border-left: 4px solid #4caf50;
+        padding: 10px;
+        margin: 15px 0;
+      }
+      
+      .example {
+        background-color: #0d260d;
+        border: 1px solid #1af025;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+      }
+      
+      /* Specific styling for code examples */
+      .code-xor {
+        color: #ffeb3b;
+      }
+      
+      .highlight {
+        background-color: #2e7d32;
+        color: #e8f5e9;
+        padding: 2px 4px;
+        border-radius: 3px;
+      }</style></head><body><h3 id="gi-i-th-ch-chi-ti-t-v-k-thu-t-x-raying-trong-ph-t-hi-n-ph-n-m-m-c-h-i">Giải thích chi tiết về kỹ thuật X-RAYING trong phát hiện phần mềm độc hại</h3>
+    <p>X-RAYING là một kỹ thuật tiên tiến được sử dụng trong lĩnh vực an ninh mạng, đặc biệt trong việc phát hiện phần mềm độc hại (malware). Kỹ thuật này cho phép các công cụ antivirus và hệ thống phát hiện tĩnh nhận dạng các mẫu phần mềm độc hại, ngay cả khi chúng đã được mã hóa, mà không cần biết khóa mã hóa. Điều đặc biệt của X-RAYING là nó không yêu cầu sử dụng các phương pháp tốn thời gian như brute-forcing (thử tất cả các khóa có thể), mà vẫn có thể &quot;nhìn xuyên qua&quot; lớp mã hóa để tìm ra mã độc.</p>
     <h4 id="t-i-sao-x-raying-h-u-ch-">Tại sao X-RAYING hữu ích?</h4>
     <p>Nhiều tác giả phần mềm độc hại sử dụng mã hóa để che giấu mã của họ, khiến việc phát hiện bằng các phương pháp truyền thống trở nên khó khăn. Với X-RAYING, các công cụ antivirus có thể nhận diện các mẫu mã độc mà không cần giải mã hoàn toàn, giúp tiết kiệm thời gian và tài nguyên. Điều này rất quan trọng khi đối phó với các biến thể phần mềm độc hại sử dụng cùng mã lõi nhưng với các khóa mã hóa khác nhau.</p>
-    ...
-</body>
-</html>
-    color: #8bc34a;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-    color: #aed581;
-  }
-  
-  code {
-    font-family: 'Courier New', monospace;
-    padding: 2px 4px;
-    background-color: #000000;
-    border-radius: 3px;
-  }
-  
-  pre {
-    background-color: #000000;
-    border-radius: 6px;
-    padding: 16px;
-    overflow: auto;
-    margin-bottom: 16px;
-  }
-  
-  pre code {
-    background-color: transparent;
-    padding: 0;
-  }
-  
-  blockquote {
-    border-left: 4px solid #388e3c;
-    padding-left: 16px;
-    margin-left: 0;
-    color: #a5d6a7;
-  }
-  
-  strong {
-    color: #66bb6a;
-    font-weight: bold;
-  }
-  
-  em {
-    color: #81c784;
-  }
-  
-  ul, ol {
-    margin-bottom: 16px;
-    padding-left: 32px;
-  }
-  
-  li {
-    margin-bottom: 8px;
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 16px;
-  }
-  
-  th, td {
-    padding: 12px;
-    border: 1px solid #2e7d32;
-  }
-  
-  th {
-    background-color: #1b3a1b;
-    font-weight: bold;
-    color: #4caf50;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #112211;
-  }
-  
-  /* Special styling for X-RAYING specifics */
-  .key-concept {
-    background-color: #1b3a1b;
-    border-left: 4px solid #4caf50;
-    padding: 10px;
-    margin: 15px 0;
-  }
-  
-  .example {
-    background-color: #0d260d;
-    border: 1px solid #1af025;
-    border-radius: 6px;
-    padding: 15px;
-    margin: 15px 0;
-  }
-  
-  /* Specific styling for code examples */
-  .code-xor {
-    color: #ffeb3b;
-  }
-  
-  .highlight {
-    background-color: #2e7d32;
-    color: #e8f5e9;
-    padding: 2px 4px;
-    border-radius: 3px;
-  }</style></head><body><h3 id="gi-i-th-ch-chi-ti-t-v-k-thu-t-x-raying-trong-ph-t-hi-n-ph-n-m-m-c-h-i">Giải thích chi tiết về kỹ thuật X-RAYING trong phát hiện phần mềm độc hại</h3>
-<p>X-RAYING là một kỹ thuật tiên tiến được sử dụng trong lĩnh vực an ninh mạng, đặc biệt trong việc phát hiện phần mềm độc hại (malware). Kỹ thuật này cho phép các công cụ antivirus và hệ thống phát hiện tĩnh nhận dạng các mẫu phần mềm độc hại, ngay cả khi chúng đã được mã hóa, mà không cần biết khóa mã hóa. Điều đặc biệt của X-RAYING là nó không yêu cầu sử dụng các phương pháp tốn thời gian như brute-forcing (thử tất cả các khóa có thể), mà vẫn có thể &quot;nhìn xuyên qua&quot; lớp mã hóa để tìm ra mã độc.</p>
-<h4 id="t-i-sao-x-raying-h-u-ch-">Tại sao X-RAYING hữu ích?</h4>
-<p>Nhiều tác giả phần mềm độc hại sử dụng mã hóa để che giấu mã của họ, khiến việc phát hiện bằng các phương pháp truyền thống trở nên khó khăn. Với X-RAYING, các công cụ antivirus có thể nhận diện các mẫu mã độc mà không cần giải mã hoàn toàn, giúp tiết kiệm thời gian và tài nguyên. Điều này rất quan trọng khi đối phó với các biến thể phần mềm độc hại sử dụng cùng mã lõi nhưng với các khóa mã hóa khác nhau.</p>
-<h4 id="x-raying-ho-t-ng-nh-th-n-o-">X-RAYING hoạt động như thế nào?</h4>
-<p>Kỹ thuật X-RAYING dựa trên nguyên lý rằng ngay cả khi dữ liệu được mã hóa, vẫn tồn tại những dấu vết hoặc mẫu byte có thể nhận dạng được. Các thuật toán mã hóa đơn giản không làm cho dữ liệu hoàn toàn ngẫu nhiên, do đó các đặc điểm cấu trúc của phần mềm độc hại thường vẫn còn nguyên vẹn sau khi mã hóa. X-RAYING tìm kiếm các chuỗi byte cụ thể hoặc các mẫu đặc trưng để phát hiện sự hiện diện của mã độc mà không cần biết khóa mã hóa chính xác.</p>
-<h4 id="v-d-v-c-ch-x-raying-ho-t-ng">Ví dụ về cách X-RAYING hoạt động</h4>
-<p>Giả sử một mẫu phần mềm độc hại chứa header &quot;MZ&quot; – dấu hiệu đặc trưng của các tệp PE (Portable Executable). Nếu phần mềm độc hại này được mã hóa bằng thuật toán XOR với một khóa bí mật, header &quot;MZ&quot; sẽ biến thành một chuỗi byte khác. Tuy nhiên, X-RAYING vẫn có thể phát hiện sự hiện diện của header này bằng cách sử dụng các kỹ thuật như phân tích tần suất hoặc nhận dạng mẫu, ngay cả khi không biết khóa mã hóa.</p>
-<h4 id="c-c-ph-ng-ph-p-c-s-d-ng-trong-x-raying">Các phương pháp được sử dụng trong X-RAYING</h4>
-<ul>
-<li><strong>Phân tích tần suất</strong>: Xác định các mẫu byte lặp lại thường xuyên trong dữ liệu, có thể chỉ ra sự hiện diện của nội dung đã mã hóa.</li>
-<li><strong>Nhận dạng mẫu</strong>: Tìm kiếm các dấu vết cấu trúc của mã gốc, như header hoặc các chuỗi lệnh đặc trưng.</li>
-<li><strong>Heuristics</strong>: Áp dụng các phỏng đoán có cơ sở dựa trên đầu ra của các thuật toán mã hóa thông dụng để phát hiện các chuỗi byte đáng ngờ.</li>
-</ul>
-<h4 id="-ng-d-ng-c-a-x-raying">Ứng dụng của X-RAYING</h4>
-<ul>
-<li><strong>Phát hiện phần mềm độc hại đã mã hóa</strong>: Nhận dạng các biến thể phần mềm độc hại đã được mã hóa mà không cần giải mã chúng.</li>
-<li><strong>Xác định các tệp PE nhúng</strong>: Phát hiện các tệp PE được nhúng trong phần mềm độc hại, ngay cả khi chúng bị mã hóa.</li>
-<li><strong>Hỗ trợ giải mã mẫu độc hại</strong>: Giúp reverse-engineering quá trình mã hóa để hỗ trợ phân tích sâu hơn các mẫu mã độc.</li>
-</ul>
-<h4 id="c-c-c-ng-c-h-tr-x-raying">Các công cụ hỗ trợ X-RAYING</h4>
-<ul>
-<li><strong>YARA</strong>: Công cụ mạnh mẽ để định nghĩa các quy tắc phát hiện dựa trên chuỗi byte, mẫu hoặc điều kiện logic.</li>
-<li><strong>IDA Pro</strong>: Công cụ phân tích và disassembly nhị phân, hỗ trợ phát hiện mẫu byte trong dữ liệu mã hóa.</li>
-<li><strong>Radare2</strong>: Khung phân tích nhị phân mã nguồn mở, cung cấp tính năng tìm kiếm chuỗi byte và phân tích mã.</li>
-<li><strong>Script tùy chỉnh</strong>: Sử dụng Python hoặc các ngôn ngữ khác để tự động hóa quá trình X-RAYING theo nhu cầu cụ thể.</li>
-</ul>
-<h4 id="v-d-">Ví Dụ</h4>
-<h3 id="nguy-n-l-c-b-n-c-a-x-raying">Nguyên lý cơ bản của X-RAYING</h3>
-<p>Nếu bạn có:</p>
-<ul>
-<li><strong>Dữ liệu mã hóa (ciphertext)</strong>: Đây là dữ liệu đã được mã hóa bởi mã độc.</li>
-<li><strong>Một phần dữ liệu gốc (plaintext)</strong>: Ví dụ, một chuỗi quen thuộc như &quot;This program cannot run in DOS mode&quot; trong tệp PE (Portable Executable).</li>
-<li><strong>Thuật toán mã hóa</strong>: Giả sử là XOR, một thuật toán đơn giản và phổ biến trong mã độc.</li>
-</ul>
-<p>Thì bạn có thể tìm ra khóa mã hóa bằng cách thử áp dụng thuật toán ngược lại, sử dụng plaintext đã biết để so sánh với ciphertext. Khi tìm được khóa, bạn có thể giải mã toàn bộ dữ liệu còn lại.</p>
-<h2 id="2-x-raying-ho-t-ng-nh-th-n-o-">2. X-RAYING hoạt động như thế nào?</h2>
-<p>Hãy xem xét một ví dụ cụ thể để hiểu cách X-RAYING hoạt động với thuật toán XOR:</p>
-<h3 id="v-d-n-gi-n">Ví dụ đơn giản</h3>
-<ul>
-<li><strong>Plaintext</strong>: &quot;MZ&quot; (header của tệp PE, thường xuất hiện ở đầu các tệp thực thi Windows).</li>
-<li><strong>Khóa bí mật (secret key)</strong>: 0x55 (một byte).</li>
-<li><strong>Ciphertext</strong>: &quot;MZ&quot; XOR 0x55 = &quot;øñ&quot; (giả sử kết quả là &quot;øñ&quot; sau khi mã hóa).</li>
-</ul>
-<p>Bây giờ, nếu bạn chỉ có ciphertext (&quot;øñ&quot;) và biết plaintext là &quot;MZ&quot;, bạn có thể tính ngược lại khóa:</p>
-<ul>
-<li>Khóa = ciphertext XOR plaintext = &quot;øñ&quot; XOR &quot;MZ&quot; = 0x55.</li>
-</ul>
-<p>Sau khi có khóa (0x55), bạn dùng nó để giải mã phần còn lại của ciphertext.</p>
-<h3 id="quy-tr-nh-x-raying">Quy trình X-RAYING</h3>
-<ol>
-<li><strong>Chọn thuật toán mã hóa</strong>: Ví dụ, XOR (rất phổ biến trong mã độc).</li>
-<li><strong>Chọn một phần plaintext</strong>: Ví dụ, chuỗi &quot;MZ&quot; hoặc &quot;kernel32.dll&quot;.</li>
-<li><strong>Thử từng đoạn ciphertext</strong>: XOR plaintext với từng phần của ciphertext để tìm khóa.</li>
-<li><strong>Kiểm tra khóa</strong>: Dùng khóa vừa tìm được để giải mã các phần khác. Nếu đúng, bạn sẽ thấy plaintext có ý nghĩa (như tên hàm hoặc chuỗi hợp lệ).</li>
-<li><strong>Giải mã toàn bộ</strong>: Khi khóa được xác nhận, bạn có thể giải mã tất cả dữ liệu.</li>
-</ol>
-<p>Điều đặc biệt của X-RAYING là nó không cần biết khóa trước, mà dùng plaintext đã biết để &quot;brute-force&quot; ra khóa một cách thông minh.</p>
-<h2 id="3-c-c-c-ng-c-h-tr-x-raying">3. Các công cụ hỗ trợ X-RAYING</h2>
-<p>Vì quá trình thủ công rất tốn thời gian, các công cụ như <strong>XORSearch</strong> và <strong>Yara</strong> được phát triển để tự động hóa X-RAYING. Hãy cùng xem cách chúng hoạt động qua các ví dụ từ hình ảnh đính kèm.</p>
-<h3 id="a-xorsearch">a. XORSearch</h3>
-<ul>
-<li><strong>Chức năng</strong>: XORSearch tìm kiếm plaintext trong ciphertext bằng cách thử tất cả các khóa XOR có thể (0x00 đến 0xFF cho XOR 1 byte). Nó cũng hỗ trợ các thuật toán khác như bit shifting (dịch bit).</li>
-<li><p><strong>Ví dụ từ Figure 4.28</strong>:</p>
-<ul>
-<li><strong>Lệnh chạy</strong>: <code>XORSearch.exe -n 20 4410585973_pe.png 4410585973_igid=&lt;cb7510d4&gt;</code>.<ul>
-<li><code>-n 20</code>: Tìm chuỗi plaintext dài 20 byte.</li>
-<li><code>4410585973_pe.png</code>: Tệp mã hóa cần phân tích (có thể là tệp PE).</li>
-</ul>
-</li>
-<li><strong>Kết quả</strong>:<ul>
-<li><code>Found XOR 81 position 2271(&lt;208&gt;): 81=170.77.126.108</code>.<ul>
-<li>Tìm thấy chuỗi &quot;170.77.126.108&quot; (một địa chỉ IP) tại vị trí 2271 trong ciphertext.</li>
-<li>Khóa XOR là 81 (0x51).</li>
-</ul>
-</li>
-<li>Điều này cho thấy XORSearch tự động tìm ra plaintext (IP) và khóa mà không cần biết trước.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Ý nghĩa</strong>: XORSearch giúp bạn nhanh chóng phát hiện các chuỗi quan trọng (như IP, URL) trong mã độc đã mã hóa, hỗ trợ việc phân tích thêm.</p>
-</li>
-</ul>
-<h3 id="b-yara">b. Yara</h3>
-<ul>
-<li><strong>Chức năng</strong>: Yara cho phép định nghĩa các quy tắc (rules) để tìm kiếm mẫu trong tệp. Nó hỗ trợ tìm chuỗi plaintext được mã hóa XOR với bất kỳ khóa 1 byte nào.</li>
-<li><p><strong>Ví dụ từ Figure 4.29</strong>:</p>
-<ul>
-<li><strong>Quy tắc Yara</strong>:<pre><code><span class="hljs-selector-tag">rule</span> <span class="hljs-selector-tag">xor_test</span> {
-    <span class="hljs-attribute">strings</span>:
-        $a = <span class="hljs-string">"http://isc.sans.edu"</span> xor
-    condition:
-        $a
-}
-</code></pre><ul>
-<li><code>$a = &quot;http://isc.sans.edu&quot; xor</code>: Tìm chuỗi &quot;<a href="http://isc.sans.edu">http://isc.sans.edu</a>&quot; được mã hóa XOR với bất kỳ khóa nào từ 0x00 đến 0xFF.</li>
-</ul>
-</li>
-<li><strong>Lệnh chạy</strong>: <code>yara64 -s xor.yara test-xor.txt</code>.</li>
-<li><strong>Kết quả</strong>:<ul>
-<li><code>0x5a: $a: 55[nnk(%3253575%20...</code>.<ul>
-<li>Tìm thấy chuỗi tại offset 0x5a (90 trong hệ thập phân).</li>
-<li>Khóa XOR là 0x55.</li>
-<li>Chuỗi mã hóa khớp với &quot;<a href="http://isc.sans.edu">http://isc.sans.edu</a>&quot; sau khi giải mã.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Ý nghĩa</strong>: Yara tự động quét tệp và phát hiện các chuỗi đã mã hóa, giúp tiết kiệm thời gian so với phân tích thủ công.</p>
-</li>
-</ul>
-<hr>
-<h2 id="4-l-i-ch-v-h-n-ch-c-a-x-raying">4. Lợi ích và hạn chế của X-RAYING</h2>
-<h3 id="l-i-ch">Lợi ích</h3>
-<ul>
-<li><strong>Không cần biết khóa</strong>: Chỉ cần một phần plaintext là đủ để tìm ra khóa và giải mã.</li>
-<li><strong>Hiệu quả với mã hóa đơn giản</strong>: Hoạt động tốt với XOR, bit shifting, hoặc các thuật toán yếu khác.</li>
-<li><strong>Tự động hóa</strong>: Các công cụ như XORSearch và Yara giúp tăng tốc quá trình.</li>
-</ul>
-<h3 id="h-n-ch-">Hạn chế</h3>
-<ul>
-<li><strong>Không hiệu quả với mã hóa mạnh</strong>: Với các thuật toán phức tạp như AES, X-RAYING không áp dụng được vì dữ liệu mã hóa không còn mẫu dự đoán.</li>
-<li><strong>Có thể phát hiện nhầm (false positives)</strong>: Nếu plaintext quá chung chung (như &quot;the&quot;), có thể tìm thấy trong các tệp không phải mã độc.</li>
-</ul>
-<h3 id="k-t-lu-n">Kết luận</h3>
-<p>X-RAYING là một kỹ thuật sáng tạo và hiệu quả trong việc phát hiện phần mềm độc hại đã mã hóa. Bằng cách tận dụng các mẫu byte và dấu vết cấu trúc mà các phương pháp mã hóa đơn giản không thể che giấu hoàn toàn, X-RAYING trở thành một công cụ quan trọng trong cuộc chiến chống lại mã độc, với sự hỗ trợ từ các công cụ như YARA, IDA Pro, Radare2 và các script tùy chỉnh.</p>
-</body></html>
+    <h4 id="x-raying-ho-t-ng-nh-th-n-o-">X-RAYING hoạt động như thế nào?</h4>
+    <p>Kỹ thuật X-RAYING dựa trên nguyên lý rằng ngay cả khi dữ liệu được mã hóa, vẫn tồn tại những dấu vết hoặc mẫu byte có thể nhận dạng được. Các thuật toán mã hóa đơn giản không làm cho dữ liệu hoàn toàn ngẫu nhiên, do đó các đặc điểm cấu trúc của phần mềm độc hại thường vẫn còn nguyên vẹn sau khi mã hóa. X-RAYING tìm kiếm các chuỗi byte cụ thể hoặc các mẫu đặc trưng để phát hiện sự hiện diện của mã độc mà không cần biết khóa mã hóa chính xác.</p>
+    <h4 id="v-d-v-c-ch-x-raying-ho-t-ng">Ví dụ về cách X-RAYING hoạt động</h4>
+    <p>Giả sử một mẫu phần mềm độc hại chứa header &quot;MZ&quot; – dấu hiệu đặc trưng của các tệp PE (Portable Executable). Nếu phần mềm độc hại này được mã hóa bằng thuật toán XOR với một khóa bí mật, header &quot;MZ&quot; sẽ biến thành một chuỗi byte khác. Tuy nhiên, X-RAYING vẫn có thể phát hiện sự hiện diện của header này bằng cách sử dụng các kỹ thuật như phân tích tần suất hoặc nhận dạng mẫu, ngay cả khi không biết khóa mã hóa.</p>
+    <h4 id="c-c-ph-ng-ph-p-c-s-d-ng-trong-x-raying">Các phương pháp được sử dụng trong X-RAYING</h4>
+    <ul>
+    <li><strong>Phân tích tần suất</strong>: Xác định các mẫu byte lặp lại thường xuyên trong dữ liệu, có thể chỉ ra sự hiện diện của nội dung đã mã hóa.</li>
+    <li><strong>Nhận dạng mẫu</strong>: Tìm kiếm các dấu vết cấu trúc của mã gốc, như header hoặc các chuỗi lệnh đặc trưng.</li>
+    <li><strong>Heuristics</strong>: Áp dụng các phỏng đoán có cơ sở dựa trên đầu ra của các thuật toán mã hóa thông dụng để phát hiện các chuỗi byte đáng ngờ.</li>
+    </ul>
+    <h4 id="-ng-d-ng-c-a-x-raying">Ứng dụng của X-RAYING</h4>
+    <ul>
+    <li><strong>Phát hiện phần mềm độc hại đã mã hóa</strong>: Nhận dạng các biến thể phần mềm độc hại đã được mã hóa mà không cần giải mã chúng.</li>
+    <li><strong>Xác định các tệp PE nhúng</strong>: Phát hiện các tệp PE được nhúng trong phần mềm độc hại, ngay cả khi chúng bị mã hóa.</li>
+    <li><strong>Hỗ trợ giải mã mẫu độc hại</strong>: Giúp reverse-engineering quá trình mã hóa để hỗ trợ phân tích sâu hơn các mẫu mã độc.</li>
+    </ul>
+    <h4 id="c-c-c-ng-c-h-tr-x-raying">Các công cụ hỗ trợ X-RAYING</h4>
+    <ul>
+    <li><strong>YARA</strong>: Công cụ mạnh mẽ để định nghĩa các quy tắc phát hiện dựa trên chuỗi byte, mẫu hoặc điều kiện logic.</li>
+    <li><strong>IDA Pro</strong>: Công cụ phân tích và disassembly nhị phân, hỗ trợ phát hiện mẫu byte trong dữ liệu mã hóa.</li>
+    <li><strong>Radare2</strong>: Khung phân tích nhị phân mã nguồn mở, cung cấp tính năng tìm kiếm chuỗi byte và phân tích mã.</li>
+    <li><strong>Script tùy chỉnh</strong>: Sử dụng Python hoặc các ngôn ngữ khác để tự động hóa quá trình X-RAYING theo nhu cầu cụ thể.</li>
+    </ul>
+    <h4 id="v-d-">Ví Dụ</h4>
+    <h3 id="nguy-n-l-c-b-n-c-a-x-raying">Nguyên lý cơ bản của X-RAYING</h3>
+    <p>Nếu bạn có:</p>
+    <ul>
+    <li><strong>Dữ liệu mã hóa (ciphertext)</strong>: Đây là dữ liệu đã được mã hóa bởi mã độc.</li>
+    <li><strong>Một phần dữ liệu gốc (plaintext)</strong>: Ví dụ, một chuỗi quen thuộc như &quot;This program cannot run in DOS mode&quot; trong tệp PE (Portable Executable).</li>
+    <li><strong>Thuật toán mã hóa</strong>: Giả sử là XOR, một thuật toán đơn giản và phổ biến trong mã độc.</li>
+    </ul>
+    <p>Thì bạn có thể tìm ra khóa mã hóa bằng cách thử áp dụng thuật toán ngược lại, sử dụng plaintext đã biết để so sánh với ciphertext. Khi tìm được khóa, bạn có thể giải mã toàn bộ dữ liệu còn lại.</p>
+    <h2 id="2-x-raying-ho-t-ng-nh-th-n-o-">2. X-RAYING hoạt động như thế nào?</h2>
+    <p>Hãy xem xét một ví dụ cụ thể để hiểu cách X-RAYING hoạt động với thuật toán XOR:</p>
+    <h3 id="v-d-n-gi-n">Ví dụ đơn giản</h3>
+    <ul>
+    <li><strong>Plaintext</strong>: &quot;MZ&quot; (header của tệp PE, thường xuất hiện ở đầu các tệp thực thi Windows).</li>
+    <li><strong>Khóa bí mật (secret key)</strong>: 0x55 (một byte).</li>
+    <li><strong>Ciphertext</strong>: &quot;MZ&quot; XOR 0x55 = &quot;øñ&quot; (giả sử kết quả là &quot;øñ&quot; sau khi mã hóa).</li>
+    </ul>
+    <p>Bây giờ, nếu bạn chỉ có ciphertext (&quot;øñ&quot;) và biết plaintext là &quot;MZ&quot;, bạn có thể tính ngược lại khóa:</p>
+    <ul>
+    <li>Khóa = ciphertext XOR plaintext = &quot;øñ&quot; XOR &quot;MZ&quot; = 0x55.</li>
+    </ul>
+    <p>Sau khi có khóa (0x55), bạn dùng nó để giải mã phần còn lại của ciphertext.</p>
+    <h3 id="quy-tr-nh-x-raying">Quy trình X-RAYING</h3>
+    <ol>
+    <li><strong>Chọn thuật toán mã hóa</strong>: Ví dụ, XOR (rất phổ biến trong mã độc).</li>
+    <li><strong>Chọn một phần plaintext</strong>: Ví dụ, chuỗi &quot;MZ&quot; hoặc &quot;kernel32.dll&quot;.</li>
+    <li><strong>Thử từng đoạn ciphertext</strong>: XOR plaintext với từng phần của ciphertext để tìm khóa.</li>
+    <li><strong>Kiểm tra khóa</strong>: Dùng khóa vừa tìm được để giải mã các phần khác. Nếu đúng, bạn sẽ thấy plaintext có ý nghĩa (như tên hàm hoặc chuỗi hợp lệ).</li>
+    <li><strong>Giải mã toàn bộ</strong>: Khi khóa được xác nhận, bạn có thể giải mã tất cả dữ liệu.</li>
+    </ol>
+    <p>Điều đặc biệt của X-RAYING là nó không cần biết khóa trước, mà dùng plaintext đã biết để &quot;brute-force&quot; ra khóa một cách thông minh.</p>
+    <h2 id="3-c-c-c-ng-c-h-tr-x-raying">3. Các công cụ hỗ trợ X-RAYING</h2>
+    <p>Vì quá trình thủ công rất tốn thời gian, các công cụ như <strong>XORSearch</strong> và <strong>Yara</strong> được phát triển để tự động hóa X-RAYING. Hãy cùng xem cách chúng hoạt động qua các ví dụ từ hình ảnh đính kèm.</p>
+    <h3 id="a-xorsearch">a. XORSearch</h3>
+    <ul>
+    <li><strong>Chức năng</strong>: XORSearch tìm kiếm plaintext trong ciphertext bằng cách thử tất cả các khóa XOR có thể (0x00 đến 0xFF cho XOR 1 byte). Nó cũng hỗ trợ các thuật toán khác như bit shifting (dịch bit).</li>
+    <li><p><strong>Ví dụ từ Figure 4.28</strong>:</p>
+    <ul>
+    <li><strong>Lệnh chạy</strong>: <code>XORSearch.exe -n 20 4410585973_pe.png 4410585973_igid=&lt;cb7510d4&gt;</code>.<ul>
+    <li><code>-n 20</code>: Tìm chuỗi plaintext dài 20 byte.</li>
+    <li><code>4410585973_pe.png</code>: Tệp mã hóa cần phân tích (có thể là tệp PE).</li>
+    </ul>
+    </li>
+    <li><strong>Kết quả</strong>:<ul>
+    <li><code>Found XOR 81 position 2271(&lt;208&gt;): 81=170.77.126.108</code>.<ul>
+    <li>Tìm thấy chuỗi &quot;170.77.126.108&quot; (một địa chỉ IP) tại vị trí 2271 trong ciphertext.</li>
+    <li>Khóa XOR là 81 (0x51).</li>
+    </ul>
+    </li>
+    <li>Điều này cho thấy XORSearch tự động tìm ra plaintext (IP) và khóa mà không cần biết trước.</li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li><p><strong>Ý nghĩa</strong>: XORSearch giúp bạn nhanh chóng phát hiện các chuỗi quan trọng (như IP, URL) trong mã độc đã mã hóa, hỗ trợ việc phân tích thêm.</p>
+    </li>
+    </ul>
+    <h3 id="b-yara">b. Yara</h3>
+    <ul>
+    <li><strong>Chức năng</strong>: Yara cho phép định nghĩa các quy tắc (rules) để tìm kiếm mẫu trong tệp. Nó hỗ trợ tìm chuỗi plaintext được mã hóa XOR với bất kỳ khóa 1 byte nào.</li>
+    <li><p><strong>Ví dụ từ Figure 4.29</strong>:</p>
+    <ul>
+    <li><strong>Quy tắc Yara</strong>:<pre><code><span class="hljs-selector-tag">rule</span> <span class="hljs-selector-tag">xor_test</span> {
+        <span class="hljs-attribute">strings</span>:
+            $a = <span class="hljs-string">"http://isc.sans.edu"</span> xor
+        condition:
+            $a
+    }
+    </code></pre><ul>
+    <li><code>$a = &quot;http://isc.sans.edu&quot; xor</code>: Tìm chuỗi &quot;<a href="http://isc.sans.edu">http://isc.sans.edu</a>&quot; được mã hóa XOR với bất kỳ khóa nào từ 0x00 đến 0xFF.</li>
+    </ul>
+    </li>
+    <li><strong>Lệnh chạy</strong>: <code>yara64 -s xor.yara test-xor.txt</code>.</li>
+    <li><strong>Kết quả</strong>:<ul>
+    <li><code>0x5a: $a: 55[nnk(%3253575%20...</code>.<ul>
+    <li>Tìm thấy chuỗi tại offset 0x5a (90 trong hệ thập phân).</li>
+    <li>Khóa XOR là 0x55.</li>
+    <li>Chuỗi mã hóa khớp với &quot;<a href="http://isc.sans.edu">http://isc.sans.edu</a>&quot; sau khi giải mã.</li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li><p><strong>Ý nghĩa</strong>: Yara tự động quét tệp và phát hiện các chuỗi đã mã hóa, giúp tiết kiệm thời gian so với phân tích thủ công.</p>
+    </li>
+    </ul>
+    <hr>
+    <h2 id="4-l-i-ch-v-h-n-ch-c-a-x-raying">4. Lợi ích và hạn chế của X-RAYING</h2>
+    <h3 id="l-i-ch">Lợi ích</h3>
+    <ul>
+    <li><strong>Không cần biết khóa</strong>: Chỉ cần một phần plaintext là đủ để tìm ra khóa và giải mã.</li>
+    <li><strong>Hiệu quả với mã hóa đơn giản</strong>: Hoạt động tốt với XOR, bit shifting, hoặc các thuật toán yếu khác.</li>
+    <li><strong>Tự động hóa</strong>: Các công cụ như XORSearch và Yara giúp tăng tốc quá trình.</li>
+    </ul>
+    <h3 id="h-n-ch-">Hạn chế</h3>
+    <ul>
+    <li><strong>Không hiệu quả với mã hóa mạnh</strong>: Với các thuật toán phức tạp như AES, X-RAYING không áp dụng được vì dữ liệu mã hóa không còn mẫu dự đoán.</li>
+    <li><strong>Có thể phát hiện nhầm (false positives)</strong>: Nếu plaintext quá chung chung (như &quot;the&quot;), có thể tìm thấy trong các tệp không phải mã độc.</li>
+    </ul>
+    <h3 id="k-t-lu-n">Kết luận</h3>
+    <p>X-RAYING là một kỹ thuật sáng tạo và hiệu quả trong việc phát hiện phần mềm độc hại đã mã hóa. Bằng cách tận dụng các mẫu byte và dấu vết cấu trúc mà các phương pháp mã hóa đơn giản không thể che giấu hoàn toàn, X-RAYING trở thành một công cụ quan trọng trong cuộc chiến chống lại mã độc, với sự hỗ trợ từ các công cụ như YARA, IDA Pro, Radare2 và các script tùy chỉnh.</p>
+    </body></html>
+</div>

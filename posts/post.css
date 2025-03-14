@@ -170,3 +170,30 @@ tr:nth-child(even) {
 .function {
     color: #ff9800;
 }
+/* Căn chỉnh theo khổ A4 */
+.a4-content {
+    width: 250mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 10mm auto;
+    background-color: #0a1f0a;
+    box-shadow: 0 0 10px rgba(5, 252, 231, 0.3);
+    box-sizing: border-box;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #b2d3d4;
+    }
+    
+    .a4-content {
+        width: 210mm;
+        height: 297mm;
+        padding: 20mm;
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+    }
+}
