@@ -172,7 +172,7 @@ tr:nth-child(even) {
 }
 /* Căn chỉnh theo khổ A4 */
 .a4-content {
-    width: 230mm;
+    width: 210mm;
     min-height: 297mm;
     padding: 20mm;
     margin: 10mm auto;
@@ -189,7 +189,7 @@ tr:nth-child(even) {
     }
     
     .a4-content {
-        width: 230mm;
+        width: 210mm;
         height: 297mm;
         padding: 20mm;
         margin: 0;
