@@ -2,6 +2,15 @@
     "posts": [
       {
         "id": "Reverse Engineering ",
+        "title": "Rev_Assembly trong kiến trúc x86 ",
+        "date": "2025-02-26",
+        "author": "Bùi Việt Dũng",
+        "file": "posts/post12/post-12.html",
+        "description": "Tổng hợp 1 số kiến thức về kiến trúc x86 như Regiter, Stack, Data type , Calling convetion , Memory", 
+        "tags": ["Reverse"]
+      },
+      {
+        "id": "Reverse Engineering ",
         "title": "Giới thiệu về mã hóa trong phân tích malware",
         "date": "2025-02-26",
         "author": "Bùi Việt Dũng",

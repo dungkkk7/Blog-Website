@@ -1,0 +1,1511 @@
+<link rel="stylesheet" href="../post.css">
+<h1 id="register-set-and-data-types">Register Set and Data Types</h1>
+<p>Khi hệ điều hành trong <em>Protected mode</em>, kiến trúc x86 có 8 thanh ghi 32 bit đa mục đích hay còn gọi là <em>General Purpose Register</em>:</p>
+<p><strong>EAX, EBX, ECX, EDX, EDI, ESI, EBP và ESP</strong></p>
+<h2 id="eax-accumulator-register-">EAX (Accumulator Register)</h2>
+<p>Thanh ghi này thường lưu trữ giá trị trả về của các hàm hay kết quả của các phép toán.</p>
+<pre><code class="lang-asm"><span class="hljs-keyword">MOV</span> <span class="hljs-built_in">EAX</span>, <span class="hljs-number">10</span>   <span class="hljs-comment">; lưu 10 vào eax</span>
+<span class="hljs-keyword">MOV</span> <span class="hljs-built_in">EBX</span>, <span class="hljs-number">5</span>    <span class="hljs-comment">; lưu 5 vào ebx</span>
+<span class="hljs-keyword">ADD</span> <span class="hljs-built_in">EAX</span>, <span class="hljs-built_in">EBX</span>  <span class="hljs-comment">; cộng giá trị của eax với ebx và lưu vào eax --&gt; eax = 15</span>
+</code></pre>
+<h2 id="ebx-base-register-">EBX (Base Register)</h2>
+<p>Thanh ghi này thường được sử dụng như giá trị cơ sở trong các phép toán truy cập bộ nhớ, chẳng hạn như truy cập một phần tử trong một mảng hay một ký tự của một chuỗi.</p>
+<h2 id="ecx">ECX</h2>
+<p>Thanh gi này thường được sủ dụng để làm bộ đếm trong các phép toán vòng lặp  ví dụ <em>for(int i = 0 ; i &lt; 10 )</em> và các phép toán chuỗi. </p>
+<h3 id="v-d-v-ecx-v-ebx">Ví dụ về ECX VÀ EBX</h3>
+<pre><code class="lang-asm">
+
+<span class="x86asm"><span class="hljs-comment">; Chương trình đơn giản để in mảng</span>
+<span class="hljs-meta">section</span> .data
+    <span class="hljs-comment">; Mảng các số nguyên</span>
+    numbers <span class="hljs-built_in">dd</span> <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>
+    array_size <span class="hljs-built_in">equ</span> <span class="hljs-number">5</span>
+
+    <span class="hljs-comment">; Ký tự xuống dòng</span>
+    newline <span class="hljs-built_in">db</span> <span class="hljs-number">10</span>
+
+<span class="hljs-meta">section</span> .bss
+    buffer <span class="hljs-built_in">resb</span> <span class="hljs-number">12</span>     <span class="hljs-comment">; Buffer để lưu số dưới dạng chuỗi</span>
+
+<span class="hljs-meta">section</span> .text
+    <span class="hljs-meta">global</span> _start
+<span class="hljs-symbol">
+_start:</span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">ecx</span>, <span class="hljs-built_in">ecx</span>       <span class="hljs-comment">; Khởi tạo ECX = 0 (index)</span>
+<span class="hljs-symbol">
+print_loop:</span>
+    <span class="hljs-comment">; Kiểm tra nếu đã in hết các phần tử</span>
+    <span class="hljs-keyword">cmp</span> <span class="hljs-built_in">ecx</span>, array_size
+    <span class="hljs-keyword">jge</span> exit_program
+
+    <span class="hljs-comment">; Lấy phần tử hiện tại</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, [numbers + <span class="hljs-built_in">ecx</span>*<span class="hljs-number">4</span>]
+
+    <span class="hljs-comment">; Chuyển số thành chuỗi</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ecx</span>
+    <span class="hljs-keyword">call</span> int_to_string
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ecx</span>
+
+    <span class="hljs-comment">; In số</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">4</span>          <span class="hljs-comment">; sys_write</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebx</span>, <span class="hljs-number">1</span>          <span class="hljs-comment">; stdout</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ecx</span>, buffer     <span class="hljs-comment">; chuỗi cần in</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>, <span class="hljs-built_in">eax</span>        <span class="hljs-comment">; độ dài chuỗi (từ int_to_string)</span>
+    <span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span>
+
+    <span class="hljs-comment">; In xuống dòng</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">4</span>          <span class="hljs-comment">; sys_write</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebx</span>, <span class="hljs-number">1</span>          <span class="hljs-comment">; stdout</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ecx</span>, newline    <span class="hljs-comment">; ký tự xuống dòng</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>, <span class="hljs-number">1</span>          <span class="hljs-comment">; độ dài 1 byte</span>
+    <span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span>
+
+    <span class="hljs-comment">; Tăng index và lặp lại</span>
+    <span class="hljs-keyword">inc</span> <span class="hljs-built_in">ecx</span>
+    <span class="hljs-keyword">jmp</span> print_loop
+<span class="hljs-symbol">
+exit_program:</span>
+    <span class="hljs-comment">; Thoát chương trình</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">1</span>          <span class="hljs-comment">; sys_exit</span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">ebx</span>, <span class="hljs-built_in">ebx</span>        <span class="hljs-comment">; exit code 0</span>
+    <span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span>
+
+<span class="hljs-comment">; Hàm đơn giản chuyển số trong EAX thành chuỗi</span>
+<span class="hljs-comment">; Đầu ra: buffer chứa chuỗi, EAX chứa độ dài chuỗi</span>
+<span class="hljs-symbol">int_to_string:</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ebx</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ecx</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">edx</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">edi</span>
+
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edi</span>, buffer     <span class="hljs-comment">; Trỏ đến buffer</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebx</span>, <span class="hljs-number">10</span>         <span class="hljs-comment">; Cơ số 10</span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">ecx</span>, <span class="hljs-built_in">ecx</span>        <span class="hljs-comment">; Đếm số chữ số</span>
+
+    <span class="hljs-comment">; Xử lý trường hợp đặc biệt nếu số = 0</span>
+    <span class="hljs-keyword">test</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">eax</span>
+    <span class="hljs-keyword">jnz</span> not_zero
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">byte</span> [<span class="hljs-built_in">edi</span>], <span class="hljs-string">'0'</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">1</span>          <span class="hljs-comment">; Độ dài = 1</span>
+    <span class="hljs-keyword">jmp</span> end_conversion
+<span class="hljs-symbol">
+not_zero:</span>
+    <span class="hljs-comment">; Lưu stack hiện tại</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>, <span class="hljs-built_in">edi</span>
+
+    <span class="hljs-comment">; Chuyển đổi từng chữ số</span>
+<span class="hljs-symbol">digit_loop:</span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">edx</span>, <span class="hljs-built_in">edx</span>        <span class="hljs-comment">; Xóa edx cho phép chia</span>
+    <span class="hljs-keyword">div</span> <span class="hljs-built_in">ebx</span>             <span class="hljs-comment">; eax = eax / 10, edx = eax % 10</span>
+    <span class="hljs-keyword">add</span> <span class="hljs-built_in">dl</span>, <span class="hljs-string">'0'</span>         <span class="hljs-comment">; Chuyển thành ký tự ASCII</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">edx</span>            <span class="hljs-comment">; Lưu chữ số vào stack</span>
+    <span class="hljs-keyword">inc</span> <span class="hljs-built_in">ecx</span>             <span class="hljs-comment">; Tăng số đếm chữ số</span>
+    <span class="hljs-keyword">test</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">eax</span>       <span class="hljs-comment">; Kiểm tra nếu eax = 0</span>
+    <span class="hljs-keyword">jnz</span> digit_loop
+
+    <span class="hljs-comment">; Pop các chữ số từ stack vào buffer (theo thứ tự ngược lại)</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">ecx</span>        <span class="hljs-comment">; Lưu độ dài vào eax</span>
+<span class="hljs-symbol">reverse_loop:</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">edx</span>
+    <span class="hljs-keyword">mov</span> [<span class="hljs-built_in">edi</span>], <span class="hljs-built_in">dl</span>
+    <span class="hljs-keyword">inc</span> <span class="hljs-built_in">edi</span>
+    <span class="hljs-keyword">loop</span> reverse_loop
+<span class="hljs-symbol">
+end_conversion:</span>
+    <span class="hljs-comment">; Thêm null terminator</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">byte</span> [<span class="hljs-built_in">edi</span>], <span class="hljs-number">0</span>
+
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">edi</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">edx</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ecx</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebx</span>
+    <span class="hljs-keyword">ret</span></span>
+</code></pre>
+<h2 id="edx-data-register-">EDX (Data Register)</h2>
+<p>Thanh gi được sử dụng để lưu các giá trị phụ trong các phép toán số học đặc biệt là chia hoặc nhân. </p>
+<pre><code class="lang-asm">; Trong phép nhâ<span class="hljs-built_in">n</span> <span class="hljs-number">32</span>-bit, khi nhâ<span class="hljs-built_in">n</span> hai số lớ<span class="hljs-built_in">n</span>, kế<span class="hljs-built_in">t</span> quả có thể vượ<span class="hljs-built_in">t</span> quá <span class="hljs-number">32</span>-bit.
+; Khi đó, EAX chứa phầ<span class="hljs-built_in">n</span> thấp của kế<span class="hljs-built_in">t</span> quả và EDX chứa phầ<span class="hljs-built_in">n</span> cao.
+section .<span class="hljs-built_in">text</span>
+    global _start
+
+_sta<span class="hljs-symbol">rt:</span>
+    mov eax , <span class="hljs-number">500000</span> ; 
+    mov ecx , <span class="hljs-number">300000</span> ; 
+    imul ecx  ; nhâ<span class="hljs-built_in">n</span> eax với ecx nhưng vif kế<span class="hljs-built_in">t</span> quả vượ<span class="hljs-built_in">t</span> quá <span class="hljs-number">32</span> bit <span class="hljs-built_in">n</span>ên. 
+              ; edx sẽ giữ phầ<span class="hljs-built_in">n</span> cao của kế<span class="hljs-built_in">t</span> quả và eax sẽ giữ phầ<span class="hljs-built_in">n</span> thấp 
+
+
+    mov eax ,<span class="hljs-number">1</span> ; sys_exit 
+    <span class="hljs-built_in">xor</span> ebx , ebx 
+    <span class="hljs-built_in">int</span> <span class="hljs-number">0</span>x80
+</code></pre>
+<h2 id="edi-destination-index-register-">EDI (Destination Index Register)</h2>
+<p>EDI được sử dụng làm chỉ mục đích (destination index) trong các phép toán chuỗi và các phép toán di chuyển bộ nhớ.</p>
+<h2 id="esi-source-index-register-">ESI (Source Index Register)</h2>
+<p>ESI được sử dụng làm chỉ mục nguồn (source index) trong các phép toán chuỗi và các phép toán di chuyển bộ nhớ.</p>
+<h3 id="v-d-v-edi-esi">Ví dụ về EDI , ESI</h3>
+<pre><code class="lang-asm"><span class="hljs-meta">section</span> .data 
+   src <span class="hljs-built_in">db</span> <span class="hljs-string">"hello"</span> , <span class="hljs-number">0</span> 
+   des <span class="hljs-built_in">times</span> <span class="hljs-number">5</span> <span class="hljs-built_in">db</span> <span class="hljs-number">0</span> 
+   src_len <span class="hljs-built_in">equ</span> <span class="hljs-number">5</span> 
+<span class="hljs-meta">section</span> .text
+    global_start
+
+_start 
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">esi</span> , src <span class="hljs-comment">; </span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edi</span> , des <span class="hljs-comment">; </span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ecx</span> , src_len <span class="hljs-comment">; </span>
+
+    <span class="hljs-comment">; ld: Xóa cờ hướng, đảm bảo ESI và EDI tăng lên trong quá trình sao chép.</span>
+    <span class="hljs-keyword">cld</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">rep</span> <span class="hljs-keyword">movsb</span>  <span class="hljs-comment">; Lặp lại lệnh movsb (move string byte) ECX lần. Lệnh movsb sao chép một byte từ địa chỉ được trỏ bởi ESI đến địa chỉ được trỏ bởi EDI, sau đó tăng ESI và EDI.</span>
+_exit 
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span> ,<span class="hljs-number">1</span> 
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">ebx</span> , <span class="hljs-built_in">ebx</span> <span class="hljs-comment">;  Thoát khỏi chương trình với mã thoát 0.</span>
+    <span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span>
+</code></pre>
+<h2 id="ebp-base-pointer-register-">EBP (Base Pointer Register)</h2>
+<p>EBP được sử dụng để lưu trữ con trỏ cơ sở của ngăn xếp (stack frame) trong các hàm. Nó giữ vị trí của ngăn xếp hiện tại, giúp quản lý tham số hàm và giá trị trả về.</p>
+<h2 id="esp-stack-pointer-register-">ESP (Stack Pointer Register)</h2>
+<p>ESP là con trỏ ngăn xếp, nó trỏ đến vị trí hiện tại trên ngăn xếp. ESP sẽ thay đổi khi có các thao tác push và pop trong quá trình thực thi chương trình.</p>
+<h3 id="v-d-v-esp-v-ebp">Ví dụ về ESP và EBP</h3>
+<pre><code class="lang-asm">
+<span class="hljs-meta">section</span> .text
+    global_start
+<span class="hljs-symbol">
+_start:</span> 
+    <span class="hljs-comment">; gọi hàm sum(10,20)</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-number">20</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">push</span> <span class="hljs-number">10</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">call</span> sum<span class="hljs-comment">; </span>
+    <span class="hljs-keyword">add</span> <span class="hljs-built_in">esp</span>, <span class="hljs-number">8</span><span class="hljs-comment">; dọn dẹp stack 2 int 4 byte mỗi cái </span>
+<span class="hljs-symbol">
+_end:</span> 
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span> ,<span class="hljs-number">1</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">ebx</span> , <span class="hljs-built_in">ebx</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span><span class="hljs-comment">; </span>
+<span class="hljs-symbol">
+sum:</span> 
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ebp</span><span class="hljs-comment">; lưu lại giá trị ebp của hàm trước </span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebp</span>, <span class="hljs-built_in">esp</span> <span class="hljs-comment">; đặp esp làm stack frame hiện tại </span>
+
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span> , [<span class="hljs-built_in">ebp</span> + <span class="hljs-number">8</span>]  <span class="hljs-comment">; truy cập tham số thứ 1 , truy cập tham số sẽ them + offset </span>
+                         <span class="hljs-comment">; đối với biến trong hàm thì - offset </span>
+    <span class="hljs-keyword">add</span> <span class="hljs-built_in">eax</span> , [<span class="hljs-built_in">ebp</span> + <span class="hljs-number">12</span>] <span class="hljs-comment">; cộng eax với tham số thứ 2 lưu vào eax</span>
+
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebp</span> <span class="hljs-comment">; khôi phục ebp của hàm trc </span>
+    <span class="hljs-keyword">ret</span> <span class="hljs-comment">;kết  thúc hàm sum trả về eax </span>
+
+
+<span class="hljs-comment">; Địa chỉ Stack    Giá trị    Mô tả</span>
+<span class="hljs-comment">; ESP+12 b = 20    Tham số thứ 2</span>
+<span class="hljs-comment">; ESP+8    a = 10    Tham số thứ 1</span>
+<span class="hljs-comment">; ESP+4    Return Address    Địa chỉ trả về sau khi RET</span>
+<span class="hljs-comment">; ESP (EBP)    EBP cũ    Lưu giá trị EBP trước đó</span>
+</code></pre>
+<p>Một vài thanh ghi có thể chia thành các phần nhỏ hơn 8 bit hay 16 bit bao gồm 
+<strong>EAX, EBX , ESI , ESP, EIP, EDI , EFLAGS..</strong> 
+<img src="image.png" alt="alt text"></p>
+<p>Những kiểu dữ liệu phổ bién trong x86 bao gồm : </p>
+<ul>
+<li>Bytes : 8 bit ví dụ al, bl ,cl. </li>
+<li>Word  : 16 bit - 2 byte ví dụ : ax, bx, cx. </li>
+<li>DWord : 32 bit - 4 byte ví dụ : eax , ebx , ecx. </li>
+<li>Qword : 64 bit - 8 byte nhưng x86 k có thanh ghi 64 bit nhưng giá trị này có thể được lưu bằng cách kết hợp edx và eax như trong ví dụ về edx trên. </li>
+</ul>
+<p>Thanh ghi 32 bit <em>EFLAGS</em> được sử dụng để lưu trạng thái của các phép toán số học và các trạng thái thực thi khác. Chủ yếu dùng có braching. </p>
+<p>Ví dụ: Nếu thực hiện phép <strong>cộng (ADD)</strong> mà kết quả bằng <strong>0</strong>, thì <strong>ZF (Zero Flag) = 1</strong> → Dùng để kiểm tra kết quả của phép toán và thực hiện rẽ nhánh nếu cần.  </p>
+<h3 id="c-c-c-quan-tr-ng-trong-eflags-">Các cờ quan trọng trong EFLAGS:</h3>
+<table>
+<thead>
+<tr>
+<th>Cờ (Flag)</th>
+<th>Bit</th>
+<th>Chức năng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZF</strong> (Zero Flag)</td>
+<td>6</td>
+<td>Bật nếu kết quả phép toán là 0</td>
+</tr>
+<tr>
+<td><strong>CF</strong> (Carry Flag)</td>
+<td>0</td>
+<td>Bật nếu có bit nhớ (carry) trong phép toán</td>
+</tr>
+<tr>
+<td><strong>OF</strong> (Overflow Flag)</td>
+<td>11</td>
+<td>Bật nếu xảy ra tràn số học</td>
+</tr>
+<tr>
+<td><strong>SF</strong> (Sign Flag)</td>
+<td>7</td>
+<td>Bật nếu kết quả là số âm</td>
+</tr>
+<tr>
+<td><strong>PF</strong> (Parity Flag)</td>
+<td>2</td>
+<td>Bật nếu số bit 1 trong kết quả là số chẵn</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-asm">
+section .text
+    global _start
+
+_start:
+    ; Đưa giá trị vào thanh ghi EAX
+    MOV EAX, <span class="hljs-number">5</span>       ; EAX = <span class="hljs-number">5</span>
+    AND EAX, <span class="hljs-number">0</span>       ; EAX = <span class="hljs-number">5</span> AND <span class="hljs-number">0</span> =&gt; Kết quả là <span class="hljs-number">0</span> =&gt; ZF được bật (ZF = <span class="hljs-number">1</span>)
+
+    ; Kiểm tra giá trị của Zero Flag (ZF)
+    JZ zero_flag_set ; Nếu ZF = <span class="hljs-number">1</span>, nhảy đến zero_flag_set
+
+    MOV EAX, <span class="hljs-number">1</span>       ; Nếu ZF = <span class="hljs-number">0</span>, lưu <span class="hljs-number">1</span> vào EAX (không nhảy)
+
+<span class="hljs-keyword">exit</span>:
+    MOV EAX, <span class="hljs-number">60</span>      ; syscall <span class="hljs-keyword">exit</span>
+    XOR EDI, EDI     ; <span class="hljs-keyword">exit</span> code = <span class="hljs-number">0</span>
+    SYSCALL          ; Thoát chương trình
+
+zero_flag_set:
+    MOV EAX, <span class="hljs-number">2</span>       ; Nếu ZF = <span class="hljs-number">1</span>, lưu <span class="hljs-number">2</span> vào EAX
+    JMP <span class="hljs-keyword">exit</span>         ; Thoát chương trình
+</code></pre>
+<h2 id="thanh-ghi-h-th-ng-quan-tr-ng-">Thanh ghi hệ thống quan trọng**</h2>
+<p>Ngoài các thanh ghi tổng quát (EAX, EBX, ...), <strong>CPU còn có các thanh ghi đặc biệt</strong> để kiểm soát các cơ chế hệ thống như bộ nhớ ảo, ngắt, và debug.</p>
+<h3 id="c-c-thanh-ghi-debug-dr0-dr7-">Các thanh ghi debug (DR0 - DR7)</h3>
+<p>Chức năng: Dùng để thiết lập breakpoints (điểm dừng) cho việc debug.</p>
+<p>Hạn chế: Hệ thống chỉ cho phép thiết lập 4 điểm dừng bộ nhớ (DR0 - DR3), còn DR4 - DR7 chỉ lưu trạng thái.</p>
+<h3 id="thanh-ghi-model-specific-registers-msrs-">Thanh ghi Model-Specific Registers (MSRs)</h3>
+<p>Đây là các thanh ghi đặc biệt tùy thuộc vào từng CPU (Intel/AMD).</p>
+<p>Chỉ có thể truy cập trong ring 0 (kernel mode) bằng lệnh RDMSR (đọc) và WRMSR (ghi).</p>
+<p>Dùng để lưu bộ đếm hiệu suất (performance counters), cài đặt chế độ hệ thống, và hỗ trợ lệnh đặc biệt như SYSENTER.</p>
+<p>Ví dụ:
+IA32_SYSENTER_EIP (0x176): Lưu địa chỉ handler cho system call của hệ điều hành (khi dùng lệnh SYSENTER).</p>
+<h1 id="instruction-set">Instruction Set</h1>
+<p>Kiến trúc x86 có tâp lệnh lớn hỗ trợ linh hoạt di chuyển dữ liệu giữa bộ nhớ và thanh ghi. Nhưng mov có thể được chia thành 5 loại mov. </p>
+<ul>
+<li>Immediate to register</li>
+<li>Register to register</li>
+<li>Immediate to memory</li>
+<li>Register to memory and vice versa</li>
+<li>Memory to memory</li>
+</ul>
+<p>4 cái đầu tiên được hỗ trợ bởi các kiến trúc hiện đại, và cái cuối được hỗ trợ bởi x86. 
+NNhững kiến trúc RISC cổ điển như ARM chỉ có thể đọc ghi data từ bộ nhớ vơi lệnh <em>LDR và STR</em>. Điều này giúp kiến trúc RISC đơn giản hơn, nhưng đôi khi yêu cầu nhiều lệnh hơn.
+Mất 3 lệnh để tăng giá trị một biến trong bộ nhớ.</p>
+<ol>
+<li>đọc dữ liệu tù bộ nhớ vào 1 thanh ghi </li>
+<li>cộng 1 giá trị vào thanh ghi </li>
+<li>lưu thanh ghi lại vào vùng nhớ trước đó </li>
+</ol>
+<p><strong>ARM</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">LDR </span><span class="hljs-built_in">R1</span>,[<span class="hljs-number">0X100</span>] <span class="hljs-comment">; tải giá trị tại 0x100 vào r1 ví dụ 123</span>
+    <span class="hljs-keyword">ADD </span><span class="hljs-built_in">R1</span> , <span class="hljs-built_in">R1</span> , <span class="hljs-number">1</span> <span class="hljs-comment">; cộng thêm 1 </span>
+    <span class="hljs-keyword">STR </span><span class="hljs-built_in">R1</span>, [<span class="hljs-number">0X100</span>]
+</code></pre>
+<p>Đối với x86 ta chỉ cần 1 lệnh.</p>
+<p><strong>X86</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">INC</span> <span class="hljs-built_in">DWORD</span> [<span class="hljs-number">0x100</span>]
+</code></pre>
+<h3 id="l-u-v-sytax">Lưu ý về Sytax</h3>
+<p>Khi viết hoặc đọc mã assembly x86, có <strong>hai kiểu cú pháp phổ biến</strong>:  </p>
+<ol>
+<li><strong>Cú pháp Intel</strong> (dùng trên Windows, IDA Pro, OllyDbg, MASM, NASM, v.v.)  </li>
+<li><strong>Cú pháp AT&amp;T</strong> (dùng trên Unix/Linux, GCC, GDB, v.v.)  </li>
+</ol>
+<p>Mặc dù cả hai cú pháp đều biểu diễn cùng một tập lệnh, nhưng cách viết của chúng <strong>khác nhau đáng kể</strong>.  </p>
+<hr>
+<h4 id="-v-d-v-s-kh-c-bi-t-"><strong>Ví dụ về sự khác biệt</strong></h4>
+<table>
+<thead>
+<tr>
+<th><strong>Intel Syntax</strong></th>
+<th><strong>AT&amp;T Syntax</strong></th>
+<th><strong>Giải thích</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mov ecx, AABBCCDDh</code></td>
+<td><code>movl $0xAABBCCDD, %ecx</code></td>
+<td>Gán giá trị ngay (<code>Immediate</code>) vào thanh ghi</td>
+</tr>
+<tr>
+<td><code>mov ecx, [eax]</code></td>
+<td><code>movl (%eax), %ecx</code></td>
+<td>Gán giá trị từ địa chỉ trong <code>eax</code> vào <code>ecx</code></td>
+</tr>
+<tr>
+<td><code>mov ecx, eax</code></td>
+<td><code>movl %eax, %ecx</code></td>
+<td>Gán giá trị từ <code>eax</code> vào <code>ecx</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="-so-s-nh-chi-ti-t-intel-vs-at-t-"><strong>So sánh chi tiết Intel vs. AT&amp;T</strong></h4>
+<table>
+<thead>
+<tr>
+<th><strong>Khác biệt</strong></th>
+<th><strong>Intel</strong></th>
+<th><strong>AT&amp;T</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ký hiệu thanh ghi</strong></td>
+<td><code>ecx</code></td>
+<td><code>%ecx</code></td>
+</tr>
+<tr>
+<td><strong>Ký hiệu giá trị ngay (Immediate value)</strong></td>
+<td><code>1234h</code></td>
+<td><code>$0x1234</code></td>
+</tr>
+<tr>
+<td><strong>Cách viết lệnh</strong></td>
+<td><code>mov đích, nguồn</code></td>
+<td><code>movl nguồn, đích</code></td>
+</tr>
+<tr>
+<td><strong>Ký hiệu địa chỉ bộ nhớ</strong></td>
+<td><code>[eax]</code></td>
+<td><code>(%eax)</code></td>
+</tr>
+<tr>
+<td><strong>Ghi chú về độ rộng toán hạng</strong></td>
+<td>Không cần hậu tố</td>
+<td>Có hậu tố (<code>b</code>, <code>w</code>, <code>l</code>)</td>
+</tr>
+<tr>
+<td><strong>Trình biên dịch/Disassembler sử dụng</strong></td>
+<td>Windows (MASM, NASM, OllyDbg, IDA Pro)</td>
+<td>Unix/Linux (GCC, GDB)</td>
+</tr>
+</tbody>
+</table>
+<p>Ví dụ, trong AT&amp;T:</p>
+<ul>
+<li><code>movb</code> (byte - 8 bit)</li>
+<li><code>movw</code> (word - 16 bit)</li>
+<li><code>movl</code> (long - 32 bit)</li>
+</ul>
+<hr>
+<h4 id="-t-m-t-t-"><strong>Tóm tắt</strong></h4>
+<ul>
+<li><strong>Intel Syntax</strong>: Dễ đọc hơn, phổ biến trên Windows.</li>
+<li><strong>AT&amp;T Syntax</strong>: Dùng nhiều trên Unix/Linux, có hậu tố chỉ kích thước.</li>
+</ul>
+<p>Trong thực tế, <strong>Intel notation phổ biến hơn</strong>, đặc biệt trong <strong>phân tích mã máy, dịch ngược (reverse engineering), lập trình Windows</strong>.</p>
+<h3 id="data-movement-">Data Movement.</h3>
+<p>Lệnh phổ biến nhất để di chuyển data đó chính là <em>mov</em>.</p>
+<h4 id="v-d-">ví dụ :</h4>
+<pre><code class="lang-asm">    BE  <span class="hljs-number">3</span>F  <span class="hljs-number">00</span>  <span class="hljs-number">0</span>F  <span class="hljs-number">00</span>      mov      esi,  <span class="hljs-number">0</span>F003Fh  ;  set  ESI  = <span class="hljs-number">0xF003</span>
+    <span class="hljs-number">8</span>B F1                   mov      esi, ecx     ; set ESI = ECX
+
+   ; BE dành cho lệnh MOV với giá trị trực tiếp (immediate).
+    ;<span class="hljs-number">8</span>B dành cho lệnh MOV giữa hai thanh ghi.
+</code></pre>
+<p>Tiếp theo là di chuyển data từ bộ nhớ. sử dung &#39;[]&#39; để biệu thị truy cập bộ nhớ. </p>
+<pre><code class="lang-asm">   C7 <span class="hljs-number">00</span> <span class="hljs-number">01</span> <span class="hljs-number">00</span> <span class="hljs-number">00</span>+  <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">dword</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">eax</span>], <span class="hljs-number">1</span>
+   8B <span class="hljs-number">08</span>            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">ecx</span>, [<span class="hljs-built_in">eax</span>]
+   <span class="hljs-number">89</span> <span class="hljs-number">18</span>            <span class="hljs-keyword">mov</span>  [<span class="hljs-built_in">eax</span>], <span class="hljs-built_in">ebx</span> 
+   <span class="hljs-number">89</span> <span class="hljs-number">46</span> <span class="hljs-number">34</span>         <span class="hljs-keyword">mov</span>  [<span class="hljs-built_in">esi</span> + <span class="hljs-number">34h</span>] , <span class="hljs-built_in">eax</span> <span class="hljs-comment">; set the memory address at (ESI+34 )to EAX</span>
+   8B <span class="hljs-number">46</span> <span class="hljs-number">34</span>         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">eax</span>, [<span class="hljs-built_in">esi</span>+<span class="hljs-number">34h</span>]
+   8B <span class="hljs-number">14</span> <span class="hljs-number">01</span>         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">edx</span>, [<span class="hljs-built_in">ecx</span>+<span class="hljs-built_in">eax</span>]
+</code></pre>
+<p>Pseudo C</p>
+<pre><code class="lang-asm">    <span class="hljs-number">01</span>: *<span class="hljs-built_in">eax</span> = <span class="hljs-number">1</span><span class="hljs-comment">;</span>
+    <span class="hljs-number">02</span>: <span class="hljs-built_in">ecx</span> = *<span class="hljs-built_in">eax</span><span class="hljs-comment">;</span>
+    <span class="hljs-number">03</span>: *<span class="hljs-built_in">eax</span> = <span class="hljs-built_in">ebx</span><span class="hljs-comment">;</span>
+    <span class="hljs-number">04</span>: *(<span class="hljs-built_in">esi</span>+<span class="hljs-number">34</span>) = <span class="hljs-built_in">eax</span><span class="hljs-comment">;</span>
+    <span class="hljs-number">05</span>: <span class="hljs-built_in">eax</span> = *(<span class="hljs-built_in">esi</span>+<span class="hljs-number">34</span>)<span class="hljs-comment">;</span>
+    <span class="hljs-number">06</span>: <span class="hljs-built_in">edx</span> = *(<span class="hljs-built_in">ecx</span>+<span class="hljs-built_in">eax</span>)
+</code></pre>
+<p>Ngoại lệ: Lệnh LEA
+Một ngoại lệ quan trọng đối với việc sử dụng dấu ngoặc vuông là lệnh LEA (Load Effective Address). Mặc dù lệnh này cũng sử dụng dấu ngoặc vuông, nhưng nó không thực sự tham chiếu đến bộ nhớ, mà thay vào đó chỉ tính toán và lưu trữ địa chỉ hiệu quả vào thanh ghi đích.</p>
+<p>Ví dụ với LEA:</p>
+<pre><code class="lang-asm"><span class="hljs-keyword">LEA</span> <span class="hljs-built_in">EAX</span>, [<span class="hljs-built_in">EBX</span>+<span class="hljs-number">4</span>]    <span class="hljs-comment">; Tính toán địa chỉ EBX + 4 và lưu vào EAX</span>
+</code></pre>
+<p>Những ví dụ này mô tả việc truy cập bộ nhớ thông qua base register  and offset .
+đây là 1 dạng thươngf được dùng để truy cập các thành viên của 1 structure hay 1 bộ đêm data tại 1 ví trị được tính toán tại thời điểm run time. </p>
+<h4 id="v-d-ecx-tr-n-1-structue-kdpc-v-i-layout-n-y-">ví dụ ECX trỏ đến 1 structue KDPC với layout này :</h4>
+<p>KDPC trong hệ thống Windows (có thể là từ kernel debugging). Cấu trúc này được định nghĩa như sau (dựa trên output của lệnh dt nt!_KDPC). </p>
+<pre><code class="lang-asm">
+kd&gt; dt nt!_KDPC
+   +<span class="hljs-number">0x000</span> Type             : UChar         (1 <span class="hljs-keyword">byte</span>)
+   +0x001 Importance       : UChar         (1 <span class="hljs-keyword">byte</span>)
+   +0x002 Number           : Uint2B        (2 <span class="hljs-keyword">byte</span>)
+   +0x004 DpcListEntry     : _LIST_ENTRY   (8 <span class="hljs-keyword">byte</span>)
+   +0x00c DeferredRoutine  : Ptr32         (4 <span class="hljs-keyword">byte</span>)
+   +0x010 DeferredContext  : Ptr32         (4 <span class="hljs-keyword">byte</span>)
+   +0x014 SystemArgument1  : Ptr32         (4 <span class="hljs-keyword">byte</span>)
+   +0x018 SystemArgument2  : Ptr32         (4 <span class="hljs-keyword">byte</span>)
+   +0x01c DpcData          : Ptr32         (4 <span class="hljs-keyword">byte</span>)
+</code></pre>
+<p>ECX là thanh ghi cơ sở (base register), trỏ đến địa chỉ bắt đầu của cấu trúc KDPC.
+Các offset (0x000, 0x001, 0x002, v.v.)là khoảng cách từ địa chỉ cơ sở để truy cập từng trường (field) trong cấu trúc.</p>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-asm">
+    <span class="hljs-number">8</span>B <span class="hljs-number">45</span> <span class="hljs-number">0</span>C         mov   eax, [ebp+<span class="hljs-number">0</span>Ch] ; Lấy giá trị từ stack (tại địa chỉ [ebp+<span class="hljs-number">0</span>Ch]) và lưu vào thanh ghi EAX. Giá trị này sau đó sẽ được gán cho trường DeferredRoutine (offset <span class="hljs-number">0x00C</span>)
+    <span class="hljs-number">83</span> <span class="hljs-number">61</span> <span class="hljs-number">1</span>C <span class="hljs-number">00</span>      and   dword ptr [ecx+<span class="hljs-number">1</span>Ch], <span class="hljs-number">0</span> ; Xóa trường DpcData (offset <span class="hljs-number">0x01C</span>) bằng cách thực hiện phép AND với <span class="hljs-number">0</span>, tức là gán DpcData = NULL.
+    <span class="hljs-number">89</span> <span class="hljs-number">41</span> <span class="hljs-number">0</span>C         mov   [ecx+<span class="hljs-number">0</span>Ch], eax ; Gán giá trị trong EAX (từ dòng <span class="hljs-number">1</span>) vào trường DeferredRoutine (offset <span class="hljs-number">0x00C</span>).
+    <span class="hljs-number">8</span>B <span class="hljs-number">45</span> <span class="hljs-number">10</span>         mov   eax, [ebp+<span class="hljs-number">10</span>h] ; Lấy một giá trị khác từ stack (tại [ebp+<span class="hljs-number">10</span>h]) và lưu vào EAX. Giá trị này sẽ được gán cho trường DeferredContext (offset <span class="hljs-number">0x010</span>).
+    C7 <span class="hljs-number">01</span> <span class="hljs-number">13</span> <span class="hljs-number">01</span> <span class="hljs-number">00</span>+  mov   dword ptr [ecx], <span class="hljs-number">113</span>h ; Ghi giá trị <span class="hljs-number">0x113</span> (dạng double-word, tức <span class="hljs-number">4</span> byte) vào địa chỉ bắt đầu của cấu trúc (offset <span class="hljs-number">0x000</span>).
+    <span class="hljs-number">89</span> <span class="hljs-number">41</span> <span class="hljs-number">10</span>         mov   [ecx+<span class="hljs-number">10</span>h], eax ; Gán giá trị trong EAX (từ dòng <span class="hljs-number">4</span>) vào trường DeferredContext (offset <span class="hljs-number">0x010</span>).
+    ; Vậy tại sao lại ghi <span class="hljs-number">4</span> byte (double-word) vào offset <span class="hljs-number">0x000</span>, trong khi Type chỉ là <span class="hljs-number">1</span> byte
+    ; vvệc ghi <span class="hljs-number">4</span> byte sẽ ảnh hưởng đến cả <span class="hljs-number">3</span> trường Type, Importance, và Number cùng lúc. Đây là một kỹ thuật tối ưu hóa của trình biên dịch (compiler optimization)
+</code></pre>
+<p>Đây là 113h khi chuyển thành binary.</p>
+<p><img src="image-1.png" alt="alt text"></p>
+<p>Nếu k tối ưu code có thẻ được viết lại như sau.</p>
+<pre><code class="lang-asm">    <span class="hljs-number">01</span>: 8B <span class="hljs-number">45</span> 0C         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">eax</span>, [<span class="hljs-built_in">ebp</span>+<span class="hljs-number">0Ch</span>]
+    <span class="hljs-number">02</span>: <span class="hljs-number">83</span> <span class="hljs-number">61</span> 1C <span class="hljs-number">00</span>      <span class="hljs-keyword">and</span>   <span class="hljs-built_in">dword</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">ecx</span>+<span class="hljs-number">1Ch</span>], <span class="hljs-number">0</span>
+    <span class="hljs-number">03</span>: <span class="hljs-number">89</span> <span class="hljs-number">41</span> 0C         <span class="hljs-keyword">mov</span>   [<span class="hljs-built_in">ecx</span>+<span class="hljs-number">0Ch</span>], <span class="hljs-built_in">eax</span>
+    <span class="hljs-number">04</span>: 8B <span class="hljs-number">45</span> <span class="hljs-number">10</span>         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">eax</span>, [<span class="hljs-built_in">ebp</span>+<span class="hljs-number">10h</span>]
+    <span class="hljs-number">05</span>: C6 <span class="hljs-number">01</span> <span class="hljs-number">13</span>         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">byte</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">ecx</span>],<span class="hljs-number">13h</span>
+    <span class="hljs-number">06</span>: C6 <span class="hljs-number">41</span> <span class="hljs-number">01</span> <span class="hljs-number">01</span>      <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">byte</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">ecx</span>+<span class="hljs-number">1</span>],<span class="hljs-number">1</span>
+    <span class="hljs-number">07</span>: <span class="hljs-number">66</span> C7 <span class="hljs-number">41</span> <span class="hljs-number">02</span> <span class="hljs-number">00</span>+  <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">word</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">ecx</span>+<span class="hljs-number">2</span>],<span class="hljs-number">0</span>
+    <span class="hljs-number">08</span>: <span class="hljs-number">89</span> <span class="hljs-number">41</span> <span class="hljs-number">10</span>         <span class="hljs-keyword">mov</span>   [<span class="hljs-built_in">ecx</span>+<span class="hljs-number">10h</span>], <span class="hljs-built_in">eax</span>
+</code></pre>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-asm">    KDPC *p = ...;                <span class="hljs-comment">// ECX trỏ đến cấu trúc KDPC</span>
+    p-&gt;DpcData = NULL;           <span class="hljs-comment">// Dòng 2</span>
+    p-&gt;DeferredRoutine = ...;    <span class="hljs-comment">// Dòng 1 + 3</span>
+    *(int *)p = <span class="hljs-number">0x113</span>;           <span class="hljs-comment">// Dòng 5</span>
+    p-&gt;DeferredContext = ...;    <span class="hljs-comment">// Dòng 4 + 6</span>
+</code></pre>
+<p>Tiếp theo là kiểu thường được dùng cho truy cập phần tử của 1 array-type object. Thông thường nó có dạng  [BaseAdrr + index*scale] , scale ở đây là kích thước giá trị mỗi phần tử ví dụ mảng int thì sẽ là 4 byte --&gt; scale = 4. </p>
+<pre><code class="lang-asm">
+    <span class="hljs-number">89</span> <span class="hljs-number">04</span> F7         mov   [edi+esi*<span class="hljs-number">8</span>], eax
+    <span class="hljs-comment">; EDI: Địa chỉ cơ sở của mảng.</span>
+    <span class="hljs-comment">; ESI: Chỉ số của phần tử.</span>
+    <span class="hljs-comment">; *8: Scale là 8, nghĩa là mỗi phần tử có kích thước 8 byte (kiểu long long hoặc QWORD).</span>
+    <span class="hljs-comment">; Lệnh này ghi giá trị trong `EAX Ascending/descending giá trị của EFLAGS.</span>
+    <span class="hljs-comment">; Lệnh này lưu giá trị của EAX vào địa chỉ [EDI + ESI*8].</span>
+</code></pre>
+<p>Trong thực tế , đay là dạng thường xuát hiện trong truy cập mảng </p>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _FOO {
+        DWORD <span class="hljs-built_in">size</span>;        <span class="hljs-comment">// +0x00</span>
+        DWORD <span class="hljs-keyword">array</span>[...];  <span class="hljs-comment">// +0x04</span>
+    } FOO, *PFOO;
+    PFOO bar = ...;
+    <span class="hljs-built_in">for</span> (i = ...; i &lt; bar-&gt;<span class="hljs-built_in">size</span>; i++) {
+        <span class="hljs-built_in">if</span> (bar-&gt;<span class="hljs-keyword">array</span>[i] != <span class="hljs-number">0</span>) {
+            ...
+        }
+    }
+</code></pre>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-comment">; EDI: Trỏ đến một cấu trúc có trường size tại offset +0x00 và mảng array tại offset +0x04.</span>
+
+    loop_start : 
+        move <span class="hljs-built_in">eax</span> ,[<span class="hljs-built_in">edi</span> + <span class="hljs-number">4</span>] <span class="hljs-comment">; Lấy địa chỉ cơ sở của mảng ([EDI+4]) vào EAX.</span>
+        <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span> , [<span class="hljs-built_in">eax</span> +<span class="hljs-built_in">ebp</span>*<span class="hljs-number">4</span>] <span class="hljs-comment">; Truy cập phần tử array[ebx] ([EAX+EBX*4]) và lưu vào EAX.</span>
+        <span class="hljs-keyword">test</span>  <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">eax</span>
+        <span class="hljs-keyword">jz</span>    short loc_7F627F
+        ... <span class="hljs-comment">; vài lệnh có thể viết ở đaya đẻ bỏ qua khi nhảy </span>
+<span class="hljs-symbol">    loc_7F627F:</span>
+        <span class="hljs-keyword">inc</span> <span class="hljs-built_in">ebx</span>
+        <span class="hljs-keyword">cmp</span> <span class="hljs-built_in">ebx</span>, [<span class="hljs-built_in">edi</span>]
+        <span class="hljs-keyword">jl</span>    short loop_start
+</code></pre>
+<p>Các lệnh MOVSB/MOVSW/MOVSD. Các lệnh này di chuyển dữ liệu giữa hai địa chỉ bộ nhớ với độ chi tiết 1, 2, hoặc 4.</p>
+<ul>
+<li>Nguồn: ESI.</li>
+<li>Đích: EDI.</li>
+<li>Cập nhật: Tăng/giảm ESI và EDI dựa trên cờ DF (0: tăng, 1: giảm).</li>
+</ul>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-comment">/* a GUID is 16-byte structure */</span>
+    GUID RamDiskBootDiskGuid = ...; <span class="hljs-comment">// global</span>
+    ...
+    GUID foo;
+    <span class="hljs-built_in">memcpy</span>(&amp;foo, &amp;RamdiskBootDiskGuid, <span class="hljs-keyword">sizeof</span>(GUID))
+</code></pre>
+<p><strong>ASM</strong> </p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">esi</span>, offset _RamdiskBootDiskGuid
+    <span class="hljs-keyword">lea</span>   <span class="hljs-built_in">edi</span>, [<span class="hljs-built_in">ebp</span>-<span class="hljs-number">0C0h</span>]
+    <span class="hljs-keyword">movsd</span>    <span class="hljs-comment">; Sao chép 4 byte</span>
+    <span class="hljs-keyword">movsd</span>    <span class="hljs-comment">; Sao chép 4 byte</span>
+    <span class="hljs-keyword">movsd</span>    <span class="hljs-comment">; Sao chép 4 byte</span>
+    <span class="hljs-keyword">movsd</span>    <span class="hljs-comment">; Sao chép 4 byte</span>
+</code></pre>
+<p>Ý nghĩa: Sao chép 16 byte (4 lần MOVSD) từ _RamdiskBootDiskGuid đến [EBP-0C0h] sử dụng Tăng/giảm ESI và EDI dựa trên cờ DF (0: tăng, 1: giảm).</p>
+<p>SCAS (Scan String) là một lệnh trong assembly x86 dùng để so sánh một giá trị trong thanh ghi AL, AX, hoặc EAX với dữ liệu tại địa chỉ bộ nhớ được trỏ bởi thanh ghi EDI
+SCAS trong assembly x86, cách nó hoạt động ngầm (implicitly), và cách nó được sử dụng trong ví dụ cụ thể để triển khai hàm strlen() trong C.</p>
+<p>Nguồn so sánh: Giá trị trong AL (1 byte), AX (2 byte), hoặc EAX (4 byte), tùy vào biến thể của lệnh (SCASB, SCASW, SCASD).
+Đích so sánh: Dữ liệu tại địa chỉ bộ nhớ [EDI].
+Kết quả: Lệnh này không lưu kết quả so sánh mà chỉ cập nhật các cờ trạng thái trong thanh ghi EFLAGS (như ZF - Zero Flag, SF - Sign Flag, v.v.).
+Tự động cập nhật EDI: Sau mỗi lần so sánh, EDI sẽ được tăng hoặc giảm dựa trên cờ hướng DF (Direction Flag) trong EFLAGS:
+Nếu DF = 0: EDI tăng (quét tiến lên).
+Nếu DF = 1: EDI giảm (quét ngược lại).
+Các biến thể:
+SCASB: So sánh 1 byte (AL với [EDI]).
+SCASW: So sánh 2 byte (AX với [EDI]).
+SCASD: So sánh 4 byte (EAX với [EDI]).</p>
+<p>&quot;Implicitly&quot; (ngầm): Nghĩa là lệnh SCAS không yêu cầu bạn chỉ định rõ ràng nguồn và đích trong cú pháp. Nó tự động (ngầm) sử dụng:
+Nguồn: AL/AX/EAX.
+Đích: [EDI]</p>
+<p>Ví dụ: Bạn không cần viết cmp al, [edi] như với lệnh CMP. Thay vào đó, chỉ cần gọi SCASB, và nó tự động thực hiện so sánh.
+Kết quả: Sau khi so sánh, các cờ trong EFLAGS được cập nhật:
+Nếu AL == [EDI]: ZF = 1 (Zero Flag bật).
+Nếu AL != [EDI]: ZF = 0.</p>
+<p><em>Sử dụng với tiền tố REP</em>
+REP và các biến thể: SCAS thường được kết hợp với tiền tố REP (Repeat) để lặp lại thao tác so sánh nhiều lần:
+REPNE (Repeat while Not Equal): Lặp lại cho đến khi tìm thấy giá trị khớp (ZF = 1) hoặc ECX = 0.
+REPE (Repeat while Equal): Lặp lại cho đến khi không còn khớp (ZF = 0) hoặc ECX = 0.
+Ứng dụng: Dùng để quét một buffer (mảng byte/word/dword) để tìm một giá trị cụ thể, ví dụ như tìm ký tự NUL (\0) trong chuỗi.</p>
+<h4 id="v-d-tri-n-khai-strlen-v-i-scas-">Ví dụ triển khai strlen() với SCAS :</h4>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-asm">    size_t strlen(<span class="hljs-keyword">const</span> <span class="hljs-built_in">char</span> *<span class="hljs-built_in">str</span>) {
+        <span class="hljs-keyword">const</span> <span class="hljs-built_in">char</span> *start = <span class="hljs-built_in">str</span>;       <span class="hljs-comment">// EBX = EDI</span>
+        <span class="hljs-keyword">while</span> (*<span class="hljs-built_in">str</span> != <span class="hljs-number">0</span>) {            <span class="hljs-comment">// REPNE SCASB</span>
+            <span class="hljs-built_in">str</span>++;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">str</span> - start;            <span class="hljs-comment">// EDI - EBX</span>
+}
+</code></pre>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-built_in">xor</span> al, al ; <span class="hljs-built_in">xor</span> reg, reg là cách phổ biế<span class="hljs-built_in">n</span> để đặ<span class="hljs-built_in">t</span> thanh ghi về <span class="hljs-number">0</span> vì <span class="hljs-built_in">n</span>ó nhanh và ngắ<span class="hljs-built_in">n</span> hơ<span class="hljs-built_in">n</span> mov reg, <span class="hljs-number">0</span>.
+    mov ebx , edi ; Lưu lại địa chỉ ban đầu của chuỗi (được trỏ bởi EDI) để sau <span class="hljs-built_in">n</span>ày <span class="hljs-built_in">t</span>ính độ dài. EDI sẽ thay đổi trong quá trình qué<span class="hljs-built_in">t</span>, <span class="hljs-built_in">n</span>ê<span class="hljs-built_in">n</span> cầ<span class="hljs-built_in">n</span> mộ<span class="hljs-built_in">t</span> bả<span class="hljs-built_in">n</span> sao.
+    repne scasb; edi liê<span class="hljs-built_in">n</span> <span class="hljs-built_in">t</span>ục <span class="hljs-built_in">t</span>ăng đé<span class="hljs-built_in">n</span> khi <span class="hljs-built_in">n</span>ào <span class="hljs-built_in">t</span>ìm đc phầ<span class="hljs-built_in">n</span> <span class="hljs-built_in">t</span>ử bằng với al 
+    sub edi , ebx; <span class="hljs-built_in">t</span>ính length
+</code></pre>
+<p>Định nghĩa: STOS (Store String) là một lệnh trong assembly x86 dùng để ghi giá trị từ thanh ghi AL, AX, hoặc EAX vào địa chỉ bộ nhớ được trỏ bởi thanh ghi EDI.
+So sánh với SCAS:
+Điểm giống nhau:
+Cả hai đều hoạt động ngầm (implicitly) với EDI làm địa chỉ đích.
+Cả hai tự động tăng hoặc giảm EDI sau mỗi lần thực thi, dựa trên cờ hướng DF trong EFLAGS:
+DF = 0: EDI tăng (hướng tiến).
+DF = 1: EDI giảm (hướng ngược).
+Có các biến thể cho 1, 2, hoặc 4 byte: STOSB (byte), STOSW (word), STOSD (dword).
+Điểm khác nhau:
+SCAS: So sánh giá trị tại [EDI] với AL/AX/EAX và cập nhật cờ trạng thái (EFLAGS), không thay đổi dữ liệu tại [EDI].
+STOS: Ghi giá trị từ AL/AX/EAX trực tiếp vào [EDI], thay đổi dữ liệu tại đó.
+Các biến thể:
+STOSB: Ghi 1 byte từ AL vào [EDI].
+STOSW: Ghi 2 byte từ AX vào [EDI].
+STOSD: Ghi 4 byte từ EAX vào [EDI].</p>
+<p>Ứng dụng của STOS
+Mục đích chính: STOS thường được dùng để khởi tạo hoặc điền một buffer (mảng byte) bằng một giá trị cố định, ví dụ như đặt tất cả các byte thành 0 (tương tự hàm memset() trong C).
+Kết hợp với REP: Khi dùng tiền tố REP (Repeat), STOS lặp lại việc ghi dữ liệu vào các vị trí liên tiếp trong bộ nhớ, với số lần lặp được xác định bởi thanh ghi ECX.</p>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-asm">    memset(edi, <span class="hljs-number">0</span>, <span class="hljs-number">36</span>);  <span class="hljs-comment">// Điền 36 byte giá trị 0 vào buffer tại EDI</span>
+</code></pre>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-asm">
+    <span class="hljs-built_in">xor</span> eax , eax ; đặ<span class="hljs-built_in">t</span> eax = <span class="hljs-number">0</span>; 
+    mov ecx , <span class="hljs-number">9</span>; 
+    mov edi , esi ; vì stos thao <span class="hljs-built_in">t</span>ác với edi nhưng <span class="hljs-built_in">t</span>ôi muô<span class="hljs-built_in">n</span> ghi vào esi 
+    rep stosd     ; ghi dwrod <span class="hljs-built_in">t</span>ưc là <span class="hljs-number">4</span> byte vào edi và giả<span class="hljs-built_in">n</span> edi đế<span class="hljs-built_in">n</span> khi vào ecx = <span class="hljs-number">0</span> 
+    ; <span class="hljs-built_in">t</span>ổng cộng <span class="hljs-number">9</span> lầ<span class="hljs-built_in">n</span> --&gt; <span class="hljs-number">36</span>byte được ghi vào esi;
+</code></pre>
+<h2 id="exercise1-this-function-uses-a-combination-scas-and-stos-to-do-its-work-first-">Exercise1. This function uses a combination SCAS and STOS to do its work. First,</h2>
+<p>explain what is the type of the [EBP+8] and [EBP+C] in line 1 and 8,
+respectively. Next, explain what this snippet does.</p>
+<pre><code class="lang-asm">    <span class="hljs-number">01</span>: 8B <span class="hljs-number">7D</span> <span class="hljs-number">08</span>         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">edi</span>, [<span class="hljs-built_in">ebp</span>+<span class="hljs-number">8</span>]
+    <span class="hljs-number">02</span>: 8B D7            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">edx</span>, <span class="hljs-built_in">edi</span>
+    <span class="hljs-number">03</span>: <span class="hljs-number">33</span> C0            <span class="hljs-keyword">xor</span>   <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">eax</span>
+    <span class="hljs-number">04</span>: <span class="hljs-number">83</span> C9 FF         <span class="hljs-keyword">or</span>    <span class="hljs-built_in">ecx</span>, <span class="hljs-number">0FFFFFFFFh</span>
+    <span class="hljs-number">05</span>: F2 AE            <span class="hljs-keyword">repne</span> <span class="hljs-keyword">scasb</span>
+    <span class="hljs-number">06</span>: <span class="hljs-number">83</span> C1 <span class="hljs-number">02</span>         <span class="hljs-keyword">add</span>   <span class="hljs-built_in">ecx</span>, <span class="hljs-number">2</span>
+    <span class="hljs-number">07</span>: F7 D9            <span class="hljs-keyword">neg</span>   <span class="hljs-built_in">ecx</span>
+    <span class="hljs-number">08</span>: 8A <span class="hljs-number">45</span> 0C         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">al</span>, [<span class="hljs-built_in">ebp</span>+<span class="hljs-number">0Ch</span>]
+    <span class="hljs-number">09</span>: 8B FA            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">edi</span>, <span class="hljs-built_in">edx</span>
+    <span class="hljs-number">10</span>: F3 AA            <span class="hljs-keyword">rep</span> <span class="hljs-keyword">stosb</span>
+    <span class="hljs-number">11</span>: 8B C2            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">edx</span>
+</code></pre>
+<p>Đoạn code này thực hiện một tác vụ tương tự hàm <code>memset()</code> trong C, nhưng với bước tính độ dài chuỗi trước đó. Cụ thể, nó:</p>
+<ol>
+<li>Tính độ dài của chuỗi null-terminated tại địa chỉ được truyền qua <code>[EBP+8]</code>.</li>
+<li>Điền toàn bộ chuỗi đó bằng một ký tự được truyền qua <code>[EBP+0C]</code>.</li>
+</ol>
+<h4 id="ph-n-t-ch-t-ng-d-ng-">Phân tích từng dòng:</h4>
+<pre><code class="lang-asm">01: 8B 7D 08         <span class="hljs-keyword">mov</span>   <span class="hljs-keyword">edi</span>, [ebp+8]    ; <span class="hljs-keyword">EDI</span> = con trỏ đế<span class="hljs-keyword">n</span> chuỗ<span class="hljs-built_in">i</span>
+</code></pre>
+<ul>
+<li>Gán địa chỉ của chuỗi (tham số đầu tiên) vào <code>EDI</code>. <code>EDI</code> sẽ là điểm bắt đầu để quét chuỗi bằng <code>SCASB</code>.</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">02</span>: 8B D7            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">edx</span>, <span class="hljs-built_in">edi</span>        <span class="hljs-comment">; EDX = EDI (lưu địa chỉ gốc)</span>
+</code></pre>
+<ul>
+<li>Sao chép địa chỉ gốc của chuỗi từ <code>EDI</code> vào <code>EDX</code> để sử dụng sau này (vì <code>EDI</code> sẽ thay đổi trong quá trình quét).</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">03</span>: <span class="hljs-number">33</span> C0            <span class="hljs-keyword">xor</span>   <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">eax</span>        <span class="hljs-comment">; EAX = 0 (AL = 0)</span>
+</code></pre>
+<ul>
+<li>Đặt <code>EAX</code> (và do đó <code>AL</code>) về 0. <code>AL = 0</code> sẽ được dùng để tìm ký tự <code>NUL</code> (<code>\0</code>) trong chuỗi bằng <code>SCASB</code>.</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">04</span>: <span class="hljs-number">83</span> C9 FF         <span class="hljs-keyword">or</span>    <span class="hljs-built_in">ecx</span>, <span class="hljs-number">0FFFFFFFFh</span> <span class="hljs-comment">; ECX = 0xFFFFFFFF</span>
+</code></pre>
+<ul>
+<li>Đặt <code>ECX = -1</code> (dạng hex: <code>0xFFFFFFFF</code>). </li>
+<li><code>ECX</code> là bộ đếm cho <code>REPNE SCASB</code>. Giá trị <code>-1</code> (tối đa 32-bit) đảm bảo quét toàn bộ chuỗi cho đến khi tìm thấy <code>NUL</code>, trừ khi chuỗi dài hơn 4 tỷ byte (không thực tế).</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-symbol">05:</span> <span class="hljs-symbol">F2</span> AE            repne scasb           ; Qué<span class="hljs-built_in">t</span> để <span class="hljs-built_in">t</span>ìm NUL
+</code></pre>
+<ul>
+<li><strong>Ý nghĩa</strong>: <ul>
+<li><code>SCASB</code>: So sánh <code>AL</code> (0) với byte tại <code>[EDI]</code>, tăng <code>EDI</code> lên 1.</li>
+<li><code>REPNE</code>: Lặp lại <code>SCASB</code> cho đến khi <code>AL == [EDI]</code> (<code>ZF = 1</code>, tức gặp <code>NUL</code>) hoặc <code>ECX = 0</code>.</li>
+</ul>
+</li>
+<li><strong>Kết quả</strong>: <ul>
+<li><code>EDI</code> trỏ đến byte sau <code>NUL</code>.</li>
+<li><code>ECX</code> giảm từ <code>0xFFFFFFFF</code> xuống còn <code>-n-1</code>, trong đó <code>n</code> là độ dài chuỗi (bao gồm <code>NUL</code>).</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-asm">06:<span class="hljs-number"> 83 </span>C1<span class="hljs-number"> 02 </span>        add   ecx,<span class="hljs-number"> 2 </span>         ; Điều chỉnh ECX
+</code></pre>
+<ul>
+<li><strong>Ý nghĩa</strong>: Thêm 2 vào <code>ECX</code>.</li>
+<li><strong>Mục đích</strong>: <ul>
+<li>Sau <code>REPNE SCASB</code>, nếu chuỗi dài <code>n</code> ký tự (không tính <code>NUL</code>), <code>ECX</code> ban đầu giảm từ <code>0xFFFFFFFF</code> xuống <code>0xFFFFFFFF - n - 1</code>.</li>
+<li>Thêm 2 để bù lại: <ul>
+<li><code>+1</code> cho byte <code>NUL</code>.</li>
+<li><code>+1</code> để chuyển từ giá trị âm sang độ dài thực tế khi đảo dấu ở bước sau.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">07</span>: <span class="hljs-built_in">F7</span> <span class="hljs-built_in">D9</span>            neg   ecx             <span class="hljs-comment">; ECX = độ dài chuỗi</span>
+</code></pre>
+<ul>
+<li><strong>Ý nghĩa</strong>: Đảo dấu <code>ECX</code> (negate: <code>-ECX</code>).</li>
+<li><strong>Mục đích</strong>: <ul>
+<li>Sau <code>add ecx, 2</code>, <code>ECX = -(n + 1) + 2 = -n + 1</code>.</li>
+<li><code>neg ecx</code> biến nó thành <code>n - 1 + 1 = n</code>, tức là độ dài chuỗi không tính <code>NUL</code>.</li>
+</ul>
+</li>
+<li><strong>Kết quả</strong>: <code>ECX</code> bây giờ chứa độ dài chuỗi (số byte sẽ được điền).</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">08</span>: 8A <span class="hljs-number">45</span> 0C         <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">al</span>, [<span class="hljs-built_in">ebp</span>+<span class="hljs-number">0Ch</span>]   <span class="hljs-comment">; AL = ký tự cần điền</span>
+</code></pre>
+<ul>
+<li>Gán giá trị byte từ <code>[EBP+0C]</code> (tham số thứ hai) vào <code>AL</code>. Đây là ký tự sẽ được dùng để điền vào buffer bằng <code>STOSB</code>.</li>
+</ul>
+<pre><code class="lang-asm">09: 8B FA            <span class="hljs-keyword">mov</span>   <span class="hljs-keyword">edi</span>, edx        ; Khôi phục <span class="hljs-keyword">EDI</span>
+</code></pre>
+<ul>
+<li>Khôi phục <code>EDI</code> về địa chỉ gốc của chuỗi (lưu trong <code>EDX</code>), vì <code>EDI</code> đã bị thay đổi bởi <code>SCASB</code>.</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-symbol">10:</span> <span class="hljs-symbol">F3</span> AA            rep stosb             ; Điề<span class="hljs-built_in">n</span> chuỗi bằng ký <span class="hljs-built_in">t</span>ự
+</code></pre>
+<ul>
+<li><strong>Ý nghĩa</strong>: <ul>
+<li><code>STOSB</code>: Ghi <code>AL</code> vào <code>[EDI]</code>, tăng <code>EDI</code> lên 1.</li>
+<li><code>REP</code>: Lặp lại <code>STOSB</code> <code>ECX</code> lần.</li>
+</ul>
+</li>
+<li><strong>Kết quả</strong>: Điền <code>n</code> byte (độ dài chuỗi) tại địa chỉ gốc bằng ký tự trong <code>AL</code>.</li>
+</ul>
+<pre><code class="lang-asm"><span class="hljs-number">11</span>: 8B C2            <span class="hljs-keyword">mov</span>   <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">edx</span>        <span class="hljs-comment">; Trả về con trỏ gốc</span>
+</code></pre>
+<ul>
+<li>Gán <code>EDX</code> (địa chỉ gốc của chuỗi) vào <code>EAX</code>. <code>EAX</code> thường là giá trị trả về của hàm trong chuẩn gọi hàm C.</li>
+</ul>
+<hr>
+<h3 id="3-ch-c-n-ng-t-ng-th-">3. Chức năng tổng thể</h3>
+<ul>
+<li><strong>Input</strong>:<ul>
+<li><code>[EBP+8]</code>: Con trỏ đến chuỗi null-terminated (ví dụ: <code>&quot;hello&quot;</code>).</li>
+<li><code>[EBP+0C]</code>: Ký tự để điền (ví dụ: <code>&#39;x&#39;</code>).</li>
+</ul>
+</li>
+<li><strong>Output</strong>: <ul>
+<li>Chuỗi tại <code>[EBP+8]</code> được ghi đè bằng ký tự từ <code>[EBP+0C]</code> trong suốt độ dài của chuỗi ban đầu.</li>
+<li><code>EAX</code> trả về con trỏ đến chuỗi đã sửa đổi.</li>
+</ul>
+</li>
+<li><strong>Ví dụ</strong>:<ul>
+<li>Input: <code>[EBP+8] = &quot;hello&quot;</code> (địa chỉ <code>0x1000</code>), <code>[EBP+0C] = &#39;x&#39;</code>.</li>
+<li>Sau thực thi: <code>[0x1000]</code> trở thành <code>&quot;xxxxx&quot;</code>, <code>EAX = 0x1000</code>.</li>
+</ul>
+</li>
+</ul>
+<h4 id="pseudo-c-">Pseudo C:</h4>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">char</span>* <span class="hljs-title">fill_string</span><span class="hljs-params">(<span class="hljs-keyword">char</span>* str, <span class="hljs-keyword">char</span> fill_char)</span> </span>{
+    <span class="hljs-keyword">char</span>* original = str;           <span class="hljs-comment">// Dòng 2: EDX = EDI</span>
+    <span class="hljs-keyword">size_t</span> len = <span class="hljs-built_in">strlen</span>(str);       <span class="hljs-comment">// Dòng 1-7: Tính độ dài</span>
+    <span class="hljs-built_in">memset</span>(str, fill_char, len);    <span class="hljs-comment">// Dòng 8-10: Điền ký tự</span>
+    <span class="hljs-keyword">return</span> original;                <span class="hljs-comment">// Dòng 11: Trả về con trỏ</span>
+}
+</code></pre>
+<hr>
+<h3 id="4-minh-h-a-th-c-thi">4. Minh họa thực thi</h3>
+<ul>
+<li>Giả sử: <code>[EBP+8] = 0x1000</code> (chuỗi <code>&quot;hi&quot;</code>), <code>[EBP+0C] = &#39;x&#39;</code>.<ul>
+<li><code>[0x1000] = &#39;h&#39;, [0x1001] = &#39;i&#39;, [0x1002] = 0</code>.</li>
+</ul>
+</li>
+<li><strong>Dòng 1-2</strong>: <code>EDI = EDX = 0x1000</code>.</li>
+<li><strong>Dòng 3-4</strong>: <code>AL = 0</code>, <code>ECX = 0xFFFFFFFF</code>.</li>
+<li><strong>Dòng 5</strong>: <code>REPNE SCASB</code> quét <code>&#39;h&#39;, &#39;i&#39;, 0</code>, dừng tại <code>EDI = 0x1003</code>, <code>ECX = 0xFFFFFFFD</code> (-3).</li>
+<li><strong>Dòng 6</strong>: <code>ECX = -3 + 2 = -1</code>.</li>
+<li><strong>Dòng 7</strong>: <code>ECX = -(-1) = 1</code>.</li>
+<li><strong>Dòng 8</strong>: <code>AL = &#39;x&#39;</code>.</li>
+<li><strong>Dòng 9</strong>: <code>EDI = 0x1000</code>.</li>
+<li><strong>Dòng 10</strong>: <code>REP STOSB</code> ghi <code>&#39;x&#39;</code> vào <code>[0x1000]</code>, chuỗi thành <code>&quot;x&quot;</code> (độ dài 1).</li>
+<li><strong>Dòng 11</strong>: <code>EAX = 0x1000</code>.</li>
+</ul>
+<p><strong>Lưu ý</strong>: Code này chỉ điền <code>len</code> byte (không tính <code>NUL</code>), nên kết quả phụ thuộc độ dài tính được.</p>
+<hr>
+<h2 id="arithmetic-operations">Arithmetic Operations</h2>
+<p>Các toán tử số học cơ bản như cộng , trừ , nhân , chia và các phép dịch bit , AND OR XOR NOT cũng được hỗ trợ với các lệnh tương ứng. Ngoại trừ nhân và chia thì cũng phép toán còn lại dễ sử dung. </p>
+<h3 id="v-d-">Ví dụ</h3>
+<pre><code class="lang-asm">    <span class="hljs-keyword">add</span> <span class="hljs-built_in">esp</span> , <span class="hljs-number">14h</span> <span class="hljs-comment">; cộng esp thêm 0x14 và lưu vào esp </span>
+    <span class="hljs-keyword">sub</span> <span class="hljs-built_in">ecx</span> , <span class="hljs-built_in">eax</span> <span class="hljs-comment">; ecx = ecx - eax </span>
+    <span class="hljs-keyword">sub</span> <span class="hljs-built_in">esp</span> , <span class="hljs-number">0ch</span> <span class="hljs-comment">; esp = esp - 0xC</span>
+    <span class="hljs-keyword">inc</span> <span class="hljs-built_in">ecx</span>       <span class="hljs-comment">; tăng ecx thêm 1 </span>
+    <span class="hljs-keyword">dec</span> <span class="hljs-built_in">edi</span>       <span class="hljs-comment">; giảm edi 1 </span>
+    <span class="hljs-keyword">or</span>  <span class="hljs-built_in">eax</span> , 0FFFFFFFF <span class="hljs-comment">; phép or giữa eax và 0XFFFFFFFF</span>
+    <span class="hljs-keyword">and</span> <span class="hljs-built_in">ecx</span> , <span class="hljs-number">7</span>  <span class="hljs-comment">; phep and </span>
+    <span class="hljs-keyword">xor</span> <span class="hljs-built_in">eax</span> , <span class="hljs-built_in">eax</span> <span class="hljs-comment">; phép xor</span>
+    <span class="hljs-keyword">not</span> <span class="hljs-built_in">edi</span>       <span class="hljs-comment">; edi = ~edi </span>
+    <span class="hljs-keyword">shl</span> <span class="hljs-built_in">cl</span> , <span class="hljs-number">4</span>    <span class="hljs-comment">; cd = cl &lt;&lt; 4 </span>
+    <span class="hljs-keyword">shr</span> <span class="hljs-built_in">ecx</span> ,<span class="hljs-number">1</span>    <span class="hljs-comment">; ecx = ecx &gt;&gt; 1 ;</span>
+    <span class="hljs-keyword">rol</span> <span class="hljs-built_in">al</span> , <span class="hljs-number">3</span>    <span class="hljs-comment">; xoay tròn al sang trái 3 bit </span>
+    <span class="hljs-keyword">ror</span> <span class="hljs-built_in">al</span> , <span class="hljs-number">1</span>    <span class="hljs-comment">; xoay tròn sang phỉa 1 bit</span>
+</code></pre>
+<p>Các lênh shl hay shr thường tháy trong các mã nguồn thực tế vì nó được dùng đẻ tối uư các phep toán nhân chia , khi các số nhân và chia là các số mũ của 2. loại tối ưu này thường được gòi là <em>Streng reduction</em>  vì nó thay thế một phép toán tốn kém tính toán bằng một phép toán nhanh hơn.</p>
+<p>Các phép phân k đấu và có dấu được thưc hiên  thông qua các lệnh <em>MUL</em> và  <em>IMUL</em> tương ứng. </p>
+<p><strong>MUL</strong> 
+Lệnh MUL được sử dụng để thực hiện phép nhân không dấu (unsigned multiplication).
+format :  <em>MUL reg/memory</em></p>
+<p>Tức là phép nhân này chỉ có thể thực hiện trên giá trị trong thanh ghi hoặc bộ nhớ.
+Lệnh MUL nhân giá trị trong thanh ghi với giá trị trong AL, AX, hoặc EAX và lưu kết quả vào các thanh ghi AX, DX:AX, hoặc EDX:EAX, tùy vào độ rộng của toán hạng. </p>
+<h3 id="d-i-y-l-c-c-v-d-">Dưới đây là các ví dụ:</h3>
+<pre><code>```asm 
+mul ecx   ; đây là phép nhâ<span class="hljs-built_in">n</span> giưuax eax và ecx kế<span class="hljs-built_in">t</span> quả sẽ được lưu vào E<span class="hljs-symbol">DX:EA</span>X
+          ; <span class="hljs-built_in">t</span>ức <span class="hljs-built_in">n</span>ếu phép toá<span class="hljs-built_in">n</span> vượ<span class="hljs-built_in">t</span> quá <span class="hljs-number">32</span> bit eax phầ<span class="hljs-built_in">n</span> cao sẽ được lưu vào EDX , và phầ<span class="hljs-built_in">n</span> thấp sẽ lưu và EAX. 
+mul dword ptr [esi + <span class="hljs-number">4</span>] ; <span class="hljs-built_in">t</span>ương <span class="hljs-built_in">t</span>ự trê<span class="hljs-built_in">n</span> E<span class="hljs-symbol">DX:EA</span>X = EAX * <span class="hljs-number">4</span> byte <span class="hljs-built_in">t</span>ại đia chỉ [esp +<span class="hljs-number">4</span>]
+
+mul dx   ; <span class="hljs-symbol">DX:AX</span> = AX*DX ; dx và cl đều <span class="hljs-number">16</span> bit <span class="hljs-built_in">n</span>ê<span class="hljs-built_in">n</span> dùng các thanh ghi <span class="hljs-number">16</span> bit để trữ <span class="hljs-built_in">t</span>ính toán. 
+mul cl   ; AX = AL * CL 
+
+```       
+</code></pre><p><strong>IMUL</strong> </p>
+<p>Lệnh <strong>IMUL</strong> được sử dụng để thực hiện phép nhân có dấu (signed multiplication). <strong>IMUL</strong> có ba dạng cơ bản:</p>
+<ol>
+<li><p><strong>IMUL reg/mem</strong>: Tương tự như lệnh <code>MUL</code>, phép nhân này thực hiện giữa giá trị trong thanh ghi <code>EAX</code> và giá trị trong thanh ghi hoặc bộ nhớ. Kết quả được lưu vào <code>EDX:EAX</code>.</p>
+<ul>
+<li>Ví dụ: <code>F7 E9</code> → <code>imul ecx</code> → <code>EDX:EAX = EAX * ECX</code></li>
+</ul>
+</li>
+<li><p><strong>IMUL reg1, reg2/mem</strong>: Phép nhân giữa <code>reg1</code> và <code>reg2/mem</code>. Kết quả sẽ được lưu vào <code>reg1</code>.</p>
+<ul>
+<li>Ví dụ: <code>69 F6 A0 01 00+</code> → <code>imul esi, 1A0h</code> → <code>ESI = ESI * 0x1A0</code></li>
+</ul>
+</li>
+<li><p><strong>IMUL reg1, reg2/mem, imm</strong>: Phép nhân giữa <code>reg2/mem</code> và một giá trị ngay lập tức (immediate value). Kết quả được lưu vào <code>reg1</code>.</p>
+<ul>
+<li>Ví dụ: <code>0F AF CE</code> → <code>imul ecx, esi</code> → <code>ECX = ECX * ESI</code></li>
+</ul>
+</li>
+</ol>
+<p>Trong Assembly, phép chia có dấu và không dấu được thực hiện thông qua các lệnh DIV và IDIV. Dưới đây là cách giải thích chi tiết về các lệnh này và cách chúng hoạt động.</p>
+<p><strong>DIV</strong>
+DIV được sử dụng để thực hiện phép chia không dấu (unsigned division). Khi thực hiện phép chia không dấu, các toán hạng được coi là các số không âm (unsigned), tức là không có dấu và mọi phép chia diễn ra trên các số không dấu.</p>
+<p>format : <code>DIV reg/mem</code>  . </p>
+<h3 id="v-d-">ví dụ :</h3>
+<pre><code class="lang-asm">     div ecx      ; Chia E<span class="hljs-symbol">DX:EA</span>X cho ECX, kế<span class="hljs-built_in">t</span> quả (<span class="hljs-built_in">quotient</span>) lưu vào EAX, phầ<span class="hljs-built_in">n</span> dư (remainder) lưu vào EDX.
+     div cl       ; Chia AX cho CL, kế<span class="hljs-built_in">t</span> quả (<span class="hljs-built_in">quotient</span>) lưu vào AL, phầ<span class="hljs-built_in">n</span> dư (remainder) lưu vào AH.
+     div dword ptr [esi+<span class="hljs-number">24</span>h]  ; Chia E<span class="hljs-symbol">DX:EA</span>X cho giá trị <span class="hljs-built_in">t</span>ại [ESI+<span class="hljs-number">24</span>], kế<span class="hljs-built_in">t</span> quả lưu vào EAX và phầ<span class="hljs-built_in">n</span> dư vào EDX.
+</code></pre>
+<p><strong>IDIV</strong></p>
+<p>IDIV được sử dụng để thực hiện phép chia có dấu (signed division), tức là phép chia giữa các số có dấu (cả số âm và dương).</p>
+<p>format : <code>IDIV reg/mem</code>  .</p>
+<pre><code class="lang-asm">    <span class="hljs-comment">; Giả sử EAX chứa -100 (0xFFFFFF9C), và ECX chứa 3</span>
+    mov eax, <span class="hljs-number">0</span>FFFFFF9Ch   <span class="hljs-comment">; EAX = -100 (số bị chia)</span>
+    mov ecx, <span class="hljs-number">3</span>            <span class="hljs-comment">; ECX = 3 (mẫu số)</span>
+
+    <span class="hljs-comment">; IDIV thực hiện phép chia EDX:EAX cho ECX</span>
+    idiv ecx              <span class="hljs-comment">; Chia EDX:EAX cho ECX</span>
+
+    <span class="hljs-comment">; Kết quả:</span>
+    <span class="hljs-comment">; EAX (quotient) = -33 (0xFFFFFFD7)</span>
+    <span class="hljs-comment">; EDX (remainder) = 1 (0x01)</span>
+</code></pre>
+<h1 id="stack-operations-and-function-invocation">Stack Operations and Function Invocation</h1>
+<p>Ngăn xếp (stack) là một cấu trúc dữ liệu cơ bản trong lập trình và hệ điều hành. Nó được sử dụng để quản lý dữ liệu theo cách &quot;vào sau, ra trước&quot; (Last-In, First-Out - LIFO). Nghĩa là, phần tử nào được thêm vào cuối cùng sẽ được lấy ra đầu tiên.</p>
+<p>Ví dụ thực tế: Trong ngôn ngữ C, các biến cục bộ (local variables) của một hàm được lưu trữ trong không gian ngăn xếp của hàm đó. Khi hệ điều hành chuyển từ chế độ người dùng (ring 3) sang chế độ hạt nhân (ring 0), nó cũng lưu thông tin trạng thái (state information) lên ngăn xếp.</p>
+<p>Ngăn xếp hỗ trợ hai thao tác chính:</p>
+<p>Push: Đặt một phần tử lên đỉnh ngăn xếp.
+Pop: Lấy phần tử ở đỉnh ngăn xếp ra. </p>
+<h4 id="ng-n-x-p-trong-ki-n-tr-c-x86">Ngăn xếp trong kiến trúc x86</h4>
+<p>Trong kiến trúc x86 (một loại kiến trúc bộ xử lý), ngăn xếp là một vùng bộ nhớ liền kề được quản lý bởi thanh ghi ESP (Stack Pointer - Con trỏ ngăn xếp).
+Ngăn xếp trong x86 phát triển ngược xuống dưới (grows downwards), nghĩa là khi thêm dữ liệu, địa chỉ bộ nhớ giảm dần.
+Các lệnh PUSH và POP được sử dụng để thực hiện thao tác push/pop, và chúng tự động thay đổi giá trị của ESP:
+PUSH: Giảm ESP trước, rồi ghi dữ liệu vào vị trí mà ESP trỏ tới.
+POP: Đọc dữ liệu từ vị trí ESP trỏ tới, rồi tăng ESP lên.</p>
+<h5 id="chi-ti-t-k-thu-t">Chi tiết kỹ thuật</h5>
+<p>Giá trị mặc định mà ESP tăng/giảm sau mỗi lệnh PUSH hoặc POP là 4 byte (vì hệ điều hành thường yêu cầu ngăn xếp được căn chỉnh theo double-word, tức là 4 byte).
+Tuy nhiên, giá trị này có thể được thay đổi thành 1 hoặc 2 byte bằng cách sử dụng tiền tố (prefix override), nhưng trong thực tế, hầu như luôn là 4 byte để đảm bảo căn chỉnh.</p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">0xAAAAAAAA</span> <span class="hljs-comment">; Gán giá trị 0xAAAAAAAA vào thanh ghi eax.</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebx</span>, <span class="hljs-number">0xBBBBBBBB</span><span class="hljs-comment">;</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ecx</span>, <span class="hljs-number">0xCCCCCCCC</span> 
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>, <span class="hljs-number">0xDDDDDDDD</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">eax</span>            <span class="hljs-comment">; Đẩy giá trị của eax (0xAAAAAAAA) lên ngăn xếp.</span>
+                        <span class="hljs-comment">; ESP giảm 4 byte: 0xb20000 - 4 = 0xb1fffc.</span>
+                        <span class="hljs-comment">; Giá trị 0xAAAAAAAA được ghi vào địa chỉ 0xb1fffc.</span>
+                        <span class="hljs-comment">; ESP bây giờ là 0xb1fffc, và ngăn xếp chứa 0xAAAAAAAA tại 0xb1fffc.</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ebx</span>            <span class="hljs-comment">; Đẩy giá trị của ebx (0xBBBBBBBB) lên ngăn xếp.</span>
+                        <span class="hljs-comment">; ESP giảm 4 byte: 0xb1fffc - 4 = 0xb1fff8.</span>
+                        <span class="hljs-comment">;Giá trị 0xBBBBBBBB được ghi vào địa chỉ 0xb1fff8.</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">esi</span>             <span class="hljs-comment">; Lấy giá trị ở đỉnh ngăn xếp (tại 0xb1fff8) ra và gán vào thanh ghi esi.  </span>
+                        <span class="hljs-comment">; Đọc giá trị 0xBBBBBBBB từ 0xb1fff8.</span>
+                        <span class="hljs-comment">; ESP tăng 4 byte: 0xb1fff8 + 4 = 0xb1fffc.</span>
+</code></pre>
+<p><img src="image-2.png" alt="alt text"></p>
+<p>Thanh ghi ESP (Stack Pointer) không chỉ bị thay đổi bởi các lệnh PUSH và POP, mà còn có thể được điều chỉnh trực tiếp bởi các lệnh khác như ADD (cộng) và SUB (trừ). Điều này cho phép linh hoạt trong việc quản lý ngăn xếp.</p>
+<h5 id="h-m-trong-ng-n-ng-c-p-cao-v-m-c-m-y">Hàm trong ngôn ngữ cấp cao và mức máy</h5>
+<p>Trong các ngôn ngữ lập trình cấp cao (như C), khái niệm &quot;hàm&quot; (function) bao gồm việc gọi hàm và trả về kết quả là một abstraction (trừu tượng hóa). Tuy nhiên, ở mức bộ xử lý (processor), không có khái niệm hàm như vậy.
+Bộ xử lý chỉ làm việc với các đối tượng cụ thể như thanh ghi (registers) hoặc dữ liệu trong bộ nhớ (memory). Vậy làm thế nào để thực hiện các hàm ở mức máy? Câu trả lời là: sử dụng ngăn xếp (stack).</p>
+<p>Khi một hàm được gọi, ngăn xếp được sử dụng để:
+Lưu trữ các tham số (arguments) của hàm.
+Lưu trữ địa chỉ trả về (return address).
+Quản lý các biến cục bộ và trạng thái của hàm.
+Các lệnh assembly như CALL, RETN, cùng với việc thao tác trên ngăn xếp, giúp thực hiện việc này.</p>
+<p><strong>Hàm trong C</strong></p>
+<pre><code class="lang-c">
+    <span class="hljs-keyword">int</span> __<span class="hljs-function">cdecl <span class="hljs-title">addme</span><span class="hljs-params">(<span class="hljs-keyword">short</span> a, <span class="hljs-keyword">short</span> b)</span>
+    </span>{
+        <span class="hljs-keyword">return</span> a + b;
+    }
+</code></pre>
+<p>Đây là một hàm đơn giản nhận hai tham số kiểu short (2 byte mỗi tham số) và trả về tổng của chúng.
+__cdecl là quy ước gọi hàm (calling convention), trong đó:
+Tham số được đẩy lên ngăn xếp từ phải sang trái (b trước, rồi a).
+Người gọi hàm (caller) chịu trách nhiệm dọn dẹp ngăn xếp sau khi hàm hoàn tất.</p>
+<p>Mã Assembly của hàm addme:</p>
+<pre><code class="lang-asm">    <span class="hljs-symbol">01:</span> <span class="hljs-number">004113</span>A0 <span class="hljs-number">55</span>           push   ebp  ; Đẩy giá trị của thanh ghi ebp (<span class="hljs-built_in">Base</span> Pointer) lê<span class="hljs-built_in">n</span> ngă<span class="hljs-built_in">n</span> xếp để lưu trạng thái của <span class="hljs-built_in">n</span>ó. ebp thường được dùng để tham chiếu các tham số và biế<span class="hljs-built_in">n</span> cục bộ trong hàm.
+    <span class="hljs-symbol">02:</span> <span class="hljs-number">004113</span>A1 <span class="hljs-number">8</span>B EC        mov    ebp, esp  ; Gá<span class="hljs-built_in">n</span> giá trị của esp (Stack Pointer) vào ebp. Điều <span class="hljs-built_in">n</span>ày thiế<span class="hljs-built_in">t</span> lập mộ<span class="hljs-built_in">t</span> <span class="hljs-string">"frame pointer"</span> mới cho hàm, giúp truy cập các tham số trê<span class="hljs-built_in">n</span> ngă<span class="hljs-built_in">n</span> xếp mộ<span class="hljs-built_in">t</span> cách dễ dàng.
+    <span class="hljs-symbol">03:</span> ...
+    <span class="hljs-symbol">04:</span> <span class="hljs-number">004113</span>BE <span class="hljs-number">0</span>F BF <span class="hljs-number">45</span> <span class="hljs-number">08</span>  movsx  eax, word ptr [ebp+<span class="hljs-number">8</span>]  ; Lấy giá trị của tham số a <span class="hljs-built_in">t</span>ừ ngă<span class="hljs-built_in">n</span> xếp (<span class="hljs-built_in">t</span>ại vị trí ebp + <span class="hljs-number">8</span>) và gá<span class="hljs-built_in">n</span> vào eax.
+                                                            ; movsx (move with <span class="hljs-built_in">sign</span>-extension) chuyể<span class="hljs-built_in">n</span> đổi giá trị <span class="hljs-number">2</span> byte (short) thành <span class="hljs-number">4</span> byte (dấu được mở rộng để phù hợp với thanh ghi <span class="hljs-number">32</span>-bit).
+    <span class="hljs-symbol">05:</span> <span class="hljs-number">004113</span>C2 <span class="hljs-number">0</span>F BF <span class="hljs-number">4</span>D <span class="hljs-number">0</span>C  movsx  ecx, word ptr [ebp+<span class="hljs-number">0</span>Ch] ; Lấy giá trị của tham số b <span class="hljs-built_in">t</span>ừ ngă<span class="hljs-built_in">n</span> xếp (<span class="hljs-built_in">t</span>ại vị trí ebp + <span class="hljs-number">0</span>xC, <span class="hljs-built_in">t</span>ức là ebp + <span class="hljs-number">12</span>) và gá<span class="hljs-built_in">n</span> vào ecx. <span class="hljs-built_in">T</span>ương <span class="hljs-built_in">t</span>ự, giá trị <span class="hljs-number">2</span> byte được mở rộng thành <span class="hljs-number">4</span> byte.
+    <span class="hljs-symbol">06:</span> <span class="hljs-number">004113</span>C6 <span class="hljs-number">03</span> <span class="hljs-symbol">C1</span>        add   eax, ecx ; cộng giá trị trong ecx (b) vào eax (a). Kế<span class="hljs-built_in">t</span> quả <span class="hljs-built_in">t</span>ổng được lưu trong eax, đây cũng là giá trị trả về của hàm (theo quy ước __cdecl).
+    <span class="hljs-symbol">07:</span> ...
+    <span class="hljs-symbol">08:</span> <span class="hljs-number">004113</span>CB <span class="hljs-number">8</span>B <span class="hljs-symbol">E5</span>        mov    esp, ebp ; Khôi phục giá trị của esp về vị trí ban đầu (bằng cách sao chép <span class="hljs-built_in">t</span>ừ ebp). Điều <span class="hljs-built_in">n</span>ày dọ<span class="hljs-built_in">n</span> dẹp bấ<span class="hljs-built_in">t</span> kỳ biế<span class="hljs-built_in">n</span> cục bộ <span class="hljs-built_in">n</span>ào trê<span class="hljs-built_in">n</span> ngă<span class="hljs-built_in">n</span> xếp (trong trường hợp <span class="hljs-built_in">n</span>ày không có).
+    <span class="hljs-symbol">09:</span> <span class="hljs-number">004113</span>CD <span class="hljs-number">5</span>D           pop    ebp  ; Lấy giá trị ebp cũ <span class="hljs-built_in">t</span>ừ ngă<span class="hljs-built_in">n</span> xếp và khôi phục <span class="hljs-built_in">n</span>ó, đưa chương trình về trạng thái trước khi gọi hàm.
+    <span class="hljs-symbol">10:</span> <span class="hljs-number">004113</span>CE <span class="hljs-symbol">C3</span>           retn      ; Lệnh <span class="hljs-string">"return"</span> . <span class="hljs-built_in">N</span>ó lấy địa chỉ trả về <span class="hljs-built_in">t</span>ừ đỉnh ngă<span class="hljs-built_in">n</span> xếp (được đẩy bởi lệnh <span class="hljs-built_in">CALL</span>) và nhảy về đó.
+</code></pre>
+<p>Lệnh CALL:
+Đây là lệnh dùng để gọi một hàm hoặc nhảy đến một địa chỉ cụ thể trong mã máy. Khi được thực thi, nó thực hiện hai thao tác:
+Đẩy địa chỉ trả về lên ngăn xếp: Địa chỉ trả về là địa chỉ của lệnh ngay sau lệnh CALL (trong ví dụ là 004129FE). Điều này đảm bảo chương trình biết nơi để quay lại sau khi hàm hoàn tất.
+Thay đổi thanh ghi EIP: Thanh ghi EIP (Instruction Pointer) được cập nhật để trỏ đến địa chỉ của hàm được gọi (trong ví dụ là addme tại 004113A0). Điều này chuyển quyền điều khiển sang hàm đích.
+Lệnh RET (Return):
+Lệnh này kết thúc hàm và trả quyền điều khiển về nơi gọi hàm. Nó thực hiện một thao tác:
+Lấy địa chỉ ở đỉnh ngăn xếp (được đẩy bởi CALL) và gán vào EIP, sau đó nhảy đến địa chỉ đó.
+Về mặt khái niệm, RET giống như một lệnh &quot;POP EIP&quot;, nhưng không có chuỗi lệnh như vậy trong x86, vì EIP không thể được thao tác trực tiếp như các thanh ghi khác.</p>
+<h5 id="v-d-minh-h-a-">Ví dụ minh họa:</h5>
+<pre><code class="lang-asm">01:<span class="hljs-number"> 68 </span>78<span class="hljs-number"> 56 </span>34<span class="hljs-number"> 12 </span>  push  0x12345678
+02: C3               ret
+</code></pre>
+<p>Dòng 1: Đẩy địa chỉ 0x12345678 lên ngăn xếp.
+Dòng 2: RET lấy địa chỉ này từ đỉnh ngăn xếp và gán vào EIP, khiến chương trình nhảy đến 0x12345678 để tiếp tục thực thi. Đây là một cách &quot;thủ công&quot; để điều khiển luồng chương trình.</p>
+<p>Tôi sẽ định dạng lại giải thích của đoạn văn trước, tách riêng phần mã (code) và phần giải thích (explanation) để rõ ràng hơn. Dưới đây là phiên bản được tổ chức lại:</p>
+<hr>
+<h3 id="ph-n-1-l-nh-call-v-ret">Phần 1: Lệnh CALL và RET</h3>
+<h4 id="code-">Code:</h4>
+<pre><code><span class="hljs-comment">; Ví dụ minh họa nhảy đến địa chỉ 0x12345678</span>
+<span class="hljs-number">01</span>: <span class="hljs-number">68</span> <span class="hljs-number">78</span> <span class="hljs-number">56</span> <span class="hljs-number">34</span> <span class="hljs-number">12</span>   <span class="hljs-keyword">push </span> <span class="hljs-number">0x12345678</span>
+<span class="hljs-number">02</span>: <span class="hljs-built_in">C3</span>               ret
+</code></pre><h4 id="gi-i-th-ch-">Giải thích:</h4>
+<ul>
+<li><strong>Lệnh <code>CALL</code></strong>:<ul>
+<li>Thực hiện hai thao tác:<ol>
+<li>Đẩy địa chỉ trả về (địa chỉ của lệnh ngay sau <code>CALL</code>) lên ngăn xếp.</li>
+<li>Thay đổi thanh ghi <code>EIP</code> (Instruction Pointer) thành địa chỉ của hàm được gọi, chuyển điều khiển đến đó.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Lệnh <code>RET</code></strong>:<ul>
+<li>Lấy địa chỉ từ đỉnh ngăn xếp (do <code>CALL</code> đẩy lên) và gán vào <code>EIP</code>, rồi nhảy về địa chỉ đó.</li>
+<li>Không có lệnh “POP EIP” trực tiếp trong x86, nên <code>RET</code> thay thế cho việc này.</li>
+</ul>
+</li>
+<li><strong>Ví dụ trên</strong>:<ul>
+<li><code>push 0x12345678</code>: Đẩy địa chỉ <code>0x12345678</code> lên ngăn xếp.</li>
+<li><code>ret</code>: Lấy địa chỉ này từ ngăn xếp, gán vào <code>EIP</code>, và nhảy đến <code>0x12345678</code>.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="ph-n-2-quy-c-g-i-h-m-calling-convention-">Phần 2: Quy ước gọi hàm (Calling Convention)</h3>
+<h4 id="gi-i-th-ch-">Giải thích:</h4>
+<ul>
+<li><strong>Định nghĩa</strong>: Quy ước gọi hàm là tập hợp quy tắc xác định cách hàm được gọi và xử lý ở mức máy, được quy định bởi <strong>Application Binary Interface (ABI)</strong> của hệ thống.</li>
+<li><strong>Các yếu tố quy định</strong>:<ul>
+<li>Tham số được truyền qua ngăn xếp, thanh ghi, hay cả hai?</li>
+<li>Thứ tự truyền tham số: từ trái sang phải hay từ phải sang trái?</li>
+<li>Giá trị trả về được lưu ở đâu: ngăn xếp, thanh ghi, hay cả hai?</li>
+</ul>
+</li>
+<li><strong>Các quy ước phổ biến</strong>:<ul>
+<li><strong><code>CDECL</code></strong>: Tham số đẩy lên ngăn xếp từ phải sang trái, caller dọn dẹp ngăn xếp.</li>
+<li><strong><code>STDCALL</code></strong>: Tương tự CDECL, nhưng callee dọn dẹp ngăn xếp.</li>
+<li><strong><code>THISCALL</code></strong>: Dùng trong C++, tham số <code>this</code> thường truyền qua thanh ghi.</li>
+<li><strong><code>FASTCALL</code></strong>: Một số tham số truyền qua thanh ghi để tăng tốc.</li>
+</ul>
+</li>
+<li><strong>Tùy chỉnh</strong>: Trình biên dịch có thể tạo quy ước riêng.</li>
+</ul>
+<hr>
+<p><img src="image-3.png" alt="alt text"></p>
+<h3 id="exercises">Exercises</h3>
+<p>1.Given what you learned about CALL and RET, explain how you wouldread the value of EIP? Why can&#39;t you just do MOV EAX, EIP?
+EIP là gì?:</p>
+<p>EIP (Instruction Pointer) là thanh ghi trong kiến trúc x86, chứa địa chỉ của lệnh tiếp theo sẽ được thực thi. Nó được cập nhật tự động sau mỗi lệnh.</p>
+<p>Tại sao không thể dùng MOV EAX, EIP?:</p>
+<p>Trong x86, EIP không phải là thanh ghi có thể truy cập trực tiếp bằng lệnh MOV. Nó được thiết kế để chỉ điều khiển luồng thực thi, không cho phép đọc hoặc ghi trực tiếp từ các lệnh thông thường.</p>
+<p>Lý do: Nếu có thể ghi trực tiếp vào EIP, chương trình có thể dễ dàng bị lỗi hoặc bị tấn công (ví dụ: thay đổi luồng thực thi một cách không kiểm soát). Thay vào đó, x86 cung cấp các lệnh gián tiếp như CALL, RET, JMP để thay đổi EIP.</p>
+<p>Cách đọc giá trị của EIP:</p>
+<p>Để đọc EIP, ta phải sử dụng lệnh CALL để đẩy giá trị của nó lên ngăn xếp, sau đó lấy ra từ đó. 
+Ví dụ:
+Gọi một nhãn (label) ngay sau lệnh CALL, rồi lấy địa chỉ trả về từ ngăn xếp.</p>
+<pre><code class="lang-asm">    ; Giả sử đây là cách đọc EIP
+    <span class="hljs-symbol">01:</span> <span class="hljs-built_in">CALL</span> get_eip
+    <span class="hljs-symbol">02:</span> get_e<span class="hljs-symbol">ip:</span>
+    <span class="hljs-symbol">03:</span> POP EAX    ; EAX chứa giá trị của EIP <span class="hljs-built_in">t</span>ại dòng <span class="hljs-number">02</span>
+
+; Dòng <span class="hljs-symbol">01:</span> <span class="hljs-built_in">CALL</span> get_eip đẩy địa chỉ của lệnh tiếp theo (dòng <span class="hljs-number">02</span>) lê<span class="hljs-built_in">n</span> ngă<span class="hljs-built_in">n</span> xếp và nhảy đế<span class="hljs-built_in">n</span> nhã<span class="hljs-built_in">n</span> get_eip.
+; Dòng <span class="hljs-symbol">03:</span> POP EAX lấy địa chỉ trả về (giá trị của EIP <span class="hljs-built_in">t</span>ại dòng <span class="hljs-number">02</span>) <span class="hljs-built_in">t</span>ừ đỉnh ngă<span class="hljs-built_in">n</span> xếp và lưu vào EAX.
+</code></pre>
+<ul>
+<li>2.Come  up  with  at  least  two  code  sequences  to  set  EIP  to 0xAABBCCDD.</li>
+</ul>
+<p>Vì không thể ghi trực tiếp vào EIP bằng MOV, ta phải dùng các lệnh điều khiển luồng như JMP, CALL, hoặc RET. Dưới đây là hai cách:</p>
+<p>Cách 1: Sử dụng JMP</p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">jmp</span> <span class="hljs-number">0xAABBCCDD</span>
+</code></pre>
+<p>Cách hoạt động: Lệnh JMP đặt EIP thành 0xAABBCCDD, khiến CPU nhảy đến địa chỉ đó và thực thi lệnh tiếp theo tại đó.
+Yêu cầu: Địa chỉ 0xAABBCCDD phải hợp lệ và chứa mã có thể thực thi.</p>
+<p>Cách 2: Sử dụng PUSH và RET</p>
+<pre><code class="lang-asm">    <span class="hljs-keyword">push</span> <span class="hljs-number">0xAABBCCDD</span>
+    <span class="hljs-keyword">ret</span>
+</code></pre>
+<p>Cách hoạt động:</p>
+<p>PUSH 0xAABBCCDD đặt giá trị 0xAABBCCDD lên đỉnh ngăn xếp.
+RET lấy giá trị này từ ngăn xếp và gán vào EIP, khiến chương trình nhảy đến 0xAABBCCDD</p>
+<p>3.In the example function, addme, what would happen if the stack pointer
+were not properly restored before executing RET?</p>
+<p>Trong một hàm assembly, con trỏ ngăn xếp (ESP) thường được điều chỉnh để cấp phát không gian cho biến cục bộ, và cần được khôi phục trước khi trả về. Ví dụ về hàm điển hình:</p>
+<pre><code class="lang-asm"><span class="hljs-symbol">addme:</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ebp</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebp</span>, <span class="hljs-built_in">esp</span>    <span class="hljs-comment">; Lưu frame ngăn xếp</span>
+    <span class="hljs-keyword">sub</span> <span class="hljs-built_in">esp</span>, <span class="hljs-number">8</span>      <span class="hljs-comment">; Cấp phát 8 byte cho biến cục bộ</span>
+    <span class="hljs-comment">; Thân hàm...</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">esp</span>, <span class="hljs-built_in">ebp</span>    <span class="hljs-comment">; Khôi phục ESP</span>
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebp</span>
+    <span class="hljs-keyword">ret</span>
+</code></pre>
+<p>Vai trò của MOV ESP, EBP: Khôi phục ESP về vị trí ban đầu, nơi chứa địa chỉ trả về (được đẩy bởi lệnh CALL gọi hàm).</p>
+<p>Nếu không khôi phục ESP:
+ESP sẽ trỏ đến vị trí sai (ví dụ, vùng biến cục bộ).
+Khi RET thực thi, nó lấy giá trị tại ESP hiện tại (có thể là dữ liệu rác hoặc biến cục bộ) và gán vào EIP.</p>
+<p>Hậu quả:</p>
+<p>Chương trình nhảy đến địa chỉ không đúng, có thể gây lỗi phân đoạn (segfault) hoặc hành vi không xác định.</p>
+<p>4.In all of the calling conventions explained, the return value is stored in a 32-bit register (EAX). What happens when the return value does not fit
+in a 32-bit register? Write a program to experiment and evaluate your
+answer. Does the mechanism change from compiler to compiler?</p>
+<p>Trong các quy ước gọi hàm x86 (như <strong>cdecl, </strong>stdcall), giá trị trả về thường được lưu trong EAX (32-bit). Nhưng nếu giá trị lớn hơn 32-bit (ví dụ: 64-bit hoặc cấu trúc lớn), cách xử lý phụ thuộc vào trình biên dịch. </p>
+<p>Trong lập trình assembly x86, các quy ước gọi hàm phổ biến như <strong>cdecl hoặc </strong>stdcall quy định rằng:</p>
+<p>Giá trị trả về của các kiểu dữ liệu nhỏ (như int, char, hoặc con trỏ) được lưu trong thanh ghi EAX.
+Vì EAX là thanh ghi 32-bit, nó chỉ có thể chứa tối đa 32 bit dữ liệu.</p>
+<p>Ví dụ: Nếu một hàm trả về số nguyên int (32-bit), giá trị đó sẽ được đặt trong EAX sau khi hàm hoàn tất.</p>
+<p>Khi giá trị trả về lớn hơn 32-bit
+Khi hàm trả về một giá trị lớn hơn 32-bit, như:</p>
+<p>Số nguyên 64-bit (long long trong C).</p>
+<p>Cấu trúc (struct) có kích thước lớn hơn 32-bit.</p>
+<p>Thanh ghi EAX không đủ dung lượng để chứa toàn bộ giá trị. Do đó, các cơ chế khác được sử dụng. Dưới đây là hai trường hợp chính:</p>
+<p>a. Số nguyên 64-bit</p>
+<p>Trong x86, giá trị 64-bit thường được chia thành hai phần:
+32-bit thấp: Lưu trong EAX.</p>
+<p>32-bit cao: Lưu trong EDX.</p>
+<p>Đây là cách phổ biến để xử lý các kiểu dữ liệu như long long hoặc int64_t.</p>
+<h4 id="v-d-minh-h-a-">Ví dụ minh họa:</h4>
+<p>Nếu hàm trả về số 0x123456789ABCDEF0 (64-bit):</p>
+<p>EAX chứa 0x9ABCDEF0 (phần thấp).</p>
+<p>EDX chứa 0x12345678 (phần cao).</p>
+<p>b. Cấu trúc hoặc dữ liệu lớn hơn 32-bit</p>
+<p>Đối với các kiểu dữ liệu phức tạp như struct có kích thước lớn hơn 32-bit, cách xử lý phổ biến là:</p>
+<p>Người gọi (caller) cấp phát một vùng nhớ tạm thời trên ngăn xếp để lưu trữ giá trị trả về.</p>
+<p>Một con trỏ ẩn trỏ đến vùng nhớ này được truyền vào hàm như một tham số bổ sung.</p>
+<p>Hàm được gọi (callee) ghi giá trị trả về vào vùng nhớ được trỏ bởi con trỏ ẩn.</p>
+<p>Sau khi hàm hoàn tất, người gọi truy cập giá trị từ vùng nhớ đó.</p>
+<h4 id="v-d-minh-h-a-">Ví dụ minh họa:</h4>
+<p>Nếu hàm trả về một cấu trúc 8 byte (64-bit), trình biên dịch sẽ:</p>
+<p>Cấp phát 8 byte trên ngăn xếp trong hàm gọi.
+Truyền địa chỉ của vùng nhớ này cho hàm được gọi.
+Hàm được gọi ghi dữ liệu trực tiếp vào vùng nhớ đó.</p>
+<pre><code class="lang-c">    <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+    <span class="hljs-keyword">struct</span> Large {
+        <span class="hljs-keyword">int</span> a;  <span class="hljs-comment">// 4 byte</span>
+        <span class="hljs-keyword">int</span> b;  <span class="hljs-comment">// 4 byte</span>
+    };          <span class="hljs-comment">// Tổng: 8 byte (64-bit)</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">struct</span> Large <span class="hljs-title">func</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">struct</span> Large result = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>};
+        <span class="hljs-keyword">return</span> result;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">struct</span> Large val = func();
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"a = %d, b = %d\n"</span>, val.a, val.b);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+</code></pre>
+<p>Giải thích chương trình:</p>
+<p>struct Large có kích thước 8 byte (64-bit), vượt quá 32-bit của EAX.</p>
+<p>Khi gọi func():</p>
+<p>Trình biên dịch cấp phát 8 byte trên ngăn xếp trong main() để lưu val.</p>
+<p>Một con trỏ ẩn đến vùng nhớ này được truyền vào func().</p>
+<p>Trong func(), giá trị {1, 2} được ghi vào vùng nhớ được trỏ bởi con trỏ ẩn.
+Sau khi func() trả về, main() truy cập val và in ra a = 1, b = 2.</p>
+<p>Assembly tương ứng (giản lược):</p>
+<pre><code><span class="hljs-symbol">    func:</span>
+        <span class="hljs-comment">; Giả sử con trỏ ẩn được truyền qua ECX</span>
+        <span class="hljs-keyword">mov</span> [<span class="hljs-built_in">ecx</span>], <span class="hljs-number">1</span>        <span class="hljs-comment">; Ghi a = 1</span>
+        <span class="hljs-keyword">mov</span> [<span class="hljs-built_in">ecx</span> + <span class="hljs-number">4</span>], <span class="hljs-number">2</span>    <span class="hljs-comment">; Ghi b = 2</span>
+        <span class="hljs-keyword">ret</span>
+</code></pre><p>Giá trị trả về không được lưu trong EAX mà được ghi trực tiếp vào bộ nhớ.</p>
+<h4 id="s-kh-c-bi-t-gi-a-c-c-tr-nh-bi-n-d-ch">Sự khác biệt giữa các trình biên dịch</h4>
+<p>Cơ chế xử lý giá trị trả về lớn hơn 32-bit có thể thay đổi tùy thuộc vào trình biên dịch và hệ điều hành:</p>
+<p>GCC (Linux, 32-bit):</p>
+<p>Số nguyên 64-bit: Dùng EAX (phần thấp) và EDX (phần cao).</p>
+<p>Cấu trúc lớn: Dùng con trỏ ẩn để ghi vào bộ nhớ.</p>
+<p>MSVC (Windows, 32-bit):</p>
+<p>Số nguyên 64-bit: 
+Thường dùng EAX:EDX tương tự GCC.</p>
+<p>Cấu trúc: Luôn dùng con trỏ ẩn, ngay cả với cấu trúc nhỏ nếu không tối ưu hóa.</p>
+<p>Khác biệt: Một số trình biên dịch có thể tối ưu hóa bằng cách trả về cấu trúc nhỏ trong EAX nếu vừa, nhưng với cấu trúc lớn hoặc số 64-bit, cách dùng EAX:EDX hoặc con trỏ ẩn là phổ biến. Điều này phụ thuộc vào quy ước gọi hàm và thiết kế của trình biên dịch.</p>
+<h1 id="control-flow">Control Flow</h1>
+<p>Phần này mô tả về cách thực hiện các kiểu thực thi có điều kiện như các cấu trúc bậc cao như <em> if/else ,  swicht/case  hay while/for </em> những cái này đều được thực hiện thông qua các lệnh <em>CMP , TEST , JMP và JCC</em>
+và kết hợp với <em>EFLAGS</em> register. </p>
+<p>Một số các EFLAG phổ biến : </p>
+<ul>
+<li>ZF/ Zero flag : đặt thành 1 nếu kết quả của phép toán trước đó bằng 0 </li>
+<li>SF/ Sign flag : Được đặt bằng giá trị của bit cao nhất (most significant bit - MSB) của kết quả. Trong số học có dấu (signed), bit này biểu thị dấu: 0 là dương, 1 là âm.</li>
+<li>CF / Carry Flag : Được đặt khi kết quả của phép toán vượt quá phạm vi của số không dấu (unsigned). Nó biểu thị có &quot;carry&quot; (tràn số) từ bit cao nhất</li>
+<li>OF / Overflow Flag : Được đặt nếu kết quả của phép toán vượt quá kích thước tối đa của số có dấu (signed), gây tràn số.</li>
+</ul>
+<p>Các lệnh số học (như ADD, SUB, CMP, v.v.) tự động cập nhật các cờ trong EFLAGS dựa trên kết quả của phép toán.</p>
+<p>Lệnh SUB EAX, EAX:</p>
+<p>Thực hiện: EAX - EAX = 0.</p>
+<p>Kết quả là 0, nên:</p>
+<p>ZF = 1 (vì kết quả bằng 0).</p>
+<p>SF = 0 (vì MSB của 0 là 0, không âm).</p>
+<p>CF = 0 (không có tràn không dấu).</p>
+<p>OF = 0 (không có tràn có dấu).</p>
+<h2 id="l-nh-jcc-jump-if-condition-code-">Lệnh Jcc (Jump if Condition Code)</h2>
+<p>Format : J + mã điều kiện </p>
+<p>Ý nghĩa: Đây là nhóm lệnh nhảy có điều kiện (conditional jump) trong x86, ví dụ: JZ (Jump if Zero), JS (Jump if Sign), JC (Jump if Carry), JO (Jump if Overflow).</p>
+<p>Cách hoạt động: Chúng kiểm tra trạng thái của các cờ trong EFLAGS và quyết định có nhảy đến một địa chỉ khác hay không.</p>
+<h5 id="v-d-">ví dụ</h5>
+<pre><code class="lang-asm">    mov eax, <span class="hljs-number">5</span>
+    <span class="hljs-keyword">sub </span>eax, eax  <span class="hljs-comment">; EAX = 5 - 5 = 0</span>
+    <span class="hljs-keyword">jz </span><span class="hljs-built_in">zero</span>       <span class="hljs-comment">; Nhảy nếu ZF = 1</span>
+    <span class="hljs-comment">; Không nhảy qua đây nếu ZF = 0</span>
+<span class="hljs-symbol">    zero:</span>
+    <span class="hljs-comment">; Thực thi khi kết quả là 0</span>
+
+    <span class="hljs-comment">; ví dụ khác </span>
+    mov eax, <span class="hljs-number">0x7FFFFFFF</span>  <span class="hljs-comment">; Giá trị lớn nhất của signed 32-bit (2147483647)</span>
+    <span class="hljs-keyword">add </span>eax, <span class="hljs-number">1</span>           <span class="hljs-comment">; EAX = 0x7FFFFFFF + 1</span>
+    <span class="hljs-keyword">jo </span>overflow          <span class="hljs-comment">; Nhảy nếu OF = 1</span>
+    <span class="hljs-comment">; Không nhảy qua đây nếu không tràn</span>
+<span class="hljs-symbol">    overflow:</span>
+    <span class="hljs-comment">; Thực thi khi có tràn số</span>
+</code></pre>
+<p>Có tới 16 mã đièu kiênj nhưng đây là những cái phổ biến nhất. </p>
+<p><img src="image-4.png" alt="alt text"></p>
+<p>Trong các ngôn ngữ lập trình cấp cao như C, bạn có thể khai báo kiểu dữ liệu rõ ràng (ví dụ: int cho số có dấu, unsigned int cho số không dấu). Tuy nhiên, trong assembly, không có khái niệm kiểu dữ liệu cố định; mọi thứ chỉ là các bit trong thanh ghi hoặc bộ nhớ.
+Để phân biệt cách diễn giải các số (có dấu hay không dấu), assembly dựa vào các cờ trong thanh ghi EFLAGS (như ZF, SF, CF, OF) và các lệnh nhảy có điều kiện (Jcc) tương ứng.</p>
+<p>Ví dụ:</p>
+<p>Với số không dấu: Dùng CF (Carry Flag) để kiểm tra tràn.</p>
+<p>Với số có dấu: Dùng OF (Overflow Flag) để kiểm tra tràn. </p>
+<h2 id="if-else">IF/ELSE</h2>
+<p>if else là 1 cấu trúc khá đơn giản để nhận biết vi chúng liên quan tới so sánh và test sử dụng bởi JCC. </p>
+<p>ví dụ :</p>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-nasm">     <span class="hljs-keyword">mov</span>  <span class="hljs-built_in">esi</span> , [<span class="hljs-built_in">ebp</span> + <span class="hljs-number">8</span>]
+     <span class="hljs-keyword">mov</span>  <span class="hljs-built_in">edx</span> , [<span class="hljs-built_in">esi</span>]
+     <span class="hljs-keyword">test</span> <span class="hljs-built_in">edx</span> , <span class="hljs-built_in">edx</span> 
+     <span class="hljs-keyword">jz</span>   short loc_4E3F9
+     <span class="hljs-keyword">mov</span>  <span class="hljs-built_in">ecx</span> , offset _FsRtlFastMutexLookasideList
+     <span class="hljs-keyword">call</span>  _ExFreeToNPagedLookasideList@<span class="hljs-number">8</span>
+     <span class="hljs-keyword">and</span>   <span class="hljs-built_in">dword</span> <span class="hljs-built_in">ptr</span> [<span class="hljs-built_in">esi</span>], <span class="hljs-number">0</span> 
+     <span class="hljs-keyword">lea</span>   <span class="hljs-built_in">eax</span>, [<span class="hljs-built_in">esi</span>+<span class="hljs-number">4</span>]
+     <span class="hljs-keyword">push</span>  <span class="hljs-built_in">eax</span> 
+     <span class="hljs-keyword">call</span>  _FsRtlUninitializeBaseMcb@<span class="hljs-number">4</span>
+<span class="hljs-symbol">   loc_4E31F9:</span>
+     <span class="hljs-keyword">pop</span>   <span class="hljs-built_in">esi</span>
+     <span class="hljs-keyword">pop</span>   <span class="hljs-built_in">ebp</span>
+     <span class="hljs-keyword">retn</span>  <span class="hljs-number">4</span> 
+     _FsRtlUninitializeLargeMcb@<span class="hljs-number">4</span> end
+</code></pre>
+<p><strong>Pseudo C</strong></p>
+<pre><code class="lang-c">    <span class="hljs-keyword">if</span> (*esi == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span>;
+    }
+    ExFreeToNPagedLookasideList(<span class="hljs-params">...</span>);
+    *esi = <span class="hljs-number">0</span>;
+    <span class="hljs-params">...</span>
+    <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-literal">OR</span>
+
+    <span class="hljs-keyword">if</span> (*esi != <span class="hljs-number">0</span>) {
+    <span class="hljs-params">...</span>
+    ExFreeToNPagedLookasideList(<span class="hljs-params">...</span>);
+    *esi = <span class="hljs-number">0</span>;
+    <span class="hljs-params">...</span>
+    }
+    <span class="hljs-keyword">return</span>
+</code></pre>
+<p>Dòng 03: test edx, edx</p>
+<p>Giải thích: Thực hiện phép AND logic giữa EDX và chính nó. Kết quả không được lưu, nhưng các cờ trong EFLAGS được cập nhật.</p>
+<p>Cờ ảnh hưởng:</p>
+<p>Nếu EDX = 0, phép AND cho kết quả 0, nên ZF = 1 (Zero Flag được đặt).</p>
+<p>Nếu EDX ≠ 0, ZF = 0.</p>
+<p>Ý nghĩa: Đây là cách phổ biến để kiểm tra xem một thanh ghi có bằng 0 hay không.</p>
+<p>Dòng 04: jz short loc_4E31F9</p>
+<p>Giải thích: Nhảy đến nhãn loc_4E31F9 (dòng 11) nếu ZF = 1 (tức EDX = 0).</p>
+<p>Ý nghĩa: Nếu *esi == 0, chương trình bỏ qua phần thân của &quot;if&quot; và nhảy thẳng đến phần trả về.</p>
+<h2 id="switch-case">Switch-Case</h2>
+<p>Switch-Case cũng là 1 khối mã đièu kiện tuần tự của if/else. </p>
+<h4 id="v-du-">Ví du :</h4>
+<pre><code class="lang-c">    <span class="hljs-comment">//Switch-Case</span>
+    <span class="hljs-keyword">switch</span>(ch) {
+        <span class="hljs-keyword">case</span> <span class="hljs-string">'c'</span>:
+            handle_C();
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> <span class="hljs-string">'h'</span>:
+            handle_H();
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">default</span>:
+            <span class="hljs-keyword">break</span>;
+    }
+    domore();
+
+    ...
+    <span class="hljs-comment">// If-Else</span>
+    <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">'c'</span>) {
+        handle_C();
+    } <span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">'h'</span>) {
+        handle_H();
+    }
+    domore();
+</code></pre>
+<p><strong>ASM</strong></p>
+<pre><code class="lang-asm">    <span class="hljs-comment">; hàm unsigned char switchme(int a)</span>
+    <span class="hljs-keyword">push</span> <span class="hljs-built_in">ebp</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">mov</span>  <span class="hljs-built_in">ebp</span> , <span class="hljs-built_in">esp</span> 
+    <span class="hljs-keyword">mov</span>  <span class="hljs-built_in">eax</span> , [<span class="hljs-built_in">ebp</span> + <span class="hljs-number">8</span>]
+    <span class="hljs-keyword">sub</span>  <span class="hljs-built_in">eax</span>, <span class="hljs-number">41h</span>
+    <span class="hljs-keyword">je</span>  short loc_caseA 
+    <span class="hljs-keyword">dec</span>  <span class="hljs-built_in">eax</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">je</span>  short loc_caseB 
+    <span class="hljs-keyword">dec</span>  <span class="hljs-built_in">eax</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">je</span>   short loc_caseC
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">al</span>. <span class="hljs-number">5ah</span> 
+    <span class="hljs-keyword">movzx</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">al</span> 
+    <span class="hljs-keyword">pop</span>  <span class="hljs-built_in">ebp</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">retn</span> 
+<span class="hljs-symbol">   loc_caseC:</span>
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">al</span>, <span class="hljs-number">43h</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">movzx</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">al</span> 
+    <span class="hljs-keyword">pop</span>  <span class="hljs-built_in">ebp</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">retn</span> 
+
+   loc_caseB : 
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">al</span>, <span class="hljs-number">42h</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">movzx</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">al</span> 
+    <span class="hljs-keyword">pop</span>  <span class="hljs-built_in">ebp</span><span class="hljs-comment">; </span>
+    <span class="hljs-keyword">retn</span> 
+
+
+   loc_caseA :
+    <span class="hljs-keyword">mov</span> <span class="hljs-built_in">al</span>, <span class="hljs-number">41h</span><span class="hljs-comment">;   </span>
+    <span class="hljs-keyword">movzx</span> <span class="hljs-built_in">eax</span>, <span class="hljs-built_in">al</span>    
+    <span class="hljs-keyword">pop</span> <span class="hljs-built_in">ebp</span>
+    <span class="hljs-keyword">retn</span>
+</code></pre>
+<p><strong>C</strong></p>
+<pre><code class="lang-c">    <span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> <span class="hljs-title">switchme</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a)</span>
+    </span>{
+        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> res;
+        <span class="hljs-keyword">switch</span>(a) {
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0x41</span>:
+            res = <span class="hljs-string">'A'</span>;
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0x42</span>:
+            res = <span class="hljs-string">'B'</span>;
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0x43</span>:
+            res = <span class="hljs-string">'C'</span>;
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">default</span>:
+            res = <span class="hljs-string">'Z'</span>;
+            <span class="hljs-keyword">break</span>;
+        }
+        <span class="hljs-keyword">return</span> res;
+    }
+</code></pre>
+<p>Trong ngôn ngữ lập trình cấp cao như C, câu lệnh switch-case cho phép chương trình chọn một nhánh thực thi dựa trên giá trị của một biến. Nếu triển khai đơn giản (như dùng nhiều if-else), chương trình sẽ phải thực hiện nhiều phép so sánh (CMP) và nhảy có điều kiện (Jcc), dẫn đến hiệu suất thấp khi số lượng trường hợp (case) lớn.
+Để tối ưu, trình biên dịch thường tạo ra một jump table (bảng nhảy) thay vì kiểm tra từng trường hợp. Điều này giúp giảm số lần so sánh và nhảy, tăng tốc độ thực thi.</p>
+<p>Jump table: Là một cấu trúc dữ liệu dạng mảng, trong đó mỗi phần tử là một địa chỉ bộ nhớ (pointer) trỏ đến đoạn mã xử lý cho một trường hợp (case) trong switch.
+Khi chương trình chạy, thay vì so sánh giá trị của biến switch với từng trường hợp, nó chỉ cần tính toán chỉ số (index) trong bảng nhảy dựa trên giá trị đó, sau đó nhảy trực tiếp đến địa chỉ tương ứng.</p>
+<pre><code class="lang-asm">    section .data
+    jump<span class="hljs-number">_</span>table:
+        dd <span class="hljs-keyword">case</span><span class="hljs-number">_0</span>         ; Địa chỉ xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>
+        dd <span class="hljs-keyword">case</span><span class="hljs-number">_1</span>         ; Địa chỉ xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>
+        dd <span class="hljs-keyword">case</span><span class="hljs-number">_2</span>         ; Địa chỉ xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>
+        dd <span class="hljs-keyword">case</span><span class="hljs-number">_3</span>         ; Địa chỉ xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>
+        dd <span class="hljs-keyword">default</span><span class="hljs-number">_</span><span class="hljs-keyword">case</span>   ; Địa chỉ xử lý <span class="hljs-keyword">default</span> (nếu ngoài phạm vi)
+
+    section .text
+        mov eax, [<span class="hljs-keyword">value</span>]      ; Lấy giá trị của biến <span class="hljs-keyword">value</span>
+        cmp eax, <span class="hljs-number">3</span>            ; Kiểm tra nếu <span class="hljs-keyword">value</span> &gt; <span class="hljs-number">3</span>
+        ja <span class="hljs-keyword">default</span><span class="hljs-number">_</span><span class="hljs-keyword">case</span>       ; Nhảy đến <span class="hljs-keyword">default</span> nếu ngoài phạm vi (<span class="hljs-number">0</span>-<span class="hljs-number">3</span>)
+        jmp [jump<span class="hljs-number">_</span>table + eax * <span class="hljs-number">4</span>]  ; Nhảy đến địa chỉ trong bảng dựa trên <span class="hljs-keyword">value</span>
+
+    <span class="hljs-keyword">case</span><span class="hljs-number">_0</span>:
+        ; Xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">0</span> (<span class="hljs-keyword">in</span> <span class="hljs-string">"Zero"</span>)
+        jmp end<span class="hljs-number">_</span><span class="hljs-keyword">switch</span>
+    <span class="hljs-keyword">case</span><span class="hljs-number">_1</span>:
+        ; Xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">1</span> (<span class="hljs-keyword">in</span> <span class="hljs-string">"One"</span>)
+        jmp end<span class="hljs-number">_</span><span class="hljs-keyword">switch</span>
+    <span class="hljs-keyword">case</span><span class="hljs-number">_2</span>:
+        ; Xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">2</span> (<span class="hljs-keyword">in</span> <span class="hljs-string">"Two"</span>)
+        jmp end<span class="hljs-number">_</span><span class="hljs-keyword">switch</span>
+    <span class="hljs-keyword">case</span><span class="hljs-number">_3</span>:
+        ; Xử lý <span class="hljs-keyword">case</span> <span class="hljs-number">3</span> (<span class="hljs-keyword">in</span> <span class="hljs-string">"Three"</span>)
+        jmp end<span class="hljs-number">_</span><span class="hljs-keyword">switch</span>
+    <span class="hljs-keyword">default</span><span class="hljs-number">_</span><span class="hljs-keyword">case</span>:
+        ; Xử lý <span class="hljs-keyword">default</span> (<span class="hljs-keyword">in</span> <span class="hljs-string">"Default"</span>)
+    end<span class="hljs-number">_</span><span class="hljs-keyword">switch</span>:`
+</code></pre>
+<h2 id="loops">Loops</h2>
+<p>Ở cấp độ máy (machine level), các vòng lặp trong lập trình bậc cao (như for, while) được triển khai bằng cách sử dụng các lệnh nhảy có điều kiện (Jcc) và nhảy vô điều kiện (JMP). Về bản chất, chúng tương đương với việc sử dụng các cấu trúc if/else để kiểm tra điều kiện và goto để quay lại điểm bắt đầu của vòng lặp. Để hiểu rõ hơn, ta có thể &quot;dịch ngược&quot; một vòng lặp for thành dạng if/else và goto, rồi xem cách nó được biên dịch thành mã máy (assembly).</p>
+<pre><code class="lang-c">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">10</span>; i++) {
+        <span class="hljs-keyword">printf</span>(<span class="hljs-string">"%d\n"</span>, i);
+    }
+    <span class="hljs-keyword">printf</span>(<span class="hljs-string">"done!\n"</span>)
+
+   //  <span class="hljs-keyword">or</span> 
+
+        <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;
+    loop_start:
+        <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">10</span>) {
+            <span class="hljs-keyword">printf</span>(<span class="hljs-string">"%d\n"</span>, i);
+            i++;
+            <span class="hljs-keyword">goto</span> loop_start;
+        }
+    <span class="hljs-keyword">printf</span>(<span class="hljs-string">"done!n"</span>);
+</code></pre>
+<p>Khi cả hai phiên bản trên được biên dịch, chúng tạo ra mã máy giống nhau. </p>
+<pre><code class="lang-asm">
+    <span class="hljs-keyword">mov</span>    <span class="hljs-built_in">edi</span>, <span class="hljs-built_in">ds</span>:__imp__printf
+    <span class="hljs-keyword">xor</span>    <span class="hljs-built_in">esi</span>, <span class="hljs-built_in">esi</span>
+    <span class="hljs-keyword">lea</span>    <span class="hljs-built_in">ebx</span>, [<span class="hljs-built_in">ebx</span>+<span class="hljs-number">0</span>]
+<span class="hljs-symbol">   loc_401010:</span>
+    <span class="hljs-keyword">push</span>   <span class="hljs-built_in">esi</span>
+    <span class="hljs-keyword">push</span>   offset Format                 <span class="hljs-comment">; "%d\n"</span>
+    <span class="hljs-keyword">call</span>   <span class="hljs-built_in">edi</span> <span class="hljs-comment">; __imp__printf</span>
+    <span class="hljs-keyword">inc</span>    <span class="hljs-built_in">esi</span>
+    <span class="hljs-keyword">add</span>    <span class="hljs-built_in">esp</span>, <span class="hljs-number">8</span>
+    <span class="hljs-keyword">cmp</span>    <span class="hljs-built_in">esi</span>, <span class="hljs-number">0Ah</span>
+    <span class="hljs-keyword">jl</span>     short loc_401010
+    <span class="hljs-keyword">push</span>   offset aDone                  <span class="hljs-comment">; "done!\n"</span>
+    <span class="hljs-keyword">call</span>   <span class="hljs-built_in">edi</span> <span class="hljs-comment">; __imp__printf</span>
+    <span class="hljs-keyword">add</span>    <span class="hljs-built_in">esp</span>, <span class="hljs-number">4</span>
+</code></pre>
+<h1 id="walk-through">WALK THROUGH</h1>
+<p>1.Repeat the walk-through by yourself. Draw the stack layout, including
+parameters and local variables.</p>
+<pre><code class="lang-asm">    <span class="hljs-number">01</span>:    ; BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason,
+           ; LPVOID lpvReserved)
+    <span class="hljs-number">02</span>:                _DllMain@<span class="hljs-number">12</span> <span class="hljs-keyword">proc</span><span class="hljs-title"> near</span>
+    03: 55<span class="hljs-title">               push</span> <span class="hljs-title">   ebp</span> ;<span class="hljs-title"> lưu</span> lại<span class="hljs-title"> ebp</span> của<span class="hljs-title"> hàm</span> trc đó đẻ<span class="hljs-title"> khôi</span> phục 
+    04: 8B<span class="hljs-title"> EC</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    ebp,</span> esp ;<span class="hljs-title"> cập</span> nhật<span class="hljs-title"> ebp</span> 
+    05: 81<span class="hljs-title"> EC</span> 30 01 00+<span class="hljs-title">  sub</span> <span class="hljs-title">    esp,</span> 130h  ;<span class="hljs-title"> thiết</span> lập<span class="hljs-title"> stack</span> frame =<span class="hljs-title"> cách</span> -<span class="hljs-title"> esp</span> đi 0x130 
+    06: 57<span class="hljs-title">               push</span> <span class="hljs-title">   edi</span> ;<span class="hljs-title"> lưu</span> lại<span class="hljs-title"> edi</span> 
+    07: 0F 01 4D<span class="hljs-title"> F8</span> <span class="hljs-title">     sidt</span> <span class="hljs-title">   fword</span> ptr [ebp-8]  ;<span class="hljs-title"> thực</span> thi<span class="hljs-title"> lệnh</span> sidt<span class="hljs-title"> nó</span> sẽ<span class="hljs-title"> ghi</span> 6<span class="hljs-title"> byte</span> của<span class="hljs-title"> thanh</span> ghi<span class="hljs-title"> IDT</span> register<span class="hljs-title"> vào</span> vùng<span class="hljs-title"> nhớ</span> [ebp - 8]
+    08: 8B 45<span class="hljs-title"> FA</span> <span class="hljs-title">        mov</span> <span class="hljs-title">    eax,</span> [ebp-6] ;<span class="hljs-title"> lấy</span> 4<span class="hljs-title"> byte</span> đầu<span class="hljs-title"> của</span> idt<span class="hljs-title"> vào</span> eax đẻ<span class="hljs-title"> kiểm</span> tra<span class="hljs-title"> sau</span> , 4<span class="hljs-title"> byte</span> là địa<span class="hljs-title"> chỉ</span> cơ<span class="hljs-title"> sở</span> (base<span class="hljs-title"> address)</span> của<span class="hljs-title"> bảng</span> IDT, 2<span class="hljs-title"> byte</span> là<span class="hljs-title"> giới</span> hạn (limit).
+    09: 3D 00<span class="hljs-title"> F4</span> 03 80<span class="hljs-title">   cmp</span> <span class="hljs-title">    eax,</span> 8003F400h ;<span class="hljs-title"> so</span> sánh địa<span class="hljs-title"> chỉ</span> cơ<span class="hljs-title"> sở</span> của<span class="hljs-title"> idt</span> với 0x8003F400
+    10: 76 10<span class="hljs-title">            jbe</span> <span class="hljs-title">    short</span> loc_10001C88 (line 18)   ;<span class="hljs-title"> nếu</span> nhỏ<span class="hljs-title"> hơn</span> hoặc<span class="hljs-title"> bằng</span> thì<span class="hljs-title"> nhảy</span> tới<span class="hljs-title"> line</span> 18
+    11: 3D 00 74 04 80<span class="hljs-title">   cmp</span> <span class="hljs-title">    eax,</span> 80047400h  ;<span class="hljs-title"> so</span> sánh địa<span class="hljs-title"> chỉ</span> cơ<span class="hljs-title"> sỏ</span> với 0x80047400  
+    12: 73 09<span class="hljs-title">            jnb</span> <span class="hljs-title">    short</span> loc_10001C88 (line 18)  ;<span class="hljs-title"> nếu</span> lớn<span class="hljs-title"> hơn</span> hoặc<span class="hljs-title"> bằng</span> cũng<span class="hljs-title"> nhảy</span> tới<span class="hljs-title"> line</span> 18  ,<span class="hljs-title"> mục</span> địch ở đây<span class="hljs-title"> là</span> kiểm<span class="hljs-title"> tra</span> sem 
+    ; địa<span class="hljs-title"> chỉ</span> cơ<span class="hljs-title"> sỏ</span> của<span class="hljs-title"> idt</span> có<span class="hljs-title"> nằm</span> trong<span class="hljs-title"> khoảng</span> 0x8003F400<span class="hljs-title"> tới</span>  0x80047400<span class="hljs-title"> không.</span> 
+    ;<span class="hljs-title"> Khoảng</span> này đặc<span class="hljs-title"> trưng</span> cho<span class="hljs-title"> Windows</span> XP<span class="hljs-title"> trên</span> CPU<span class="hljs-title"> lõi</span> 0,<span class="hljs-title"> vì</span> vậy đây<span class="hljs-title"> có</span> thể<span class="hljs-title"> là</span> cách<span class="hljs-title"> kiểm</span> tra<span class="hljs-title"> xem</span> hệ<span class="hljs-title"> thống</span> có đang<span class="hljs-title"> chạy</span> trong<span class="hljs-title"> môi</span> trường ảo<span class="hljs-title"> hóa</span> hay<span class="hljs-title"> không.</span>
+
+    13: 33<span class="hljs-title"> C0</span> <span class="hljs-title">           xor</span> <span class="hljs-title">    eax,</span> eax ;<span class="hljs-title"> xóa</span> giá<span class="hljs-title"> trị</span> tài<span class="hljs-title"> eax</span> thành 0 để<span class="hljs-title"> trả</span> về<span class="hljs-title"> false</span>
+    14: 5F<span class="hljs-title">               pop</span> <span class="hljs-title">    edi</span>     ;<span class="hljs-title"> lấy</span> lại<span class="hljs-title"> edi</span> 
+    15: 8B<span class="hljs-title"> E5</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    esp,</span> ebp ;<span class="hljs-title"> cập</span> nhật<span class="hljs-title"> lại</span> esp ; 
+    16: 5D<span class="hljs-title">               pop</span> <span class="hljs-title">    ebp</span> ;<span class="hljs-title"> cập</span> nhật<span class="hljs-title"> lại</span> ebp 
+    17:<span class="hljs-title"> C2</span> 0C 00<span class="hljs-title">         retn</span>    0Ch ;<span class="hljs-title"> dọn</span> dẹp<span class="hljs-title"> stack</span> frame  12<span class="hljs-title"> byte</span> do 3<span class="hljs-title"> tham</span> số<span class="hljs-title"> của</span> DllMain
+    18:<span class="hljs-title">                loc_10001C88:</span>   ; ở đây<span class="hljs-title"> sẽ</span> tiếp<span class="hljs-title"> tục</span> thực<span class="hljs-title"> thi</span> gì đó<span class="hljs-title"> bên</span> dưới 
+    19: 33<span class="hljs-title"> C0</span> <span class="hljs-title">           xor</span> <span class="hljs-title">    eax,</span> eax  ; đặt<span class="hljs-title"> eax</span> = 0
+    20:<span class="hljs-title"> B9</span> 49 00 00 00<span class="hljs-title">   mov</span> <span class="hljs-title">    ecx,</span> 49h  ; đặt 0x49<span class="hljs-title"> vào</span> ecx 
+    21: 8D<span class="hljs-title"> BD</span> D4<span class="hljs-title"> FE</span> FF+<span class="hljs-title">  lea</span> <span class="hljs-title">    edi,</span> [ebp-12Ch] ;<span class="hljs-title"> lưu</span> edi<span class="hljs-title"> vào</span> [ebp - 0x12c]
+    22:<span class="hljs-title"> C7</span> 85<span class="hljs-title"> D0</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> mov</span> <span class="hljs-title">    dword</span> ptr [ebp-130h], 0  ;<span class="hljs-title"> lưu</span> 0<span class="hljs-title"> vào</span> [ebp -0x130]
+    23: 50<span class="hljs-title">               push</span> <span class="hljs-title">   eax</span> ;<span class="hljs-title"> lưu</span> lại<span class="hljs-title"> eax</span> = 0<span class="hljs-title"> vào</span> stack 
+    24: 6A 02<span class="hljs-title">            push</span>    2   ; đẩy 2<span class="hljs-title"> vào</span> stack 
+    25:<span class="hljs-title"> F3</span> AB<span class="hljs-title">            rep</span> stosd   ; ;iên<span class="hljs-title"> tục</span> ghi  0<span class="hljs-title"> vào</span> vùng<span class="hljs-title"> nhớ</span> edi<span class="hljs-title"> lưu</span> 
+    26:<span class="hljs-title"> E8</span> 2D 2F 00 00<span class="hljs-title">   call</span> <span class="hljs-title">   CreateToolhelp32Snapshot</span> ;<span class="hljs-title">  Gọi</span> CreateToolhelp32Snapshot(2, 0),<span class="hljs-title"> một</span> hàm<span class="hljs-title"> Win32</span> API để<span class="hljs-title"> lấy</span> danh<span class="hljs-title"> sách</span> tất<span class="hljs-title"> cả</span> các<span class="hljs-title"> tiến</span> trình đang<span class="hljs-title"> chạy</span> trên<span class="hljs-title"> hệ</span> thống.<span class="hljs-title"> Tham</span> số 2 (TH32CS_SNAPPROCESS)<span class="hljs-title"> yêu</span> cầu<span class="hljs-title"> thông</span> tin<span class="hljs-title"> tiến</span> trình,<span class="hljs-title"> và</span> 0<span class="hljs-title"> nghĩa</span> là<span class="hljs-title"> không</span> lọc<span class="hljs-title"> theo</span> ID<span class="hljs-title"> tiến</span> trình<span class="hljs-title"> cụ</span> thể.
+    27: 8B<span class="hljs-title"> F8</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    edi,</span> eax  ;<span class="hljs-title"> lưu</span> giá<span class="hljs-title"> trị</span> trả<span class="hljs-title"> vè</span> tuừ<span class="hljs-title"> CreateToolhelp32Snapshot</span> sem<span class="hljs-title"> có</span> phải<span class="hljs-title"> là</span> 0FFFFFFFFh<span class="hljs-title"> tưc</span> IN<span class="hljs-title"> VALID</span> hay<span class="hljs-title"> k.</span> 
+    28: 83<span class="hljs-title"> FF</span> FF<span class="hljs-title">         cmp</span> <span class="hljs-title">    edi,</span> 0FFFFFFFFh ;<span class="hljs-title"> so</span> sánh<span class="hljs-title"> sem</span> có<span class="hljs-title"> phải</span> là<span class="hljs-title"> invalidinvalid</span>
+    29: 75 09<span class="hljs-title">            jnz</span> <span class="hljs-title">    short</span> loc_10001CB9 (line 35)  ;<span class="hljs-title"> nếu</span> k<span class="hljs-title"> phải</span> thfi<span class="hljs-title"> nhảy</span> tới<span class="hljs-title"> line</span> 35 
+    30: 33<span class="hljs-title"> C0</span> <span class="hljs-title">           xor</span> <span class="hljs-title">    eax,</span> eax ;<span class="hljs-title"> phải</span> thì đặt<span class="hljs-title"> eax</span> = 0 đẻ<span class="hljs-title"> return</span> false
+
+    31: 5F<span class="hljs-title">               pop</span> <span class="hljs-title">    edi</span> ;<span class="hljs-title"> khôi</span> phục<span class="hljs-title"> edi</span> 
+    32: 8B<span class="hljs-title"> E5</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    esp,</span> ebp ;<span class="hljs-title"> khôi</span> phục<span class="hljs-title"> và</span> dọn<span class="hljs-title"> dẹp</span> stack<span class="hljs-title"> fame</span> 31 -34 
+    33: 5D<span class="hljs-title">               pop</span> <span class="hljs-title">    ebp</span>
+    34:<span class="hljs-title"> C2</span> 0C 00<span class="hljs-title">         retn</span>    0Ch
+    35:<span class="hljs-title">                loc_10001CB9:</span>  ; ở đầy<span class="hljs-title"> chươn</span> trình<span class="hljs-title"> tiếp</span> tục<span class="hljs-title"> làm</span> gì đó 
+    36: 8D 85<span class="hljs-title"> D0</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> lea</span> <span class="hljs-title">    eax,</span> [ebp-130h] ; đặt<span class="hljs-title"> giá</span> trị<span class="hljs-title"> trả</span> về<span class="hljs-title"> từ</span> CreateToolhelp32Snapshot, Đặt<span class="hljs-title"> eax</span> trỏ đến<span class="hljs-title"> cấu</span> trúc<span class="hljs-title"> PROCESSENTRY32</span> tại [ebp-130h]
+    37: 56<span class="hljs-title">               push</span> <span class="hljs-title">   esi</span>  ; đẩy<span class="hljs-title"> các</span> 
+    38: 50<span class="hljs-title">               push</span> <span class="hljs-title">   eax</span>  ;<span class="hljs-title"> tham</span> số<span class="hljs-title"> vào</span>  
+    39: 57<span class="hljs-title">               push</span> <span class="hljs-title">   edi</span>  ;<span class="hljs-title"> stack</span>
+    40:<span class="hljs-title"> C7</span> 85<span class="hljs-title"> D0</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> mov</span> <span class="hljs-title">    dword</span> ptr [ebp-130h], 128h ; Đặt<span class="hljs-title"> trường</span> dwSize<span class="hljs-title"> của</span> cấu<span class="hljs-title"> trúc</span> thành 0x128 (kích<span class="hljs-title"> thước</span> của<span class="hljs-title"> PROCESSENTRY32).</span>
+    41:<span class="hljs-title"> E8</span> FF 2E 00 00<span class="hljs-title">   call</span> <span class="hljs-title">   Process32First</span> ;<span class="hljs-title"> ggọi</span> Process32First để<span class="hljs-title"> lấy</span> thông<span class="hljs-title"> tin</span> tiến<span class="hljs-title"> trình</span> đầu<span class="hljs-title"> tiên</span> từ<span class="hljs-title"> snapshot.</span>
+    42: 85<span class="hljs-title"> C0</span> <span class="hljs-title">           test</span> <span class="hljs-title">   eax,</span> eax  ;<span class="hljs-title"> Kiểm</span> tra<span class="hljs-title"> giá</span> trị<span class="hljs-title"> trả</span> về<span class="hljs-title"> của</span> Process32First.<span class="hljs-title"> Nếu</span> là 0,<span class="hljs-title"> nhảy</span> đến<span class="hljs-title"> dòng</span> 70. 
+    43: 74 4F<span class="hljs-title">            jz</span> <span class="hljs-title">     short</span> loc_10001D24 (line 70)
+    44: 8B 35<span class="hljs-title"> C0</span> 50 00+<span class="hljs-title">  mov</span> <span class="hljs-title">    esi,</span> ds:_stricmp ; đặt đỉa<span class="hljs-title"> chỉ</span> hàm<span class="hljs-title"> so</span> sánh<span class="hljs-title"> vào</span> esi 
+    45: 8D 8D<span class="hljs-title"> F4</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> lea</span> <span class="hljs-title">    ecx,</span> [ebp-10Ch] ; đặt<span class="hljs-title"> giá</span> trị<span class="hljs-title"> tại</span> ...<span class="hljs-title"> vào</span> ecx 
+    46: 68 50 7C 00 10<span class="hljs-title">   push</span>    10007C50h  ;<span class="hljs-title"> thám</span> số<span class="hljs-title"> thứ</span> 2 
+    47: 51<span class="hljs-title">               push</span> <span class="hljs-title">   ecx</span>        ;<span class="hljs-title">  thám</span> số<span class="hljs-title"> thứ</span> 1 
+    48:<span class="hljs-title"> FF</span> D6<span class="hljs-title">            call</span> <span class="hljs-title">   esi</span> ;<span class="hljs-title"> _stricmp</span> ;<span class="hljs-title"> gọi</span> hàm<span class="hljs-title"> so</span> sanhs<span class="hljs-title"> với</span> 2<span class="hljs-title"> tham</span> số 
+    49: 83<span class="hljs-title"> C4</span> 08<span class="hljs-title">         add</span> <span class="hljs-title">    esp,</span> 8  ;<span class="hljs-title"> Dòng</span> 49-51:<span class="hljs-title"> Dọn</span> stack<span class="hljs-title"> và</span> kiểm<span class="hljs-title"> tra</span> kết<span class="hljs-title"> quả.</span> 
+    50: 85<span class="hljs-title"> C0</span> <span class="hljs-title">           test</span> <span class="hljs-title">   eax,</span> eax
+    51: 74 26<span class="hljs-title">            jz</span> <span class="hljs-title">     short</span> loc_10001D16 (line 66)  ;<span class="hljs-title"> Nếu</span> stricmp<span class="hljs-title"> trả</span> về 0 (chuỗi<span class="hljs-title"> khớp),</span> nhảy đến<span class="hljs-title"> dòng</span> 66.
+    52:<span class="hljs-title">                loc_10001CF0:</span> ;<span class="hljs-title"> nếu</span> <span class="hljs-title"> không</span> khớp<span class="hljs-title"> Dòng</span> 52-65:<span class="hljs-title"> Lặp</span> qua<span class="hljs-title"> các</span> tiến<span class="hljs-title"> trình</span> bằng<span class="hljs-title"> Process32Next</span>
+    53: 8D 95<span class="hljs-title"> D0</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> lea</span> <span class="hljs-title">    edx,</span> [ebp-130h] ; 
+    54: 52<span class="hljs-title">               push</span> <span class="hljs-title">   edx</span>
+    55: 57<span class="hljs-title">               push</span> <span class="hljs-title">   edi</span>
+    56:<span class="hljs-title"> E8</span> CD 2E 00 00<span class="hljs-title">   call</span> <span class="hljs-title">   Process32Next</span> ;<span class="hljs-title"> Gọi</span> Process32Next để<span class="hljs-title"> lấy</span> tiến<span class="hljs-title"> trình</span> tiếp<span class="hljs-title"> theo</span>
+    57: 85<span class="hljs-title"> C0</span> <span class="hljs-title">           test</span> <span class="hljs-title">   eax,</span> eax ;<span class="hljs-title"> Nếu</span> trả<span class="hljs-title"> về</span> 0 (hết<span class="hljs-title"> tiến</span> trình),<span class="hljs-title"> nhảy</span> đến<span class="hljs-title"> dòng</span> 70.
+    58: 74 23<span class="hljs-title">            jz</span> <span class="hljs-title">     short</span> loc_10001D24 (line 70) ; 
+    59: 8D 85<span class="hljs-title"> F4</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> lea</span> <span class="hljs-title">    eax,</span> [ebp-10Ch]
+    60: 68 50 7C 00 10<span class="hljs-title">   push</span>    10007C50h
+    61: 50<span class="hljs-title">               push</span> <span class="hljs-title">   eax</span>
+    62:<span class="hljs-title"> FF</span> D6<span class="hljs-title">            call</span> <span class="hljs-title">   esi</span> ;<span class="hljs-title"> _stricmp</span> ;<span class="hljs-title"> So</span> sánh<span class="hljs-title"> tên</span> tiến<span class="hljs-title"> trình</span> với "explorer.exe".
+    63: 83<span class="hljs-title"> C4</span> 08<span class="hljs-title">         add</span> <span class="hljs-title">    esp,</span> 8
+    64: 85<span class="hljs-title"> C0</span> <span class="hljs-title">           test</span> <span class="hljs-title">   eax,</span> eax ;<span class="hljs-title">  Nếu</span> khớp,<span class="hljs-title"> thoát</span> vòng<span class="hljs-title"> lặp</span> (dòng 66);<span class="hljs-title"> nếu</span> không,<span class="hljs-title"> quay</span> lại<span class="hljs-title"> dòng</span> 52.
+    65: 75<span class="hljs-title"> DA</span> <span class="hljs-title">           jnz</span> <span class="hljs-title">    short</span> loc_10001CF0 (line 52) ;<span class="hljs-title"> loop</span> 
+
+    66:<span class="hljs-title">                loc_10001D16:</span>  ;<span class="hljs-title"> Dòng</span> 66-68:<span class="hljs-title"> Nếu</span> tìm<span class="hljs-title"> thấy</span> "explorer.exe",<span class="hljs-title"> lấy</span> th32ParentProcessID (ID<span class="hljs-title"> tiến</span> trình<span class="hljs-title"> cha)</span> và<span class="hljs-title"> th32ProcessID</span> (ID<span class="hljs-title"> tiến</span> trình)<span class="hljs-title"> từ</span> cấu<span class="hljs-title"> trúc.</span>
+    67: 8B 85<span class="hljs-title"> E8</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> mov</span> <span class="hljs-title">    eax,</span> [ebp-118h] ;<span class="hljs-title"> th32ParentProcessID</span> 
+    68: 8B 8D<span class="hljs-title"> D8</span> FE<span class="hljs-title"> FF+</span> <span class="hljs-title"> mov</span> <span class="hljs-title">    ecx,</span> [ebp-128h] ;<span class="hljs-title"> th32ProcessID</span>
+    69:<span class="hljs-title"> EB</span> 06<span class="hljs-title">            jmp</span> <span class="hljs-title">    short</span> loc_10001D2A (line 73) ;<span class="hljs-title"> nhảy</span> tới<span class="hljs-title"> line</span> 73 
+    70:<span class="hljs-title">                loc_10001D24:</span> ;<span class="hljs-title"> Nếu</span> không<span class="hljs-title"> tìm</span> thấy,<span class="hljs-title"> lấy</span> giá<span class="hljs-title"> trị</span> tham<span class="hljs-title"> số</span> fdwReason<span class="hljs-title"> của</span> DllMain (tại [ebp+0Ch]).
+    71: 8B 45 0C<span class="hljs-title">         mov</span> <span class="hljs-title">    eax,</span> [ebp+0Ch]
+    72: 8B 4D 0C<span class="hljs-title">         mov</span> <span class="hljs-title">    ecx,</span> [ebp+0Ch]
+    73:<span class="hljs-title">                loc_10001D2A:</span>
+    74: 3B<span class="hljs-title"> C1</span> <span class="hljs-title">           cmp</span> <span class="hljs-title">    eax,</span> ecx ;<span class="hljs-title"> So</span> sánh<span class="hljs-title"> eax</span> và<span class="hljs-title"> ecx.</span>
+    75: 5E<span class="hljs-title">               pop</span> <span class="hljs-title">    esi</span>  
+    76: 75 09<span class="hljs-title">            jnz</span> <span class="hljs-title">    short</span> loc_10001D38 (line 82) ;<span class="hljs-title"> nêú</span> k<span class="hljs-title"> bằng</span> nhảy<span class="hljs-title"> line</span> 82 
+    77: 33<span class="hljs-title"> C0</span> <span class="hljs-title">           xor</span> <span class="hljs-title">    eax,</span> eax ;:<span class="hljs-title"> Nếu</span> eax ==<span class="hljs-title"> ecx,</span> trả<span class="hljs-title"> về</span> 0 (FALSE)
+    78: 5F<span class="hljs-title">               pop</span> <span class="hljs-title">    edi</span>
+    79: 8B<span class="hljs-title"> E5</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    esp,</span> ebp
+    80: 5D<span class="hljs-title">               pop</span> <span class="hljs-title">    ebp</span>
+    81:<span class="hljs-title"> C2</span> 0C 00<span class="hljs-title">         retn</span>    0Ch
+    82:<span class="hljs-title">                loc_10001D38:</span>
+    83: 8B 45 0C<span class="hljs-title">         mov</span> <span class="hljs-title">    eax,</span> [ebp+0Ch] ;<span class="hljs-title"> lấy</span> giá<span class="hljs-title"> trị</span> tham<span class="hljs-title"> số</span> fdwReason<span class="hljs-title"> của</span> DllMain (tại [ebp+0Ch]).
+    84: 48<span class="hljs-title">               dec</span> <span class="hljs-title">    eax</span> ;<span class="hljs-title"> giảm</span> eax đi 1 
+    85: 75 15<span class="hljs-title">            jnz</span> <span class="hljs-title">    short</span> loc_10001D53 (line 93) ;<span class="hljs-title"> k</span> bằng 1<span class="hljs-title"> nhảy</span> tới<span class="hljs-title"> line</span> 93
+    ;<span class="hljs-title"> Nếu</span> fdwReason == 1 (DLL_PROCESS_ATTACH),<span class="hljs-title"> gọi</span> CreateThread để<span class="hljs-title"> tạo</span> một<span class="hljs-title"> thread</span> mới<span class="hljs-title"> với</span> địa<span class="hljs-title"> chỉ</span> bắt đầu<span class="hljs-title"> là</span> 100032D0h.
+    86: 6A 00<span class="hljs-title">            push</span>    0
+    87: 6A 00<span class="hljs-title">            push</span>    0
+    88: 6A 00<span class="hljs-title">            push</span>    0
+    89: 68<span class="hljs-title"> D0</span> 32 00 10<span class="hljs-title">   push</span>    100032D0h
+    90: 6A 00<span class="hljs-title">            push</span>    0
+    91: 6A 00<span class="hljs-title">            push</span>    0
+    92:<span class="hljs-title"> FF</span> 15 20 50 00+<span class="hljs-title">  call</span> <span class="hljs-title">   ds:CreateThread</span> ;<span class="hljs-title"> gọi</span> CreateThread để<span class="hljs-title"> tạo</span> một<span class="hljs-title"> thread</span> mới<span class="hljs-title"> với</span> địa<span class="hljs-title"> chỉ</span> bắt đầu<span class="hljs-title"> là</span> 100032D0h.
+    93:<span class="hljs-title">                loc_10001D53:</span>
+    94:<span class="hljs-title"> B8</span> 01 00 00 00<span class="hljs-title">   mov</span> <span class="hljs-title">    eax,</span> 1   ;<span class="hljs-title"> lưuu</span> 1<span class="hljs-title"> vào</span> eax đẻ<span class="hljs-title"> trả</span> vê<span class="hljs-title"> true</span> làm<span class="hljs-title"> gì</span> đó 
+    95: 5F<span class="hljs-title">               pop</span> <span class="hljs-title">    edi</span>  ;<span class="hljs-title"> khôi</span> phục<span class="hljs-title"> edi</span> 
+    96: 8B<span class="hljs-title"> E5</span> <span class="hljs-title">           mov</span> <span class="hljs-title">    esp,</span> ebp  ;<span class="hljs-title"> kp</span> esp 
+    97: 5D<span class="hljs-title">               pop</span> <span class="hljs-title">    ebp</span> ;<span class="hljs-title"> kp</span> ebp 
+    98:<span class="hljs-title"> C2</span> 0C 00<span class="hljs-title">         retn</span>    0Ch ;<span class="hljs-title"> dọn</span> dẹp<span class="hljs-title"> stack</span> frame<span class="hljs-title"> và</span> đưa<span class="hljs-title"> chỉ</span> chỉ<span class="hljs-title"> lệnh</span> tiếp<span class="hljs-title"> vào</span> rip 
+    99:<span class="hljs-title">                _DllMain@12</span> endp
+</code></pre>
+<p>Hàm DllMain này:</p>
+<p>Kiểm tra xem địa chỉ IDT có nằm trong khoảng đặc trưng của Windows XP không. Nếu không, thoát ngay (có thể để phát hiện ảo hóa).</p>
+<p>Nếu IDT hợp lệ, duyệt qua tất cả các tiến trình để tìm &quot;explorer.exe&quot;.</p>
+<p>Dựa trên tham số fdwReason:</p>
+<p>Nếu là DLL_PROCESS_ATTACH (1), tạo một thread mới.</p>
+<p>Nếu là DLL_PROCESS_DETACH (0), trả về FALSE.</p>
+<p>Các trường hợp khác trả về TRUE.</p>
+<p>2.In the example walk-through, we did a nearly one-to-one translation of
+the  assembly  code  to  C.  As  an  exercise,  re-decompile  this  whole
+function  so  that  it  looks  more  natural.  What  can  you  say  about  the
+developer&#39;s skill level/experience? Explain your reasons. Can you do a
+better job?</p>
+<pre><code class="lang-c">    <span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _IDTR {
+        DWORD base;
+        SHORT limit;
+    } IDTR;
+
+    <span class="hljs-built_in">BOOL</span> __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
+        IDTR idtr;
+        __sidt(&amp;idtr);
+        <span class="hljs-keyword">if</span> (idtr.base &lt;= <span class="hljs-number">0x8003F400</span> || idtr.base &gt;= <span class="hljs-number">0x80047400</span>) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>;
+        }
+
+        HANDLE h = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span> (h == INVALID_HANDLE_VALUE) <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>;
+
+        PROCESSENTRY32 pe = {<span class="hljs-number">0</span>};
+        pe.dwSize = <span class="hljs-keyword">sizeof</span>(pe);
+        <span class="hljs-keyword">if</span> (!Process32First(h, &amp;pe)) <span class="hljs-keyword">return</span> <span class="hljs-literal">FALSE</span>;
+
+        <span class="hljs-keyword">while</span> (Process32Next(h, &amp;pe)) {
+            <span class="hljs-keyword">if</span> (stricmp(pe.szExeFile, <span class="hljs-string">"explorer.exe"</span>) == <span class="hljs-number">0</span>) {
+                <span class="hljs-keyword">break</span>;
+            }
+        }
+
+        <span class="hljs-keyword">if</span> (fdwReason == DLL_PROCESS_ATTACH) {
+            CreateThread(<span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, (LPTHREAD_START_ROUTINE)<span class="hljs-number">0x100032D0</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">NULL</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">TRUE</span>;
+        }
+        <span class="hljs-keyword">return</span> (fdwReason != DLL_PROCESS_DETACH);
+    }
+</code></pre>
+<p>3.In  some  of  the  assembly  listings,  the  function  name  has  a  @  prefix
+followed by a number. Explain when and why this decoration exists. </p>
+<p>Trong lập trình, đặc biệt khi làm việc với assembly được tạo ra từ mã C hoặc C++ trên các hệ thống Windows (như khi sử dụng Microsoft Visual Studio), bạn có thể thấy tên hàm được &quot;trang trí&quot; (decorated) với ký hiệu @ theo sau là một số, ví dụ như function@8 hoặc myFunc@12. Đây là một phần của quy ước gọi hàm (calling convention) và liên quan đến cách trình biên dịch quản lý các hàm và ngăn xếp (stack).</p>
+<p>Khi nào điều này xảy ra?</p>
+<p>Ký hiệu này thường xuất hiện trong các chương trình được biên dịch với quy ước gọi hàm <strong>stdcall (standard call), một quy ước phổ biến trong lập trình Windows API. Nó ít phổ biến hơn trong các quy ước khác như </strong>cdecl (quy ước mặc định của C) hoặc __fastcall.</p>
+<p>Tại sao ký hiệu @ và số xuất hiện?</p>
+<p>Quy ước gọi hàm __stdcall:</p>
+<p>Trong <strong>stdcall, các tham số được đẩy lên ngăn xếp từ phải sang trái, và hàm được gọi chịu trách nhiệm dọn sạch ngăn xếp (khác với </strong>cdecl, nơi mã gọi hàm dọn sạch ngăn xếp).
+Để đảm bảo tính tương thích và tránh xung đột khi liên kết (linking), trình biên dịch thêm thông tin về kích thước ngăn xếp vào tên hàm. Số sau ký hiệu @ biểu thị tổng số byte mà các tham số chiếm trên ngăn xếp.</p>
+<p>Ví dụ:</p>
+<p>Nếu bạn thấy myFunction@8, điều đó có nghĩa là hàm myFunction sử dụng 8 byte tham số trên ngăn xếp (ví dụ: hai tham số kiểu int, mỗi cái 4 byte trên hệ thống 32-bit).</p>
+<p>Tên được trang trí này được gọi là &quot;mangled name&quot; hoặc &quot;decorated name&quot;, giúp trình liên kết (linker) phân biệt các hàm dựa trên chữ ký của chúng.</p>
+<p>Lý do tồn tại:</p>
+<p>Ngăn ngừa xung đột tên: Nếu có nhiều hàm trùng tên nhưng khác số lượng hoặc kiểu tham số (function overloading), việc trang trí tên giúp trình liên kết phân biệt chúng.
+Tương thích với hệ thống: Windows sử dụng __stdcall cho nhiều API của nó, vì vậy việc trang trí này đảm bảo mã của bạn khớp với các hàm trong thư viện hệ thống.</p>
+<p>Khi nào bạn không thấy ký hiệu này?</p>
+<p>Trong quy ước __cdecl, tên hàm thường không được trang trí với @ và số, mà giữ nguyên tên gốc (hoặc chỉ được trang trí theo cách khác nếu có overloading trong C++).
+Trên các nền tảng không phải Windows (như Linux với GCC), quy ước gọi hàm và cách trang trí tên có thể khác, thường dựa trên chuẩn System V ABI và không sử dụng ký hiệu @.</p>
+<p>4.Implement the following functions in x86 assembly: strlen, strchr,
+memcpy, memset, strcmp, strset</p>
