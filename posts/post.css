@@ -1,199 +1,60 @@
-/* Dark Green Markdown Theme with Courier New Font */
-
+/* Loại bỏ overflow-x từ body */
 body {
-    font-family: 'Courier New', monospace;
+    font-family: 'Merriweather', serif;
     line-height: 1.6;
-    color: #c8e6c9;
-    background-color: #0a1f0a;
+    color: #F5F5F5;
+    background-color: #000000;
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    /* overflow-x: auto; */ /* Xóa dòng này */
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: #4caf50;
-    font-weight: bold;
-    margin-top: 24px;
-    margin-bottom: 16px;
-    font-family: 'Courier New', monospace;
-}
-
-h1 {
-    font-size: 2.2em;
-    border-bottom: 2px solid #048a0b;
-    padding-bottom: 0.3em;
-}
-
-h2 {
-    font-size: 1.8em;
-    border-bottom: 1px solid #09af11;
-    padding-bottom: 0.3em;
-}
-
-h3 {
-    font-size: 1.5em;
-}
-
-h4 {
-    font-size: 1.3em;
-}
-
-h5 {
-    font-size: 1.1em;
-}
-
-p {
-    margin-bottom: 16px;
-}
-
-a {
-    color: #8bc34a;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-    color: #aed581;
-}
-
-code {
-    font-family: 'Courier New', monospace;
-    padding: 2px 4px;
-    background-color: #000000;
-    border-radius: 3px;
-}
-
+/* Giữ overflow-x: auto cho pre */
 pre {
-    background-color: #001100;
-    border: 1px solid #2e7d32;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    padding: 20px;
-    overflow: auto;
-    margin-bottom: 16px;
-}
-
-pre code {
-    background-color: transparent;
-    padding: 0;
-    font-size: 0.9em;
-    line-height: 1.4;
-}
-
-blockquote {
-    border-left: 4px solid #388e3c;
-    padding-left: 16px;
-    margin-left: 0;
-    color: #a5d6a7;
-}
-
-strong {
-    color: #66bb6a;
-    font-weight: bold;
-}
-
-em {
-    color: #81c784;
-}
-
-ul, ol {
-    margin-bottom: 16px;
-    padding-left: 32px;
-}
-
-li {
-    margin-bottom: 8px;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 16px;
-}
-
-th, td {
-    padding: 12px;
-    border: 1px solid #2e7d32;
-}
-
-th {
-    background-color: #1b3a1b;
-    font-weight: bold;
-    color: #4caf50;
-}
-
-tr:nth-child(even) {
-    background-color: #112211;
-}
-
-/* Special styling for X-RAYING specifics */
-.key-concept {
-    background-color: #1b3a1b;
-    border-left: 4px solid #4caf50;
     padding: 10px;
-    margin: 15px 0;
+    border-radius: 8px;
+    overflow-x: auto; /* Chỉ áp dụng cho khối mã */
+    border: 1px solid #12d3c3;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    scrollbar-width: thin;
+}
+/* Thanh bottom bar của các khối code nhỏ hơn */
+pre::-webkit-scrollbar {
+    height: 5px; /* Chiều cao nhỏ hơn */
+    box-sizing: content-box; /* Đảm bảo thanh cuộn không ảnh hưởng đến nội dung */
 }
 
-.example {
-    background-color: #0d260d;
-    border: 1px solid #1af025;
-    border-radius: 6px;
-    padding: 15px;
-    margin: 15px 0;
+pre::-webkit-scrollbar-thumb {
+    background-color: #12d3c3;
+    border-radius: 1px;
 }
 
-/* Specific styling for code examples */
-.code-xor {
-    color: #ffeb3b;
+/* CSS cho bảng biểu */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #12d3c3;
 }
 
-.highlight {
-    background-color: #2e7d32;
-    color: #e8f5e9;
-    padding: 2px 4px;
-    border-radius: 3px;
+table th, table td {
+    border: 1px solid #12d3c3;
+    padding: 10px;
+    text-align: center;
 }
 
-/* Syntax highlighting for code blocks */
-.keyword {
-    color: #4caf50;
-}
-.string {
-    color: #ffeb3b;
-}
-.comment {
-    color: #388e3c;
-}
-.variable {
-    color: #81c784;
-}
-.function {
-    color: #ff9800;
-}
-/* Căn chỉnh theo khổ A4 */
-.a4-content {
-    width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
-    margin: 10mm auto;
-    background-color: #0a1f0a;
-    box-shadow: 0 0 10px rgba(5, 252, 231, 0.3);
-    box-sizing: border-box;
+table th {
+    background-color: #1e1e1e;
+    color: #ffffff;
 }
 
-@media print {
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: #b2d3d4;
-    }
-    
-    .a4-content {
-        width: 210mm;
-        height: 297mm;
-        padding: 20mm;
-        margin: 0;
-        box-shadow: none;
-        page-break-after: always;
-    }
+/* CSS cho ảnh căng giữa và bo góc */
+img {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }

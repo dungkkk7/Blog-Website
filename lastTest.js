@@ -51,6 +51,9 @@ class BlogManager {
 
         console.log('Bắt đầu tạo các phần tử bài viết...');
         this.posts.forEach((post, index) => {
+            if (index == 3) {
+                return;
+            } // Chỉ tạo 3 bài viết đầu tiên
             console.log(`Đang tạo bài viết thứ ${index + 1}:`, post);
             
             const postElement = document.createElement('div');
@@ -66,9 +69,7 @@ class BlogManager {
             container.appendChild(postElement);
             console.log(`Đã thêm bài viết ${index + 1} vào container`);
             // index = 5 xóa 
-            if (index === 3) {
-                return;
-            }
+        
            
         });
        
