@@ -46,11 +46,6 @@
         <div class="meteor"></div>
         <div class="meteor"></div>
         <div class="meteor"></div>
-        <div class="meteor"></div>
-        <div class="meteor"></div>
-        <div class="meteor"></div>
-        <div class="meteor"></div>
-        <div class="meteor"></div>
     </div>
     <header>
         <nav class="navbar">
@@ -69,8 +64,26 @@
         </section>
         <section class="latest-posts">
             <h2>Latest Posts</h2>
-            <div id="posts-container">
+            <div class="post-count"></div>
+            <div class="posts-grid">
                 <!-- Các bài viết sẽ được thêm vào đây bằng JavaScript -->
+                <div class="post">
+                    <div class="post-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title"></h3>
+                        <p class="post-excerpt"></p>
+                        <div class="post-meta">
+                            <span class="post-date"></span>
+                            <div class="post-rating">
+                                <i class="fas fa-star"></i>
+                                <span class="rating-value"></span>
+                            </div>
+                        </div>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
+                </div>
             </div>
         </section>
         
@@ -84,7 +97,7 @@
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div>
     </footer>
-    <script src="lastTest.js"></script>
-    
+    <script src="blog-manager.js"></script>
+    <script src="meteor.js"></script>
 </body>
 </html>
