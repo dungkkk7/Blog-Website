@@ -67,6 +67,55 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     setInterval(createMeteor, 100);
+
+    // Navigation bar auto-hide functionality
+    let navTimeout;
+    const header = document.querySelector('header');
+    let isNavVisible = true;
+
+    function hideNav() {
+        if (isNavVisible) {
+            header.style.transform = 'translateY(-100%)';
+            isNavVisible = false;
+        }
+    }
+
+    function showNav() {
+        if (!isNavVisible) {
+            header.style.transform = 'translateY(0)';
+            isNavVisible = true;
+        }
+    }
+
+    function resetNavTimeout() {
+        clearTimeout(navTimeout);
+        showNav();
+        navTimeout = setTimeout(hideNav, 5000);
+    }
+
+    // Show nav when mouse is near the top of the page
+    document.addEventListener('mousemove', (e) => {
+        if (e.clientY <= 80) {
+            showNav();
+            clearTimeout(navTimeout);
+        } else {
+            resetNavTimeout();
+        }
+    });
+
+    // Show nav when scrolling up
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop < lastScrollTop) {
+            showNav();
+            clearTimeout(navTimeout);
+        }
+        lastScrollTop = scrollTop;
+    });
+
+    // Initial setup
+    resetNavTimeout();
 });
 
 

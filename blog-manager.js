@@ -89,16 +89,12 @@ class BlogManager {
             // Tạo HTML cho bài post
             const postHTML = `
                 <div class="post-icon">
-                    <i class="fas fa-dragon"></i>
+                    <img src="crystal.png" class="post-dragon-icon" alt="Crystal">
                 </div>
                 <div class="post-content">
                     <h3>${post.title}</h3>
                     <p class="post-meta">
                         <span class="post-date">${post.date}</span>
-                        <div class="post-rating">
-                            <i class="fas fa-star"></i>
-                            <span class="rating-value">${post.rating || '0'}</span>
-                        </div>
                     </p>
                     <p class="post-description">${post.description}</p>
                     <div class="post-tags">

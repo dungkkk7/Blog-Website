@@ -7,8 +7,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post12/post-12.html",
         "description": "Tổng hợp 1 số kiến thức về kiến trúc x86 như Regiter, Stack, Data type , Calling convetion , Memory", 
-        "tags": ["Reverse"],
-        "rating": 5
+        "tags": ["Reverse"]
       },
       {
         "id": "Reverse Engineering ",
@@ -17,8 +16,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post9/post-9.html",
         "description": "Các bước malware sử dụng để mã hóa hoặc giải mã dữ liệu",
-        "tags": ["Reverse"],
-        "rating": 4
+        "tags": ["Reverse"]
       },
       {
         "id": "Reverse Engineering ",
@@ -27,8 +25,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post8/post-8.html",
         "description": "Thuật toán RC4 là gì? Cách hoạt động của thuật toán RC4",
-        "tags": ["Reverse"],
-        "rating": 4
+        "tags": ["Reverse"]
       },
     
          
@@ -39,8 +36,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post-4.html",
         "description": "Trong hệ điều hành Windows, hệ thống tệp NTFS (New Technology File System) hỗ trợ một tính năng đặc biệt gọi là Alternate Data Streams (ADS)",
-        "tags": ["Reverse"],
-        "rating": 5
+        "tags": ["Reverse"]
       },
      
         {
@@ -50,8 +46,7 @@
           "author": "Bùi Việt Dũng",
           "file": "posts/post10/post-10.html",
           "description": "Các Khái niêm cơ bản về memory ex: heap , stack ...",
-          "tags": ["Reverse"],
-          "rating": 4
+          "tags": ["Reverse"]
         },
           {
         "id": "Reverse Engineering ",
@@ -60,8 +55,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post-5.html",
         "description": "Quy Trình Manual Unpacking: Kỹ Thuật Sử Dụng Memory Breakpoints và DEP",
-        "tags": ["Reverse"],
-        "rating": 5
+        "tags": ["Reverse"]
       },
      
       {
@@ -71,8 +65,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post-2.html",
         "description": "Hướng Dẫn Tắt ASLR Trong File PE",
-        "tags": ["Reverse"],
-        "rating": 4
+        "tags": ["Reverse"]
       },
       {
         "id": "Reverse Engineering ",
@@ -81,8 +74,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post-1.html",
         "description": "Hướng Dẫn Kiểm Tra File Binary",
-        "tags": ["Reverse"],
-        "rating": 5
+        "tags": ["Reverse"]
       }, 
       {
         "id": "Reverse Engineering ",
@@ -91,8 +83,7 @@
         "author": "Bùi Việt Dũng",
         "file": "posts/post-3.html",
         "description": "Tìm hiểu cách phân tich file apk với tools jadx ",
-        "tags": ["Reverse"],
-        "rating": 4
+        "tags": ["Reverse"]
       }
      
     ]
