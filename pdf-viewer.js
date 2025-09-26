@@ -73,6 +73,16 @@
     }
 
     // Render pages continuous with page-fit by height
+    // Pre-create canvases in correct order so async rendering cannot reorder DOM
+    const pageCanvases = new Map();
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const c = document.createElement('canvas');
+      c.className = 'pdf-page';
+      c.setAttribute('data-page-number', String(i));
+      viewerEl.appendChild(c);
+      pageCanvases.set(i, c);
+    }
+
     const pagePromises = new Map();
     const ensureRendered = async (targetPage) => {
       for (let i = 1; i <= targetPage; i++) {
@@ -86,25 +96,9 @@
       const p = (async () => {
         const page = await pdf.getPage(num);
         const baseViewport = page.getViewport({ scale: 1 });
-        const canvas = document.createElement('canvas');
-        canvas.className = 'pdf-page';
-        canvas.setAttribute('data-page-number', String(num));
+        const canvas = pageCanvases.get(num);
+        if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        // Insert canvas in correct DOM order regardless of async completion timing
-        const existingPages = viewerEl.querySelectorAll('.pdf-page');
-        let inserted = false;
-        for (let i = 0; i < existingPages.length; i++) {
-          const sibling = existingPages[i];
-          const siblingNum = Number(sibling.getAttribute('data-page-number') || '0');
-          if (siblingNum > num) {
-            viewerEl.insertBefore(canvas, sibling);
-            inserted = true;
-            break;
-          }
-        }
-        if (!inserted) {
-          viewerEl.appendChild(canvas);
-        }
 
         const fit = () => {
           // Page width mode: scale canvas to exactly fit the container width
