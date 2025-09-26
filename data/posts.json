@@ -1,4 +1,15 @@
 [
+   {
+    "id": "obfuscation",
+    "title": "OverviewofObfuscation",
+    "excerpt": "Overview of Obfuscation.",
+    "url": "posts/pdf-viewer.html?src=obfuscation_overview.pdf&title=OverviewofObfuscation",
+    "date": "2025-02-02",
+    "tags": ["pdf", "obfuscation"],
+    "format": "pdf",
+    "mins": 6,
+    "views": 0
+  },
   {
     "id": "ransomware",
     "title": "Ransomware",
@@ -8,7 +19,7 @@
     "tags": ["pdf", "malware"],
     "format": "pdf",
     "mins": 6,
-    "views": 910
+    "views": 0
   },
   {
     "id": "anti-disassembly",
@@ -21,7 +32,7 @@
     "mins": 11,
     "views": 640
   },
-  
+
   {
     "id": "obscuring-flow",
     "title": "Obscuring Flow Control",
