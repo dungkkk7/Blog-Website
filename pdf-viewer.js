@@ -90,7 +90,21 @@
         canvas.className = 'pdf-page';
         canvas.setAttribute('data-page-number', String(num));
         const ctx = canvas.getContext('2d');
-        viewerEl.appendChild(canvas);
+        // Insert canvas in correct DOM order regardless of async completion timing
+        const existingPages = viewerEl.querySelectorAll('.pdf-page');
+        let inserted = false;
+        for (let i = 0; i < existingPages.length; i++) {
+          const sibling = existingPages[i];
+          const siblingNum = Number(sibling.getAttribute('data-page-number') || '0');
+          if (siblingNum > num) {
+            viewerEl.insertBefore(canvas, sibling);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) {
+          viewerEl.appendChild(canvas);
+        }
 
         const fit = () => {
           // Page width mode: scale canvas to exactly fit the container width
